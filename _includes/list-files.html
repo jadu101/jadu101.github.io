@@ -1,0 +1,16 @@
+<ul>
+	{%- for writeup in site.pages -%}
+	  {%- if writeup.type == include.type -%}
+	    <li>
+	      <a href="{{ writeup.url | relative_url }}">
+		 {% if writeup.category %}
+		   [{{writeup.category}}]
+		 {% endif %}
+		  <b>{{ writeup.title | escape }}</b></a>
+		<blockquote style="font-size: 0.9em">
+		  {{ writeup.meta }}
+		</blockquote>	      
+	    </li>
+	   {%- endif -%}
+	{%- endfor -%}
+</ul>

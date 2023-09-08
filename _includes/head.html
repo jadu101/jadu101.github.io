@@ -1,0 +1,32 @@
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+      
+    <meta name="twitter:title" content="{{ page.title }}">
+    <meta name="twitter:description" content="{{ page.meta | append: page.desc }}">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:image" content="{% if page.img-link %}{{ 'https://altelus1.github.io' | append: page.img-link }}{% else %}https://altelus1.github.io/assets/images/default.png{% endif %}" />
+    
+    <meta property="og:image" content="{% if page.img-link %}{{page.img-link}}{% else %}/assets/images/default.png{% endif %}">
+    <meta property="og:description" content="{{ page.meta | append: page.desc }}">
+    <title>{{ page.title }}</title>
+  {%- seo title=false -%}
+
+  {%- if site.listen_for_clients_preferred_style -%}
+    <link rel="stylesheet" type="text/css" href="{{ "/assets/main.css" | relative_url }}">
+  {%- else -%}
+    {%- if site.style == 'light' -%}
+     <link rel="stylesheet" type="text/css" href="{{ "/assets/main-light.css" | relative_url }}">
+   {%- else -%}
+      <link rel="stylesheet" type="text/css" href="{{ "/assets/main-dark.css" | relative_url }}">
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- if jekyll.environment == 'production' and site.google_analytics -%}
+    {%- include google-analytics.html -%}
+  {%- endif -%}
+</head>
+
+

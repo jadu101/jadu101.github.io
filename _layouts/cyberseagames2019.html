@@ -1,0 +1,18 @@
+---
+layout: default
+---
+
+{{ content }}
+{% assign contentwonl = content | strip_newlines %} {% unless contentwonl == ""  %} <br /> {% endunless %} <!-- add line break if there is any content -->
+
+
+<ul>
+	{%- for writeup in site.cyberseagames2019 -%}
+	{%- if writeup.url contains "/index" -%}
+	{%- else -%}
+	<li>
+		[{{ writeup.category }}] <a href="{{ writeup.url | relative_url }}">{{ writeup.title | escape }}</a>
+	</li>
+	{%- endif -%}
+	{%- endfor -%}
+</ul>

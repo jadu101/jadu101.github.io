@@ -1,0 +1,16 @@
+<ul>
+	{%- for project in site.pages -%}
+	  {%- if project.type == include.type -%}
+	    <li>
+	      <a href="{{ project.url | relative_url }}">
+		 {% if project.category %}
+		   [{{project.category}}]
+		 {% endif %}
+		  <b>{{ project.title | escape }}</b></a>
+		<blockquote style="font-size: 0.9em">
+		  {{ project.meta }}
+		</blockquote>	      
+	    </li>
+	  {%- endif -%}
+	{%- endfor -%}
+</ul>
