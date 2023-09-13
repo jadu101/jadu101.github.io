@@ -2,7 +2,7 @@
 title: Hackthebox Writeups
 layout: default
 type: collection
-meta: Hackthebox.eu writeups. It includes writeups of RETIRED boxes and RETIRED challenges.
+meta: Hackthebox.com writeups. It includes writeups of RETIRED boxes and RETIRED challenges.
 ---
 
 Hackthebox Writeups
