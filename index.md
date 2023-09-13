@@ -1,12 +1,12 @@
 ---
 layout: home
 title: Home
-meta: Altelus1 site
+meta: Jadud101 site
 ---
 
-# Altelus Writeup Site
+# Jadu101 CTF Write Ups
 
-# What's Up?
+### I do CTFs
 
 
 
