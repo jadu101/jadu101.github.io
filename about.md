@@ -6,17 +6,17 @@ permalink: /about.html
 
 # About
 <br />
-This is Jadu
-Welcome, fellow hackerman! I am Altelus (a.k.a. FriedTempura). I do various
-types of writeups from different CTFs (Capture The Flag) I joined. I mainly do reverse engineering and memory corruption type of writeups but I also do other categories. I also put here my projects I have completed.
-<br /> 
-Enjoy your stay, hackerman! 
 
+Whoever is visiting, welcome! I do various types of writeups from different CTFs I joined. Most of them mainly comes from Hackthebox but sometimes I upload CTFs from different platform as well. As a college student, I sometimes upload projects I have completed as well. 
 <br />
-You may contact me at this address : __dark_symmetra@protonmail.com__
-My Github : [Altelus Github](https://github.com/Altelus1)
+This is my personal portfolio where I keep track of what I've been doing. If any wrong information is found, feel free to let me know.
+<br />
+Enjoy your stay!
+<br />
+You many contact me through : __miss4200miss@gmail.com__
+<br />
 
-Special Thanks - [b2a3e8](http://github.com/b2a3e8) for the console theme
+Special Thanks - [b2a3e8](http://github.com/b2a3e8), [Altelus1](https://github.com/Altelus1) for the console theme and structure of this website. 
 
 
 

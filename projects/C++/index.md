@@ -1,18 +1,13 @@
 ---
-title: Learning C++
+title: C++
 layout: page
 type: project
-meta: UM-SJTU JI VE280 Course WriteUps
+meta: C++ practice problems and projects. 
 ---
 
-# Learning C++
+# C++
 
-### Introduction
-Jadu
+{% include list-files.html type="cpp_adventure" %}
 
-
-
-**Resources:**
-- Jadu
 
 
