@@ -1,28 +1,22 @@
 ---
-title: Tabby 
-category: BOX - Tabby
+title: Support 
+category: BOX - Support
 type: htb_box
 layout: page
 img-link: 
-desc: 10.10.10.194 - [EASY] Tabby
-tags: tabby writeup hackthebox
+desc: 10.10.10.194 - [EASY] Support
+tags: support writeup hackthebox
 ---
 
-# [EASY] Tabby <br/>
+# [EASY] Support <br/>
 
 
-![Alt text](images/tabby/tabby-1.png)
+<img src="images/support/support-01.png" alt="Jadu" style="max-width: 70%; height: auto;">
+
 
 # <span style="color:red">Introduction</span> 
 
-**Tabby**, labeled as "*Easy*" on HackTheBox, proved to be a challenging yet instructive endeavor. 
-<br />
-Initial enumeration revealed a **Local File Inclusion** (LFI) vulnerability, permitting access to the critical **tomcat-users.xml** file, which held login credentials for the "**tomcat**" user. Exploiting this, "**manager-script**" access was gained, facilitating the upload of a Web Application Resource (**WAR**) reverse shell and leading to user escalation as "**ash**." The culmination was a creative use of **LXD** container technology for privilege escalation to root. 
-<br />
-This experience underscored the significance of exhaustive enumeration, vulnerability exploitation, and diverse attack vectors, significantly enhancing expertise in LFI, credential acquisition, and container-based privilege escalation within cybersecurity.
-
-
-
+**Support**, labeled as "*Easy*" on HackTheBox, proved to be a challenging yet instructive endeavor. 
 
 
 
@@ -32,8 +26,8 @@ This experience underscored the significance of exhaustive enumeration, vulnerab
   <thead>
     <tr>
       <th>Name</th>
-    <th style="text-align: right"><a href="https://affiliate.hackthebox.com/box?box=tabby" target="_blank" style="font-size: xx-large; : 0 0 5px #ffffff, 0 0 3px #ffffff; color: #ffffff">
-      Tabby
+    <th style="text-align: right"><a href="https://affiliate.hackthebox.com/box?box=support" target="_blank" style="font-size: xx-large; : 0 0 5px #ffffff, 0 0 3px #ffffff; color: #ffffff">
+      Support
       </a><br /></th>
     </tr>
   </thead>
@@ -41,16 +35,16 @@ This experience underscored the significance of exhaustive enumeration, vulnerab
     <tr>
       <td>OS</td>
       <td style="text-align: right"><a style="font-size: x-large; : 0 0 5px #ffffff, 0 0 7px #ffffff; color: #2020E">
-      Linux
+      Windows
       </a></td>
     </tr>
      <tr>
       <td>1st User blood</td>
-      <td style="text-align: right"><a href="https://www.hackthebox.eu/home/users/profile/310032"><img src="https://www.hackthebox.eu/badge/image/310032"  style="display: unset" /></a></td>
+      <td style="text-align: right"><a href="https://www.hackthebox.eu/home/users/profile/2761"><img src="https://www.hackthebox.eu/badge/image/2761"  style="display: unset" /></a></td>
     </tr>
     <tr>
       <td>1st System blood</td>
-      <td style="text-align: right"><a href="https://www.hackthebox.eu/home/users/profile/310032"><img src="https://www.hackthebox.eu/badge/image/310032"  style="display: unset" /></a></td>
+      <td style="text-align: right"><a href="https://www.hackthebox.eu/home/users/profile/357237"><img src="https://www.hackthebox.eu/badge/image/357237"  style="display: unset" /></a></td>
     </tr>
   </tbody>
 </table>
@@ -58,8 +52,14 @@ This experience underscored the significance of exhaustive enumeration, vulnerab
 
 
 
-# <span style="color:red">Enuemeration</span>
+# <span style="color:red">Nmap Enumerationn</span>
 ## Scanning for open ports using Nmap
+
+
+Nmap found so many port open: **3,88,135,139,389,445,464,593,636,3268,3269,5985,9389,49664,49667,49674,49686,49700,64527**. 
+<br />
+This box looks like a typically Domain controller. 
+<br />
 
 ```nmap
 ┌──(yoon㉿kali)-[~/Documents/htb/support]
@@ -95,6 +95,11 @@ Read data files from: /usr/bin/../share/nmap
 ```
 
 ## nmap version scan
+
+Version scan found nothing that special.
+<br />
+There's services such as LDAP, MSRPC, and kerberos running on this box.
+<br />
 
 ```nmap
 ┌──(yoon㉿kali)-[~/Documents/htb/support]
@@ -149,7 +154,10 @@ Service detection performed. Please report any incorrect results at https://nmap
 # Nmap done at Thu Oct 12 11:45:56 2023 -- 1 IP address (1 host up) scanned in 114.28 seconds
 ```
 
-## SMB
+# <span style="color:red">SMB Enumerationn</span>
+
+Except for **suport-tools** share, all the others are windows default SMB share. 
+<br />
 
 ```smb
 ┌──(yoon㉿kali)-[~/Documents/htb/support]
@@ -167,10 +175,16 @@ Reconnecting with SMB1 for workgroup listing.
 do_connect: Connection to 10.10.11.174 failed (Error NT_STATUS_RESOURCE_NAME_NOT_FOUND)
 Unable to connect with SMB1 -- no workgroup available
 ```
+<br />
 
+Looking into **support-tools**, there are several zip files and common softwares that are used in Windows.
+<br />
+
+Interestingly, **UserInfo.exe.zip**, I don't think this is a common file on windows, so I'll be looking into it:
+
+<br />
 
 ```bash
-                                                                                   
 ┌──(yoon㉿kali)-[~/Documents/htb/support]
 └─$ smbclient //10.10.11.174/support-tools
 Password for [WORKGROUP\yoon]:
@@ -189,6 +203,11 @@ smb: \> ls
 
 		4026367 blocks of size 4096. 962960 blocks available
 ```
+<br />
+
+I downloaded entire **support-tools** share to my local machine. 
+
+<br />
 
 ```bash
 ┌──(yoon㉿kali)-[~/Documents/htb/support/smb-files]
@@ -198,3 +217,82 @@ npp.8.4.1.portable.x64.zip   windirstat1_1_2_setup.exe
 putty.exe                    WiresharkPortable64_3.6.5.paf.exe
 SysinternalsSuite.zip
 ```
+
+## crackmapexec
+
+I tried running **crackmapexec** and found nothing interesting other than the domain name **support.htb**.
+
+<br />
+
+I added domain name to /etc/hosts.
+<br />
+
+```
+┌──(yoon㉿kali)-[~/Documents/htb/support]
+└─$ crackmapexec smb 10.10.11.174 --shares -u 'jadu' -p ''
+SMB         10.10.11.174    445    DC               [*] Windows 10.0 Build 20348 x64 (name:DC) (domain:support.htb) (signing:True) (SMBv1:False)
+SMB         10.10.11.174    445    DC               [+] support.htb\jadu: 
+SMB         10.10.11.174    445    DC               [+] Enumerated shares
+SMB         10.10.11.174    445    DC               Share           Permissions     Remark
+SMB         10.10.11.174    445    DC               -----           -----------     ------
+SMB         10.10.11.174    445    DC               ADMIN$                          Remote Admin
+SMB         10.10.11.174    445    DC               C$                              Default share
+SMB         10.10.11.174    445    DC               IPC$            READ            Remote IPC
+SMB         10.10.11.174    445    DC               NETLOGON                        Logon server share 
+SMB         10.10.11.174    445    DC               support-tools   READ            support staff tools
+SMB         10.10.11.174    445    DC               SYSVOL                          Logon server share 
+```
+
+
+# <span style="color:red">Enumeration on UserInfo.exe</span>
+
+
+>**Binary Files in .NET**: In .NET, like in many other programming languages and frameworks, binary files typically refer to files that contain **non-textual data**, such as compiled code (e.g., **DLL** or **EXE** files), serialized data, or proprietary file formats. These binary files are **not human-readable** and are often used to store or distribute compiled applications or data that needs to be preserved in a specific binary format.
+<br />
+
+**UserInfo.exe** is a .NET file which couldn't be ran on Linux system. However, I can run it using softwares such as Wine or I can look into it by using .NET analyzer such as **DNSpy** or **IlSpy**.
+
+<br />
+
+## Method 1: DNSpy
+
+
+![Alt text](image.png)
+
+
+![Alt text](image-1.png)
+```NET
+// UserInfo.Services.Protected
+// Token: 0x04000005 RID: 5
+private static string enc_password = "0Nv32PTwgYjzg9/8j5TbmvPd3e7WhtWWyuPsyO76/Y+U193E";
+```
+## Method 2: Wireshark with Wine
+
+
+# <span style="color:red">Enumeration on kerberos</span>
+
+## kerbrute
+
+```
+┌──(yoon㉿kali)-[/opt]
+└─$ ./kerbrute_linux_amd64 userenum --dc 10.10.11.174 -d support.htb /usr/share/wordlists/SecLists/Usernames/xato-net-10-million-usernames.txt 
+
+    __             __               __     
+   / /_____  _____/ /_  _______  __/ /____ 
+  / //_/ _ \/ ___/ __ \/ ___/ / / / __/ _ \
+ / ,< /  __/ /  / /_/ / /  / /_/ / /_/  __/
+/_/|_|\___/_/  /_.___/_/   \__,_/\__/\___/                                        
+
+Version: v1.0.3 (9dad6e1) - 10/17/23 - Ronnie Flathers @ropnop
+
+2023/10/17 08:50:58 >  Using KDC(s):
+2023/10/17 08:50:58 >  	10.10.11.174:88
+
+2023/10/17 08:51:13 >  [+] VALID USERNAME:	 support@support.htb
+2023/10/17 08:51:21 >  [+] VALID USERNAME:	 guest@support.htb
+2023/10/17 08:52:12 >  [+] VALID USERNAME:	 administrator@support.htb
+```
+
+## Sources
+- https://github.com/dnSpy/dnSpy/releases
+- 
