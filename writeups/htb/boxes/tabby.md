@@ -935,6 +935,8 @@ uid=1000(ash) gid=1000(ash) euid=0(root) groups=1000(ash),4(adm),24(cdrom),30(di
 <br />Thank you for reading!
 
 <br />
+
+
 ## Sources:
 - https://www.infosecmatter.com/nessus-plugin-library/?id=136806
 - https://github.com/PenTestical/CVE-2020-9484
