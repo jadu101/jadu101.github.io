@@ -14,7 +14,7 @@ tags: traverxec writeup hackthebox
 
 # [EASY] Traverxec <br/>
 
-
+**Traverxec** stands out as an approachable box with an 'easy' rating on Hack The Box. My journey began by gaining an initial foothold as the user '**www-data**.' I achieved this by leveraging an RCE exploit against the **Nostromo** web server, which opened doors for further exploration. Transitioning from 'www-data' to '**david**' involved a clever privilege escalation maneuver. I delved into the configuration files of Nostromo, uncovering SSH identity keys that provided me with a path to 'david.' Finally, my path to 'root' was marked by seizing an opportunity with a **journalctrl** vulnerability. It was a thrilling adventure indeed!
 
 # <span style="color:red">Introduction</span> 
 
@@ -227,7 +227,7 @@ www-data@traverxec:/home/david$ find / -user www-data 2>/dev/null
 /proc/540/task/540/net
 /proc/7378/task/7378/fd
 /proc/7378/task/7378/fd/0
-/proc/7378/task/7378/fd/1
+/proc/7378/task/737 8/fd/1
 /proc/7378/task/7378/fd/2
 <snip>
 ```

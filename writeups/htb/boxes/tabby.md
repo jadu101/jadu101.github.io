@@ -627,6 +627,7 @@ ash@tabby:~$
 
 I tried SSHing as user **ash** but it didn't work:
 <br />
+
 ```bash
 └─$ ssh ash@10.10.10.194     
 The authenticity of host '10.10.10.194 (10.10.10.194)' can't be established.
@@ -643,6 +644,7 @@ To make things easier, I am going to create a SSH private key so I can signin as
 <br />
 I created folder **.ssh** and generated SSH private keys in it:
 <br />
+
 ```bash
 ash@tabby:~/.ssh$ ssh-keygen -f id_rsa
 ssh-keygen -f id_rsa
@@ -669,8 +671,10 @@ The key's randomart image is:
 +----[SHA256]-----+
 ```
 <br />
+
 I set up **authoried_key** by copying public key in to it:
 <br />
+
 ```bash
 cat id_rsa.pub > authorized_keys
 ash@tabby:~/.ssh$ ls
@@ -678,8 +682,10 @@ ls
 authorized_keys  id_rsa  id_rsa.pub
 ```
 <br />
+
 I prepared private key on my local machine by creating and copying **id_rsa** private key inside of it:
 <br />
+
 ```bash
 ┌──(yoon㉿kali)-[~/Documents/htb/tabby]
 └─$ sudo nano id_rsa                         
