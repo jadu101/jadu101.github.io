@@ -74,6 +74,7 @@ $ stty rows 38 columns 116
 Sending linpeas from local machine:
 ```
 python3 -m http.server
+python -m SimpleHTTPServer 9999
 ```
 <br />
 
@@ -107,6 +108,7 @@ cat /etc/passwd | grep /bin/bash
 - Check for files that user owns:
 ```
 find / -user jadu 2>/dev/null
+find / -user jadu 2>/dev/null | grep -Ev '(/proc/|/sys/)'
 ```
 
 #### folder
