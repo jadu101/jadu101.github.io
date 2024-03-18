@@ -15,7 +15,6 @@ tags:
 - azure
 
 ---
-
 ## Recon
 ### Rustscan
 Based on the ports open, I assumed that this machine running on **Active Directory**.
