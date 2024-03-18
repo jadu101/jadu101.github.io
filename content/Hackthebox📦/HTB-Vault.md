@@ -34,7 +34,6 @@ tags:
 Only two ports are open (**SSH** and **HTTP**) -> Classic HTB Linux machine:
 
 ```bash
-
 ┌──(yoon㉿kali)-[~/Documents/htb/vault]
 └─$ rustscan --addresses 10.10.10.109 --range 1-65535
 .----. .-. .-. .----..---. .----. .---. .--. .-. .-.
@@ -68,7 +67,6 @@ Nothing very new was found from nmap scan:
   
 
 ```bash
-
 ┌──(yoon㉿kali)-[~/Documents/htb/vault]
 └─$ sudo nmap -sVC -p 22,80 10.10.10.109 -v
 <snip>
