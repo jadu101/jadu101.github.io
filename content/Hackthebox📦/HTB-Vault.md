@@ -259,7 +259,7 @@ Using the found creds(dave:Dav3therav3123) from above, I can sign in to ssh as d
 
 ![](https://i.imgur.com/U51hEaW.png)
 
-## Pivoting dave@ubuntu -> dave@DNS
+## Pivoting dave@ubuntu to dave@DNS
 
 Here is the [Pivoting Tutorial](https://0xdf.gitlab.io/2019/01/28/pwk-notes-tunneling-update1.html) that I found it really hand when solving this box.
 
