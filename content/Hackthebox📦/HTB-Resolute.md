@@ -217,7 +217,7 @@ Now I have my first shell as user **melanie**!:
 
 
 
-## Privesc melanie -> ryan
+## Privesc melanie to ryan
 ### Bloodhound
 Since I know this machine is running on Active Directory, I first decided to run **Bloodhound**.
 
@@ -377,7 +377,7 @@ Now I have a shell connection as user **ryan**:
 ![](https://i.imgur.com/X69qS2q.png)
 
 
-## Privesc ryan -> Administrator
+## Privesc ryan to Administrator
 ### Bloodhound
 
 Again uploaded and ran **SharpHound.exe**, downloaded the zip file and imported it into bloodhound:

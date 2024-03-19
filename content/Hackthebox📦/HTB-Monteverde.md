@@ -170,7 +170,7 @@ Using crackmapexec for password spraying, I discovered account **mhope** pairs w
 Luckily, this user had access to winrm:
 
 ![](https://i.imgur.com/66MQPfI.png)
-## Privesc mhope->administrator
+## Privesc mhope to administrator
 ### SMB as mhope
 I checked if account mhope has more access to different shares but it seemed it has the same access as account SABatchJobs -> **FAILED**
 

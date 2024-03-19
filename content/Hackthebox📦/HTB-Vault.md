@@ -215,7 +215,7 @@ I uploaded downloaded p0wny shell with php5 extension and through **/uploads**, 
 
 ![](https://i.imgur.com/YfdgfTA.png)
 
-## Privesc www-data@ubuntu -> dave@ubuntu
+## Privesc www-data@ubuntu to dave@ubuntu
 
 sparklays-local-admin-interface-0001.php -> Looks interesting...
 
@@ -389,7 +389,7 @@ With the SSH creds found above -> SSHed in to **dave@DNS** from **dave@ubuntu**
 
 ![](https://i.imgur.com/zDjomyo.png)
 
-## Privesc dave@DNS -> root@DNS
+## Privesc dave@DNS to root@DNS
 
 Earlier on OpenVPN RCE shell, I had connection as root but here connection was made a dave.
 
@@ -409,7 +409,7 @@ I can easily reach root privilege as such:
 
 ![](https://i.imgur.com/l9BhgOq.png)
 
-## Pivoting dave@DNS -> dave@vault
+## Pivoting dave@DNS to dave@vault
 
 ### Local Enumeration
 
