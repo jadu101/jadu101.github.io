@@ -82,4 +82,6 @@ Let's say you are on the compromised system and you found 192.168.122.4 host liv
 
 ## References
 - https://0xdf.gitlab.io/2019/01/28/pwk-notes-tunneling-update1.html
-- 
+- https://0xdf.gitlab.io/2020/08/10/tunneling-with-chisel-and-ssf-update.html
+- https://jadu101.github.io/Hackthebox%F0%9F%93%A6/HTB-Vault
+- https://viperone.gitbook.io/pentest-everything/everything/pivoting-and-portforwarding

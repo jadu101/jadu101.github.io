@@ -11,6 +11,7 @@ tags:
   - secretsdump
   - bloodhound
   - add-user
+  - persistence
 ---
 ## Information Gathering
 ### Rustscan
