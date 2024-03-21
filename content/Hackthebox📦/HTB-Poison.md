@@ -5,6 +5,11 @@ tags:
   - htb
   - linux
   - freebsd
+  - lfi
+  - zip2john
+  - vnc
+  - tunneling
+  - persistence
 ---
 ## Information Gathering
 
