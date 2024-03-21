@@ -1,5 +1,5 @@
 ---
-title: Maintaining persistence after compromise in Windows
+title: Windows Persistence
 draft: false
 tags:
   - windows

@@ -1,5 +1,5 @@
 ---
-title: Maintaining persistence after compromise in Linux
+title: Linux Persistence
 draft: false
 tags:
   - linux
