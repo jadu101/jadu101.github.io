@@ -381,9 +381,9 @@ Now using the copied private key, you sign in to SSH as root: `ssh -i mykey root
 ![](https://i.imgur.com/WTwCQHs.png)
 
 ### Add user
-I can whatever user I want to root group and this will allow me to escalate my privilege to root directly when I gain access to low privilege user shell.
+I can add whatever user I want to root group and this will allow me to escalate my privilege to root directly when I gain access to low privilege user shell.
 
-I add user and set password using the commands below:
+I add  user and set password using the commands below:
 ```bash
 useradd -ou 0 -g 0 hacker-jadu
 passwd hacker-jadu
