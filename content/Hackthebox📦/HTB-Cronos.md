@@ -260,7 +260,7 @@ Before I do anything, I first enhanced the shell:
 
   
 
-## Privesc www-data -> root
+## Privesc www-data to root
 ### Local Enumeration
 
 Before running linpeas, I manually looked around the file system and on **/var/www/admin**, I saw **config.php** which seemed interesting:
