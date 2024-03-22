@@ -3,6 +3,8 @@ title: Port 21 - FTP
 draft: false
 tags:
   - ftp
+  - telnet
+  - nc
 ---
 ## Enumeration
 Manual banner grab:

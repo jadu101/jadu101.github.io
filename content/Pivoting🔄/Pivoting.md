@@ -7,6 +7,7 @@ tags:
   - chisel
 ---
 ## Plot
+
 Let's say you finally compromised the machine. You have shell connection but it seems like you need to pivot to another machine in different network. In this note, I will cover following topics:
 - Enumeration for Pivoting
 - Host discovery
