@@ -7,6 +7,7 @@ tags:
   - crackmapexec
   - enum4linux
   - smbmap
+  - smbclient-py
 ---
 ## crackmapexec
 
@@ -24,6 +25,14 @@ Check on non-default shares such as Replication or Users.
 `smbclient -N -L //10.10.10.100`
 
 ![](https://i.imgur.com/93M3k9H.png)
+
+### NTLM Auth Disabled
+
+In such case like [HTB-Scrambled](https://0xdf.gitlab.io/2022/10/01/htb-scrambled-linux.html), NTLM authentication might be disabled for security purpose and you won't be able to use standard tools and you won't be able to access any any service by IP address if it requires authentication.
+
+Using impacket's **smbclient.py** you can access SMB:
+
+`smbclient.py -k scrm.local/ksimpson:ksimpson@dc1.scrm.local -dc-ip dc1.scrm.local`
 
 ## smbmap
 

