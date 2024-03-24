@@ -12,6 +12,8 @@ tags:
   - bloodhound
   - add-user
   - persistence
+  - ldapsearch
+  - awk
 ---
 ## Information Gathering
 ### Rustscan
