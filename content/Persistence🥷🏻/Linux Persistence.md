@@ -18,7 +18,7 @@ These connections are still shell but it is loud and ugly. It is also complicate
  Below are several ways of maintaining persistence once gained shell as a root.
 
 
-### SSH as root
+## SSH as root
 
 This is my most recommended and preferred method of maintaining persistence.
 
@@ -49,7 +49,7 @@ Now using the copied private key, you sign in to SSH as root: `ssh -i mykey root
 
 ![](https://i.imgur.com/WTwCQHs.png)
 
-### Add user
+## Add user
 I can add whatever user I want to root group and this will allow me to escalate my privilege to root directly when I gain access to low privilege user shell.
 
 I add user and set password using the commands below:
@@ -70,7 +70,7 @@ Now I can switch to user **hacker-jadu** using `su hacker-jadu`:
 
 
 
-### Crack /etc/shadow
+## Crack /etc/shadow
 
 This method is not very recommended since you don't know how strict password policy is for your target environment.
 

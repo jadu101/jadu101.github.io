@@ -17,7 +17,7 @@ These connections are still shell but it is loud and ugly. It is also complicate
 
  Below are several ways of maintaining persistence once gained shell as a root.
 
-### Adding Domain Admin User
+## Adding Domain Admin User
 
 I can simply create a new user and add the user in Domain Admins group as such:
 
@@ -34,7 +34,7 @@ Now with evil-winrm, I can sign in as the created user:
 ![](https://i.imgur.com/y8ojooG.png)
 
 
-### Dumping NTDS.dit
+## Dumping NTDS.dit
 
 I can dump **NTDS.dit** to obtain hashes for users and pass those hashes to gain connection to the machine.
 

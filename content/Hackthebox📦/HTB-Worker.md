@@ -718,3 +718,4 @@ Now I can sign it to the system as Administrator with the password that I set:
 
 ## References
 - https://www.legitsecurity.com/blog/remote-code-execution-vulnerability-in-azure-pipelines-can-lead-to-software-supply-chain-attack
+- https://book.hacktricks.xyz/network-services-pentesting/3690-pentesting-subversion-svn-server
