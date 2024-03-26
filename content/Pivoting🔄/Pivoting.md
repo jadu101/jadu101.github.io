@@ -45,6 +45,10 @@ You can see that **192.168.122.4** and **192.168.122.5** is live above.
 ## Port Scan
 For port scanning, you can upload binary version of nmap to the system to run nmap on the compromised system but I somehow found just running **nc** scan more comfortable.
 
+You can download static binary version of nmap from [here](https://github.com/andrew-d/static-binaries/blob/master/binaries/linux/x86_64/nmap).
+
+`wget https://github.com/andrew-d/static-binaries/blob/master/binaries/linux/x86_64/nmap?raw=true -O nmap-static
+
 **For Full Port Scan:**
 
 `time for i in $(seq 1 65535); do (nc -zvn 192.168.122.5 ${i} 2>&1 | grep -v "Connection refused" &); done`

@@ -4,6 +4,8 @@ draft: false
 tags:
   - windows
   - privilege-escalation
+  - chisel
+  - smbserver
 ---
 
 ## Plot
@@ -154,9 +156,7 @@ netsh firewall show config
 
 ## File Transfer
 
-  
-
-## Transferring winpeas.exe
+### Transferring winpeas.exe
 
 
 The following sequence of commands creates a PowerShell script named **wget.ps1** that performs the download of a file (**winpeas.exe**) from a specified URL (http://10.10.16.22/winpeas.exe) using the **System.Net.WebClient** class.
