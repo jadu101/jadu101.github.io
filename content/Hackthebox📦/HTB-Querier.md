@@ -11,6 +11,17 @@ tags:
   - xp_cmdshell
   - powerup-ps1
 ---
+## Summary
+- SMB Null login
+- Access to Reports share -> Download xlsm file
+- xlsm file macros -> user reporting creds exposed
+- MSSQL as reporting
+- Relay Attack -> obtain user mssql-svc hash and crack
+- MSSQL as mssql-svc
+- enable_xp_cmdshell -> reverse shell as mssql-svc
+- PowerUp.ps1 -> Administrator password learked
+- Evil-Winrm as Administrator
+ 
 ## Information Gathering
 ### Rustscan
 

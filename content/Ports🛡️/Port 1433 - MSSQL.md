@@ -23,8 +23,9 @@ Check whether creds found is valid on MSSQL:
 
 Using **impacket-mssqlclient**, interact with the database:
 
-`impacket-mssqlclient -port 1433 10.10.11.236/operator:operator@10.10.11.236 -windows-auth`
+`mssqlclient.py reporting:'PcwTWTHRwryjc$c6'@10.10.10.125 -windows-auth`
 
+![](https://i.imgur.com/bR3FwZc.png)
 
 Below are example interaction:
 
