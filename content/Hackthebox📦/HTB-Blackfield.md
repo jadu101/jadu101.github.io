@@ -15,6 +15,7 @@ tags:
   - sebackupprivilege
   - pypykatz
   - secretsdump
+  - ntds-dit
 ---
 ## Information Gathering
 ### Rustscan
@@ -372,7 +373,7 @@ Unfortunately, passing the above hash to crackmapexec didn't work out.
 
   
 
-## Extracting NTDS.dit
+### Extracting NTDS.dit
 
 Creating a Distributed Shell File (dsh file) that contains all the commands required by Diskshadow to run and create a full copy of our Windows Drive, from which I can then extract the ntds.dit file. I moved to the Kali Linux shell and created a dsh file. In this file, I instructed Diskshadow to create a copy of the C: Drive into a Z Drive with "jadu" as its alias. After creating this dsh file, I used **unix2dos** to convert the encoding and spacing of the dsh file to one that is compatible with the Windows machine.
 
