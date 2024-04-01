@@ -118,7 +118,7 @@ Using **awk**, I made a list of accounts to username.txt
 ![](https://i.imgur.com/VbwOPLO.png)
 
 
-**usernames.txt** is created and I decided to enumerate other services first before moving on to AS-REP Roasting of Kerbruting.
+**usernames.txt** is created and I decided to enumerate other services first before moving on to AS-REP Roasting or Kerbruting.
 
 ![](https://i.imgur.com/4NbS4gB.png)
 
@@ -159,11 +159,11 @@ Using Kerbrute, I can filter out valid username from KDC:
 
 Kerbrute found three users: **audit2020**, **support**, and **svc_backup**.
 
-More interestingly, user support seemed to be vulnerable to **AS-REP Roasting**
+More interestingly, user **support** seemed to be vulnerable to **AS-REP Roasting**
 
 ### AS-REP Roasting
 
-Using **GetNPUsers.py**, I can obtain hashcat crackable hash for user **suport**:
+Using **GetNPUsers.py**, I can obtain hashcat crackable hash for user **support**:
 
 `GetNPUsers.py -no-pass -dc-ip 10.10.10.192 BLACKFIELD.LOCAL/support`
 
@@ -176,6 +176,8 @@ Using hashcat, I cracked the password and credentials were obtained -> **support
 
 `haschat -m 18200 hash.asreproast rockyou.txt`
 
+![](https://i.imgur.com/C4STsM3.png)
+
 ### Kerberoasting - Failed
 
 I tried Kerberoasting with the found credentials but it didn't work:
@@ -187,7 +189,7 @@ I tried Kerberoasting with the found credentials but it didn't work:
 
 ### SMB - SYSVOL & NETLOGON
 
-I hoped user support had access to winrm but unfortunately it didn't:
+I hoped user **support** had access to winrm but unfortunately it didn't:
 
 ![](https://i.imgur.com/CIh1EgV.png)
 
@@ -207,7 +209,7 @@ I recursively downloaded everything:
 ![](https://i.imgur.com/iNdGodp.png)
 
 
-All the files were in Policies folder but none of those files had password keyword inside of it:
+All the files were in **Policies** folder but none of those files had password keyword inside of it:
 
 ![](https://i.imgur.com/IkvFdnx.png)
 
@@ -246,7 +248,7 @@ Checking on **Outbound Object Control**, there was one **First Degree Object Con
 ![](https://i.imgur.com/QGgg30F.png)
 
 
-User SUPPORT@BLACKFIELD.LOCAL has the capability to change the user AUDIT2020@BLACKFIELD.LOCAL's password without knowing that user's current password.
+User SUPPORT@BLACKFIELD.LOCAL had the capability to change the user AUDIT2020@BLACKFIELD.LOCAL's password without knowing that user's current password.
 
 ![](https://i.imgur.com/LfBlfop.png)
 
@@ -258,7 +260,7 @@ Bloodhound provided me with guide on how to abuse this vulnerability but followi
 ![](https://i.imgur.com/WiCrQLg.png)
 
 
-Instead, I signed-in to RPC as support and changed the password for audit2020:
+Instead, I signed-in to RPC as support and changed the password for **audit2020**:
 
 `setuserinfo2 audit2020 23 Password123!`
 
@@ -269,7 +271,7 @@ Instead, I signed-in to RPC as support and changed the password for audit2020:
 
 I tried Evil-Winrm as **audit2020** with the changed password but it didn't work. It seemed that audit2020 wasn't in winrm group. 
 
-However, audit2020 did had an access to **forensic** share:
+However, **audit2020** did had an access to **forensic** share:
 
 `smbclient //10.10.10.192/forensic -U audit2020%'Password123!'`
 
@@ -292,6 +294,8 @@ I unzipped the file to obtain **lsass.DMP** file:
 
 Using **pypykatz**, I was able to extract password hashes from the DMP file:
 
+`pypykatz lsa minidump lsass.DMP`
+
 ![](https://i.imgur.com/IZsMx0B.png)
 
 
@@ -303,12 +307,12 @@ I had NT hash for both **svc_backup** and **Administrator**:
 ![](https://i.imgur.com/M31NXSz.png)
 
 
-Unfortunately, for some reason passing the hash for administrator didn't work:
+Unfortunately, for some reason, passing the hash for administrator didn't work:
 
 ![](https://i.imgur.com/Rw7Yb4U.png)
 
 
-However, passing the hash for **svc_backup** gave me a shell:
+However, passing the hash for **svc_backup** returned me a shell:
 
 ![](https://i.imgur.com/H4oFW95.png)
 
@@ -336,90 +340,48 @@ By abusing this privilege, I can dump password hashes by downloading **SAM**,**S
 
 I used reg command to save registry key for **SAM** and **SYSTEM** saved it to Temp directory:
 
-
-
 ![](https://i.imgur.com/znviqNn.png)
 
-
-  
 
 ![](https://i.imgur.com/xe26VNo.png)
 
 
   
-  
-
-
-
 After downloading **SAM** and **SYSTEM** to local side, I can use **pypykatz** to extract password hashes.
 
 
-
-  
-
 **PyPykatz** is a Python library for parsing and manipulating credentials from Windows Security Account Manager (SAM) files, and I can use this to get password hashes:
 
-
+`pypykatz registry --sam sam system`
 
 ![](https://i.imgur.com/CUuYe9C.png)
 
 
-  
-
-
-
-
-Unfortunately, passing the above hash to crackmapexec didn't work out.
-
-  
+Unfortunately, passing the above hash to **crackmapexec** didn't work out.
 
 ### Extracting NTDS.dit
 
+*I followed [this tutorial](https://www.hackingarticles.in/windows-privilege-escalation-sebackupprivilege/) by hacking articles.*
+
 Creating a Distributed Shell File (dsh file) that contains all the commands required by Diskshadow to run and create a full copy of our Windows Drive, from which I can then extract the ntds.dit file. I moved to the Kali Linux shell and created a dsh file. In this file, I instructed Diskshadow to create a copy of the C: Drive into a Z Drive with "jadu" as its alias. After creating this dsh file, I used **unix2dos** to convert the encoding and spacing of the dsh file to one that is compatible with the Windows machine.
-
-
-
-  
 
 1.  Creating dsh file to copy C: drive:
 
-
-
 ![](https://i.imgur.com/RwYPl7o.png)
-
-
-  
-
-
 
   
 
 2.  Uploaded the dsh file and ran it to copy the disk:
 
-  
+  ![](https://i.imgur.com/pVOfMuo.png)
 
 
-
-![](https://i.imgur.com/pVOfMuo.png)
-
-
-  
-
-
-
-  
 
 3.  Copied C drive into Z drive:
 
-  
+  ![](https://i.imgur.com/4DbBJv5.png)
 
-
-
-![](https://i.imgur.com/4DbBJv5.png)
-
-
-  
-  
+ 
 
 Now using the commands below, I downloaded ntds.dit and relevant files to local machine:
 
@@ -431,25 +393,16 @@ download ntds.dit
 download system
 ```
 
- 
-
-Using secretsdump.py, I dumped all the password hashes:
-
-
+ Using secretsdump.py, I dumped all the password hashes:
 
 ![](https://i.imgur.com/RTvLaqu.png)
 
 
-  
-
 ![](https://i.imgur.com/uvW12ys.png)
 
 
-  
 
 Now I have shell as administrator:
-
-
 
 ![](https://i.imgur.com/W36PuDv.png)
 
@@ -457,3 +410,4 @@ Now I have shell as administrator:
 - https://www.thehacker.recipes/a-d/movement/dacl/forcechangepassword
 - https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation/privilege-escalation-abusing-tokens
 - https://book.hacktricks.xyz/windows-hardening/active-directory-methodology/privileged-groups-and-token-privileges
+- https://www.hackingarticles.in/windows-privilege-escalation-sebackupprivilege/
