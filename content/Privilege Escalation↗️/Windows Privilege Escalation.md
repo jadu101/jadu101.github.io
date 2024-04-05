@@ -170,6 +170,9 @@ Download PowerUp.ps1 to **C:\Users\mssql-svc\app-data\local\temp** and run it:
 ![](https://i.imgur.com/z2BwkNx.png)
 
 
+If there is Script execution restriction, bypass it using `powershell -e bypass`
+
+
 `Invoke-AllChecks` shows you result:
 
 ![](https://i.imgur.com/HWl21e9.png)
