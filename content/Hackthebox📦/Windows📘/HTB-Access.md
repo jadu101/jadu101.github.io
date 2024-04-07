@@ -13,7 +13,6 @@ tags:
   - savecred
   - lsass-dmp
   - mimikatz
-  - as-rep-roasting
   - readpst
   - procdump
 ---
