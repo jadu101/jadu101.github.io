@@ -261,6 +261,30 @@ A classic example…
 Let’s say tar has “tar = cap_dac_read_search+ep” which means tar has read access to anything. We can abuse this to read /etc/shadow by utilising the function of archiving a file.
 
 
+### Capabilites - python
+
+
+Running **linpeas.sh** discovers **capabilites** on **python3.8**:
+
+
+![](https://i.imgur.com/vL4vE6P.png)
+
+**cap_setuid** has the following ability according to the man page:
+
+> * Make arbitrary manipulations of process UIDs (setuid(2), setreuid(2), setresuid(2), setfsuid(2)); * forge UID when passing socket credentials via UNIX domain sockets; * write a user ID mapping in a user namespace (see user_namespaces(7)).
+
+
+I can abuse this capability following guide from [GTFOBins](https://gtfobins.github.io/gtfobins/python/): 
+
+![](https://i.imgur.com/LlCkMFT.png)
+
+
+Running the command from above, It instantly give me shell as the root:
+
+`/usr/bin/python3.8 -c 'import os; os.setuid(0); os.system("/bin/sh")'`
+
+![](https://i.imgur.com/GgiF1oF.png)
+
 ## Automated Tools
 
   
