@@ -10,6 +10,8 @@ tags:
   - setuid
   - capabilities
 ---
+![](https://i.imgur.com/uyzHwGN.png)
+
 ## Information Gathering
 ### Rustscan
 

@@ -63,6 +63,16 @@ You can see here that port 22 is open in 192.168.122.4:
 
 ![](https://i.imgur.com/hth0q73.png)
 
+If netcat is not found on system, try this way:
+
+
+```bash
+for port in {1..65535}; do echo > /dev/tcp/172.19.0.1/$port && echo "$port open"; done 2>/dev/null           
+```
+
+![](https://i.imgur.com/fiQtWb0.png)
+
+
 ## Tunneling/Pivoting
 ### Chisel
 There are many ways for tunneling but my favorite way is **chisel**.

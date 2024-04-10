@@ -328,6 +328,11 @@ Now on my local listener, the data receieved by Netcat is redirected to a file n
 
 ## Developing your shell
   
+- Script
+
+```bash
+script /dev/null -c bash
+```
 
 - Python pty module:
   
