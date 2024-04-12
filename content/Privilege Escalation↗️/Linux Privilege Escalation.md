@@ -247,6 +247,34 @@ find / -perm -4000 -type f -exec ls -la {} 2>/dev/null \;
 find / -uid 0 -perm -4000 -type f 2>/dev/null
 ```
 
+### SUID Path
+
+#### Ex) Tar
+I can take a better look at it using **ltrace**:
+
+`ltrace /usr/bin/pandora_backup`
+
+![](https://i.imgur.com/03y8EG6.png)
+
+Because there’s no path given for tar, it will use the current user’s PATH environment variable to look for valid executables to run. But I can control that path, which makes this likely vulnerable to path hijack.
+
+I’ll work from `/dev/shm`, and add that to the current user’s PATH:
+
+![](https://i.imgur.com/dCc3h78.png)
+
+Now the first place it will look for **tar** is `/dev/shm`.
+
+I will create a simple payload that will run bash as root inside tar as such:
+
+![](https://i.imgur.com/AIpHMhO.png)
+
+
+Running **pandora_backup** will spawn a shell as root:
+
+![](https://i.imgur.com/l0W0Cr0.png)
+
+
+
 ## Capabilities
 
 - https://linux-audit.com/linux-capabilities-101/

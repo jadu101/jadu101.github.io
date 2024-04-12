@@ -11,6 +11,8 @@ tags:
   - container
   - pivoting
 ---
+![](https://i.imgur.com/NJNAL7r.png)
+
 ## Information Gathering
 ### Rustscan
 
