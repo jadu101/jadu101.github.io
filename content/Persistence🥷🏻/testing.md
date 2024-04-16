@@ -23,4 +23,7 @@ sd
 
 no imgur
 
-![[images/DSC05778.jpg]]
+![[/Images/DSC05778.jpg]]
+
+
+![Alt text](/Images/DSC05778.jpg)
