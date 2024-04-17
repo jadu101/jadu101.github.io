@@ -14,8 +14,6 @@ tags:
   - gpg
   - gpg2john
 ---
-Testing:
-![alt text](https://github.com/jadu101/jadu101.github.io/blob/v4/Images/htb/metatwo/MetaTwo.png)
 
 
 
