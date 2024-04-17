@@ -14,24 +14,10 @@ tags:
   - gpg
   - gpg2john
 ---
-
-{% include img_link src="/Images/htb/metatwo/MetaTwo.png" alt="image-20221111145357104" ext="png" trunc=400 %}
-
-https://github.com/username/repoName
-
-Tessting:
-
-![alt text](https://github.com/jadu101/jadu101.github.io/Images/htb/metatwo/MetaTwo.png)
+Testing:
+![alt text](https://github.com/jadu101/jadu101.github.io/blob/v4/Images/htb/metatwo/MetaTwo.png)
 
 
-
-![alt text](/Images/htb/metatwo/MetaTwo.png)
-
-![[./Images/htb/metatwo/crack.png]]
-
-![[./Images/htb/metatwo/crack.png]]
-
-![[image-9.png]]
 
 ![alt text](/Images/htb/metatwo/MetaTwo.png)
 ## Recon
