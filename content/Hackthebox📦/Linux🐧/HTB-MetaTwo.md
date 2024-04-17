@@ -15,7 +15,7 @@ tags:
   - gpg2john
 ---
 
-![alt text](Images/htb/metatwo/MetaTwo.png)
+![alt text](/Images/htb/metatwo/MetaTwo.png)
 ## Recon
 ### Rustscan
 
