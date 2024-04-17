@@ -8,7 +8,6 @@ tags:
 ---
 ![[PDFs/HTB-MetaTwo.pdf]]
 
-
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/MetaTwo.png)
 
 

