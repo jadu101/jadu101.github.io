@@ -9,6 +9,9 @@ tags:
 - [Pentest Everything](https://viperone.gitbook.io/pentest-everything)
 - [BreakInSecurity](https://axcheron.github.io/writeups/htb/htb_writeups/)- Good HTB AD WriteUps
 - [AD Pentest Mindmap](https://tajdini.net/blog/penetration/active-directory-penetration-mind-map/)
+- [sushant747](https://sushant747.gitbooks.io/total-oscp-guide/content/privilege_escalation_windows.html) - Netstat
+
+
 
 
 
