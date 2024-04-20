@@ -43,4 +43,14 @@ tags:
 
 cintrollsdf
 
-![](../../../Control%20(2).png)
+![sadasd](../../../Control%20(2).png)
+
+
+
+test
+
+```
+<img src="Images/htb/metatwo/MetaTwo.png" alt="Jadu" style="max-width: 80%; height: auto;">
+```
+
+<img src="Images/htb/metatwo/MetaTwo.png" alt="Jadu" style="max-width: 80%; height: auto;">
