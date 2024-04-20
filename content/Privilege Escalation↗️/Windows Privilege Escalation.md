@@ -179,6 +179,13 @@ If there is Script execution restriction, bypass it using `powershell -e bypass`
 
   
   
+## Writable Path
+
+```powershell
+C:\Users\<username>\AppData\Local\Temp\
+C:\Windows\system32\spool\drivers\color\
+C:\Windows\Temp
+```
 
 ## File Transfer
 
