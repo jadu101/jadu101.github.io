@@ -91,3 +91,9 @@ testing
 ```
 
 ![alt text](/../../Images/htb/metatwo/MetaTwo.png)
+
+
+
+testing with doubel brsket
+
+[[/Images/htb/metatwo/MetaTwo.png]]
