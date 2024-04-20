@@ -75,5 +75,5 @@ sdfghjk
 <img src="Images/htb/metatwo/MetaTwo.png" alt="Jadu" />
 
 
-
-<img src="Images/htb/metatwo/MetaTwo.png" />
+sdfds
+<img src="../../../Images/htb/metatwo/MetaTwo.png" />
