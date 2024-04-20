@@ -54,3 +54,9 @@ test
 ```
 
 <img src="Images/htb/metatwo/MetaTwo.png" alt="Jadu" style="max-width: 80%; height: auto;">
+
+```
+<img src="/Images/htb/metatwo/MetaTwo.png" alt="Jadu" style="max-width: 80%; height: auto;">
+```
+
+<img src="Images/htb/metatwo/MetaTwo.png" alt="Jadu" style="max-width: 80%; height: auto;">
