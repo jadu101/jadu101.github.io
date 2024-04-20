@@ -39,3 +39,6 @@ tags:
 ```
 
 ![alt text](/Images/htb/metatwo/MetaTwo.png)
+
+
+![](../../../Control%20(2).png)
