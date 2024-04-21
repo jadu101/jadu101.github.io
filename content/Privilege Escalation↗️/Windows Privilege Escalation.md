@@ -60,9 +60,10 @@ whoami /all
 net users
 net user 'username'
 net user administrator
+net group
+	net group /domainx
 net localgroup
 net localgroup administrators
-net /group domain
 whoami /groups
 ```
 
