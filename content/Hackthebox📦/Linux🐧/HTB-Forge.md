@@ -4,9 +4,16 @@ draft: false
 tags:
   - htb
   - linux
+  - ssrf
+  - ssrf-bypass
+  - sudo
+  - pdb
 ---
 
-![alt text](Forge.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/Forge.png)
+
+**Forge** was Easy-Medium Linux machine. Initial foothold part could be little tricky if you are not familiar with SSRF. Through subdomain bruteforcing, I discovered **admin.forge.htb** and through SSRF, I can access it to read it. On **admin.forge.htb**, it noticed me of how to connect to FTP through SSRF and using that I was able to read id_rsa key from it. Using id_rsa, I spawned SSH connection as the user. Privilege Escalation was very simple, remote-management.py was open to any user to be ran as root. By inputting value to the script, the script spawns PDB as sudo, and through that I can get root shell. 
+
 ## Information Gathering
 ### Rustscan
 
@@ -68,73 +75,73 @@ Nmap done: 1 IP address (1 host up) scanned in 21.29 seconds
 
 Going to the IP address throguh web browser, it leads me to **forge.htb** which I add to `/etc/hosts`:
 
-![alt text](image.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image.png)
 
 Subdomain bruteforcing discovered one valid entry: **admin.forge.htb**:
 
 `sudo gobuster vhost -u http://forge.htb --append-domain -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt`
 
-![alt text](image-4.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-4.png)
 
 After adding it to `/etc/hosts`, I can access it. However, it seems that only localhost is allowed for access:
 
 `admin.forge.htb/`
 
-![alt text](image-3.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-3.png)
 
 
 **forge.htb** is some sort of gallery website:
 
-![alt text](image-1.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-1.png)
 
 
 Through `/upload`, I can choose to upload local file or to upload form URL:
 
-![alt text](image-2.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-2.png)
 
 After submiting random image from local directory, it shows the path where the image is saved:
 
-![alt text](image-6.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-6.png)
 
 Image successfully uploads as such:
 
-![alt text](image-7.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-7.png)
 
 Unfortunately, this web app won't read any php scripts. 
 
 No matter what PHP script I upload, it won't render it properly. 
 
-![alt text](image-8.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-8.png)
 
 ## SSRF
 
 Moving on to **Upload from url**, I will try uploading file from my local Python HTTP server:
 
-![alt text](image-11.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-11.png)
 
 I see that the connection is made to my local listener from the web app:
 
-![alt text](image-10.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-10.png)
 
-Normally, I would upload PHP webshell to it and opein through `/uploads` and spawn a reverse shell through it but in this case, I know this webapp is not reading PHP.
+Normally, I would upload PHP webshell to it and open it through `/uploads` and spawn a reverse shell through it but in this case, I know this webapp is not reading PHP.
 
 Remembering **admin.forge.htb** is only accessible by localhost, I will try to access it through upload from url:
 
-![alt text](image-12.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-12.png)
 
 Unfortunately, there seems to be protection running here:
 
-![alt text](image-13.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-13.png)
 
 ### Bypass SSRF Protection
 
 I will try to bypass the blacklist through capitalization as such and it works:
 
-![alt text](image-15.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-15.png)
 
-Using **curl**, I can read **admin.forge.htb** in html as such:
+Using **curl**, I can read **admin.forge.htb** in html:
 
-![alt text](image-14.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-14.png)
 
 Below is the full output for admin.forge.htb:
 
@@ -162,11 +169,11 @@ Below is the full output for admin.forge.htb:
 
 Based on above's code, I will now try reading `/announcements`:
 
-![alt text](image-17.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-17.png)
 
 Using the same way, I can read `/announcements` in HTML:
 
-![alt text](image-16.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-16.png)
 
 Below is the full output:
 
@@ -198,13 +205,13 @@ Below is the full output:
 
 `/announcements` reveals potentials credentials(user:heightofsecurity123!) as well as the way to access ftp through `/upload` paremeter:
 
-![alt text](image-18.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-18.png)
 
 Using the following url, I can access FTP:
 
-`http://ADMIN.FORGE.HTB/upload?u=ftp://user:heightofsecurity123!@127.0.1.1/`
+`http://ADMIN.FORGE.HTB/upload?u=ftp://user:heightofsecurity123!@127.0.0.1/`
 
-![alt text](image-19.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-19.png)
 
 Since I can read contents inside the server through ftp, I will try reading **id_rsa** from `.ssh` and it works:
 
@@ -212,24 +219,24 @@ Since I can read contents inside the server through ftp, I will try reading **id
 `http://ADMIN.FORGE.HTB/upload?u=ftp://user:heightofsecurity123!@127.0.1.1/.ssh/id_rsa`
 
 
-![alt text](image-20.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-20.png)
 
 After copying **id_rsa** in to a file name mykey to my local kali machine, now I have SSH access as **user**:
 
-![alt text](image-21.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-21.png)
 
 ## Privesc: user to root
 ### Sudo Privilege Abuse
 
 I will first check if there's anything I can run as the root with `sudo -l`:
 
-![alt text](image-34.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-34.png)
 
 `/opt/remote-manage.py` can be run as root using sudo.
 
 Script can be seen in plain-text and password **secretadminpassword** is shown:
 
-![alt text](image-26.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-26.png)
 
 Below is the whole python code:
 
@@ -281,25 +288,25 @@ The script appears to be a simple server-side application that listens for incom
 
 Running the script will prompt you with what port is being used for listening:
 
-![alt text](image-27.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-27.png)
 
 I will use **nc** to connect to it and sign-in using the found password from earlier:
 
-![alt text](image-28.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-28.png)
 
-Choosing whatver option I want by typing in number will return me with the output after the command run:
+Choosing whatver option I want by typing in number will return me with the output after the command runs:
 
-![alt text](image-29.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-29.png)
 
 Now, I will run the script as the root using **sudo**:
 
-![alt text](image-31.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-31.png)
 
 I will connect the listening port and sign-in. I will try throwing in random value this time:
 
-![alt text](image-32.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-32.png)
 
-On the terminal where I ran the script, it shows an error and **PDD**(Python Debugger) shell is spawned.
+On the terminal where I ran the script, it shows an error and **PDB**(Python Debugger) shell is spawned.
 
 After importing **os**, I can run commands as the root as such:
 
@@ -308,4 +315,4 @@ import os
 os.system("/bin/sh")
 ```
 
-![alt text](image-33.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/image-33.png)
