@@ -145,7 +145,7 @@ On my local listern, I have a shell as Alfred:
 
 ## Read root.txt
 
-Running LinPEAS.exe found several interesting points.
+Running WinPEAS.exe found several interesting points.
 
 AutoLogon credential for Alfred is discovered: **Welcome1!**
 
