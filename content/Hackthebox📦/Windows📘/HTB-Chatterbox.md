@@ -10,10 +10,11 @@ tags:
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/chatterbox/Chatterbox.png)
 
+**Chatterbox** was more like an Easy level Windows box. I first gained initial foothold by exploiting AChat server with Buffer Overflow. For privilege escalation, user alfred had full access to most of the directories in Administrator folder which I abuse to change permission for root.txt to read. 
 ## Information Gathering
 ### Rustscan
 
-Rustscan finds several ports open inclusing port 9255 and 9256 which is uncommon:
+Rustscan finds several ports open including port 9255 and 9256 which is uncommon:
 
 ```bash
 ┌──(yoon㉿kali)-[~/Documents/htb/chatterbox]
