@@ -109,6 +109,7 @@ Also check for pivoting.
 
 ```bash
 ipconfig
+	ip neigh
 ipconfig /all
 route print
 arp -a (shows all devices on network)
