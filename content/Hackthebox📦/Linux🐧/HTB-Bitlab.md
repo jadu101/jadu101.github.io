@@ -8,6 +8,10 @@ tags:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/Bitlab.png)
 
+**Bitlab** was a pretty hard box which included reversing .exe file and abusing sudoers file. 
+
+I first gained access to Gitlab login credential through deobfuscating javascript. From there, I injected php RCE script to profile page's index.php file which spawned me shell as www-data. From here, I reverse engineered RemoteConnection.exe file to obtain credentials for the root. There was another way of privilege escalation to root, which was to create copy of the .git directories and make a git pull which includes a payload that will spawn a reverse shell as the root. 
+
 ## Information Gathering
 ### Rustscan
 
@@ -116,7 +120,7 @@ I will bookmark **Gitlab Login** as such:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-4.png)
 
-Returning to sign-in page, credentials auto-fill as such:
+Returning to sign-in page, credentials auto-fills:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-5.png)
 
@@ -128,15 +132,15 @@ With the found credentials, I can successfully sign-in:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-7.png)
 
-I see two projects listed: Profile and Deployer. I would have to look in to this later. 
+I see two projects listed: **Profile** and **Deployer**. I would have to look in to this later. 
 
 ## Shell as www-data
 
-Going to `/dashboard/snippets` shows **postgresql** snippet:
+Going to `/dashboard/snippets`, shows **postgresql** snippet:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-9.png)
 
-It reveals the credentials for postgresql -> **profiles:profiles**
+It reveals the credentials for PostgreSQL -> **profiles:profiles**
 
 `/snippets/1`
 
@@ -195,9 +199,9 @@ Uncommon SUID mount.cifs is found but this doesn't seem very intriguing to me:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-20.png)
 
-### git pull privesc (Fail)
+### git pull privesc
 
-(This source)[https://github.com/arnav-t/git-pull-priv-escalation/blob/master/README.md] shows a way on how to abuse git pull sudoer privilege:
+[This source](https://github.com/arnav-t/git-pull-priv-escalation/blob/master/README.md) shows a way on how to abuse git pull sudoer privilege:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-22.png)
 
@@ -211,6 +215,7 @@ If www-data has a privilege to create file inside `.git/hooks`, I can create suc
 
 Since www-data doesn't have enough privilege to exploit this, I will move from here for now.
 
+- *I thought this was not exploitable, but later from other's write-ups I realized it is actually exploitable -> More at the below*
 ### Ping Sweep & Port Scan
 
 From some enumeration, I realized that this server is running with docker. 
@@ -219,7 +224,7 @@ Let's see if there are any other network connected to this server:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-25.png)
 
-It seems that **172.19.0.1** is also connected this shell.
+It seems that **172.19.0.1** is also connected.
 
 I will use ping sweep to see what host are actually open:
 
@@ -334,24 +339,26 @@ I will copy the .exe over to my local Kali machine through **scp**:
 
 I will first install **ollydbg** through `apt install ollydbg`.
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/bitlab-1.png)
+After opening **RemoteConnection.exe** file, I will right click it and Search for all referenced text strings:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/butlab2.png)
 
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/butlab-2.png)
-
+Here you’ll see a bunch of strings, one of which contains the username clave and the Access Denied msg.
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-56.png)
 
+Click on the Access Denied string and press F2 to set a breakpoint. This is where the program will halt if you F9 and allow it to run continuously.
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-57.png)
+
+
+
+Restart the program in the debugger. Now press F9 once to run the program. It will halt exactly where you placed the breakpoint. Once there, in the stack pane at the bottom right we see this:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-58.png)
 
-
-```bash
-ASCII "-ssh root@gitlab.htb -pw "Qf7]8YSV.wDNF*[7d?j&eD4^""
-     OFFSET MSVCP100.?cout@std@@3V?$basic_ostream@DU?$char_traits@D@std@@@1@A
-```
-
+This appears to be the root password. After some testing I found that the password actually is for root:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-59.png)
 
@@ -363,19 +370,31 @@ Remember earlier that I mentioned abusing sudoers won't be possible since I don'
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-21.png)
 
+In `git`, a `pull` is actually a `git fetch` followed by a `git merge`. I can make my own hook, a `post-merge` hook, and put a shell in there.
 
+I could create a new project, but to do a `git pull`, I’ll need to connect it to a remote project. I could stand up my own git server on my kali box.
+
+A much easier way to do this is to just copy one of the projects. I’ll copy it into a working directory in `/tmp`:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-49.png)
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-50.png)
+I’ll write a reverse shell as a `post-merge` hook, and set it executable:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-51.png)
 
+Running git pull won't work currently since there's nothing to merge:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-53.png)
+
+I made slight change in **index.php** so that there's something to merge:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-54.png)
 
+Now I can pull it:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-55.png)
+
+Reverse shell as root is spawned on my local listener:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-60.png)
 
