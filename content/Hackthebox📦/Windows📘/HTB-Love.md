@@ -4,6 +4,10 @@ draft: false
 tags:
   - htb
   - windows
+  - ssrf
+  - voting-system
+  - alwaysinstallelevated
+  - msfvenom
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/love/Love.png)
 
