@@ -4,6 +4,11 @@ draft: false
 tags:
   - htb
   - windows
+  - lfi
+  - smtp
+  - hmailserver
+  - responder
+  - sam
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/mailing/Mailing.png)
 
