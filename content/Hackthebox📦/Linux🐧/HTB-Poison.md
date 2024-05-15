@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB-Poison"
+title: HTB-Poison
 draft: false
 tags:
   - htb
@@ -10,6 +10,7 @@ tags:
   - vnc
   - tunneling
   - persistence
+  - medium
 ---
 ## Information Gathering
 

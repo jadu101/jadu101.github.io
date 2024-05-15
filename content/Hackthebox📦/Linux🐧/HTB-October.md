@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB-October"
+title: HTB-October
 draft: false
 tags:
   - htb
@@ -9,6 +9,7 @@ tags:
   - file-upload
   - lse-sh
   - bufferoverflow
+  - medium
 ---
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/october/October.png)

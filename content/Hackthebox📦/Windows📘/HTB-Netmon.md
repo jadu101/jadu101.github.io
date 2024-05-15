@@ -1,11 +1,12 @@
 ---
-title: "[EASY] HTB-Netmon"
+title: HTB-Netmon
 draft: false
 tags:
   - htb
   - windows
   - ftp
   - prtg
+  - easy
 ---
 ## Information Gathering
 

@@ -1,5 +1,5 @@
 ---
-title: "[HARD] HTB-Control"
+title: HTB-Control
 draft: false
 tags:
   - htb
@@ -16,6 +16,7 @@ tags:
   - get-acl
   - acl
   - sddl
+  - hard
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/control/Control.png)
 

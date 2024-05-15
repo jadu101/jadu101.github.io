@@ -1,19 +1,12 @@
 ---
-
-title: "[MEDIUM] HTB-Monteverde"
-
+title: HTB-Monteverde
 draft: false
-
 tags:
-
-- windows
-
-- active-directory
-
-- htb
-
-- azure
-
+  - windows
+  - active-directory
+  - htb
+  - azure
+  - medium
 ---
 ## Recon
 ### Rustscan

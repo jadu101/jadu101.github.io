@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB-Atom"
+title: HTB-Atom
 draft: false
 tags:
   - htb
@@ -13,6 +13,7 @@ tags:
   - electron-updater
   - cyberchef
   - kanban
+  - medium
 ---
 ![](https://i.imgur.com/QBaoY6Z.png)
 

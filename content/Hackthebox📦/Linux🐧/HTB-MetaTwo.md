@@ -1,5 +1,5 @@
 ---
-title: "[EASY] HTB-MetaTwo"
+title: HTB-MetaTwo
 draft: false
 tags:
   - htb
@@ -13,6 +13,7 @@ tags:
   - passpie
   - gpg
   - gpg2john
+  - easy
 ---
 
 

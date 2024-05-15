@@ -1,31 +1,18 @@
 ---
-
-title: "[MEDIUM] HTB-Vault"
-
+title: HTB-Vault
 draft: false
-
 tags:
-
-- pivoting
-
-- openvpn
-
-- chisel
-
-- file-upload
-
-- firewall-ev
-
-- base32
-
-- gpg
-
-- web-shell
-
-- linux
-
-- htb
-
+  - pivoting
+  - openvpn
+  - chisel
+  - file-upload
+  - firewall-ev
+  - base32
+  - gpg
+  - web-shell
+  - linux
+  - htb
+  - medium
 ---
 
 ## Information Gathering

@@ -1,5 +1,5 @@
 ---
-title: "[EASY] HTB-Love"
+title: HTB-Love
 draft: false
 tags:
   - htb
@@ -8,6 +8,7 @@ tags:
   - voting-system
   - alwaysinstallelevated
   - msfvenom
+  - easy
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/love/Love.png)
 

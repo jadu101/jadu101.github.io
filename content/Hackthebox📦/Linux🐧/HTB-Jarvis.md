@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB-Jarvis"
+title: HTB-Jarvis
 draft: false
 tags:
   - htb
@@ -8,6 +8,7 @@ tags:
   - sqlmap
   - cme
   - systemctl
+  - medium
 ---
 ![](https://i.imgur.com/CmJK7cH.png)
 

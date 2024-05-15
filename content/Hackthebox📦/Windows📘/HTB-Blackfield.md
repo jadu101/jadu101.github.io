@@ -1,5 +1,5 @@
 ---
-title: "[HARD] HTB-Blackfield"
+title: HTB-Blackfield
 draft: false
 tags:
   - htb
@@ -16,6 +16,7 @@ tags:
   - pypykatz
   - secretsdump
   - ntds-dit
+  - hard
 ---
 ## Information Gathering
 ### Rustscan

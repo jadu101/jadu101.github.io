@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB - Cronos"
+title: HTB - Cronos
 draft: false
 tags:
   - htb
@@ -13,6 +13,7 @@ tags:
   - laravel
   - sqlmap
   - ssh-keygen
+  - medium
 ---
 ## Information Gathering
 ### Rustscan

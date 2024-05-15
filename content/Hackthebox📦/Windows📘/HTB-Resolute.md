@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB-Resolute"
+title: HTB-Resolute
 draft: false
 tags:
   - htb
@@ -14,6 +14,7 @@ tags:
   - persistence
   - ldapsearch
   - awk
+  - medium
 ---
 ## Information Gathering
 ### Rustscan

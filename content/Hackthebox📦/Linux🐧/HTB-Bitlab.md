@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB-Bitlab"
+title: HTB-Bitlab
 draft: false
 tags:
   - htb
@@ -14,6 +14,7 @@ tags:
   - ping-sweep
   - tunneling
   - chisel
+  - medium
 ---
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/Bitlab.png)

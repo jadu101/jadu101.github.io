@@ -1,5 +1,5 @@
 ---
-title: "[EASY] HTB-Cap"
+title: HTB-Cap
 draft: false
 tags:
   - htb
@@ -9,6 +9,7 @@ tags:
   - wireshark
   - setuid
   - capabilities
+  - easy
 ---
 ![](https://i.imgur.com/uyzHwGN.png)
 

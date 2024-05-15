@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB- Silo"
+title: HTB- Silo
 draft: false
 tags:
   - htb
@@ -13,6 +13,7 @@ tags:
   - dmp
   - volatility
   - hashdump
+  - medium
 ---
 ## Information Gathering
 ### Rustscan

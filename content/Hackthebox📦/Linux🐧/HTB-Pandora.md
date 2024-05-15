@@ -1,5 +1,5 @@
 ---
-title: "[EASY] HTB-Pandora"
+title: HTB-Pandora
 draft: false
 tags:
   - htb
@@ -14,6 +14,7 @@ tags:
   - sqli
   - persistence
   - ltrace
+  - easy
 ---
 
 

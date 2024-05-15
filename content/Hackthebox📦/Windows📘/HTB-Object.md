@@ -1,5 +1,5 @@
 ---
-title: "[HARD] HTB-Object"
+title: HTB-Object
 draft: false
 tags:
   - htb
@@ -16,6 +16,7 @@ tags:
   - genericwrite
   - logon-script
   - writeowner
+  - hard
 ---
 ![](https://i.imgur.com/60RZofd.png)
 

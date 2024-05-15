@@ -1,5 +1,5 @@
 ---
-title: "[EASY] HTB-GoodGames"
+title: HTB-GoodGames
 draft: false
 tags:
   - htb
@@ -10,6 +10,7 @@ tags:
   - docker
   - container
   - pivoting
+  - easy
 ---
 ![](https://i.imgur.com/NJNAL7r.png)
 

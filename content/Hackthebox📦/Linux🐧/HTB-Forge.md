@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB-Forge"
+title: HTB-Forge
 draft: false
 tags:
   - htb
@@ -8,6 +8,7 @@ tags:
   - ssrf-bypass
   - sudo
   - pdb
+  - medium
 ---
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forge/Forge.png)

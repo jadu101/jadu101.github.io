@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB-Worker"
+title: HTB-Worker
 draft: false
 tags:
   - htb
@@ -9,6 +9,7 @@ tags:
   - web-shell
   - svn
   - subversion
+  - medium
 ---
 ## Information Gathering
 

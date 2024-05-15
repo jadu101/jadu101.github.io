@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB-Lightweight"
+title: HTB-Lightweight
 draft: false
 tags:
   - htb
@@ -10,6 +10,7 @@ tags:
   - wireshark
   - capabilities
   - sudoers
+  - medium
 ---
 ## Information Gathering
 ### Rustscan

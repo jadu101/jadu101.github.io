@@ -1,5 +1,5 @@
 ---
-title: "[EASY] HTB-Sauna"
+title: HTB-Sauna
 draft: false
 tags:
   - htb
@@ -15,6 +15,7 @@ tags:
   - persistence
   - getnpusers
   - getuserspns
+  - easy
 ---
 ## Summary
 HTTP -> User list generation -> Kerbrute -> AS-REP Roast -> Shell as **FSmith**-> WinPEAS -> AutoLogon Creds Exposed -> Shell as **svc_loanmgr** -> Bloodhound -> DCSync Attack -> Shell as **Administrator**

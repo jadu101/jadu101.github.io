@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB-Solidstate"
+title: HTB-Solidstate
 draft: false
 tags:
   - smtp
@@ -11,6 +11,7 @@ tags:
   - pspy
   - cron
   - rbash
+  - medium
 ---
 ## Information Gathering
 ### Rustscan

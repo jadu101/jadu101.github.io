@@ -1,5 +1,5 @@
 ---
-title: "[EASY] HTB-Active"
+title: HTB-Active
 draft: false
 tags:
   - htb
@@ -8,6 +8,7 @@ tags:
   - gpp
   - kerberoasting
   - psexec
+  - easy
 ---
 ## Information Gathering
 ### Rustscan

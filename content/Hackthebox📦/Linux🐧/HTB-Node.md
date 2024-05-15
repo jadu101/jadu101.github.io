@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB-Node"
+title: HTB-Node
 draft: false
 tags:
   - htb
@@ -9,6 +9,7 @@ tags:
   - mongodb
   - controllers
   - zip2john
+  - medium
 ---
 ## Information Gathering
 ### Nmap

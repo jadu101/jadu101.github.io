@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB-Jeeves"
+title: HTB-Jeeves
 draft: false
 tags:
   - htb
@@ -9,6 +9,7 @@ tags:
   - juicypotato
   - persistence
   - psexec
+  - medium
 ---
 ## Information Gathering
 ### Rustscan

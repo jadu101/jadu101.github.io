@@ -1,5 +1,5 @@
 ---
-title: "[EASY] HTB-Access"
+title: HTB-Access
 draft: false
 tags:
   - htb
@@ -15,6 +15,7 @@ tags:
   - mimikatz
   - readpst
   - procdump
+  - easy
 ---
 ![](https://i.imgur.com/k4PGWXN.png)
 

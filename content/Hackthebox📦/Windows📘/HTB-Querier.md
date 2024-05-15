@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB-Querier"
+title: HTB-Querier
 draft: false
 tags:
   - htb
@@ -10,6 +10,7 @@ tags:
   - responder
   - xp_cmdshell
   - powerup-ps1
+  - medium
 ---
 ## Summary
 - SMB Null login

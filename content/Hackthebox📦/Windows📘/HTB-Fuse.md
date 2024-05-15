@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB-Fuse"
+title: HTB-Fuse
 draft: false
 tags:
   - htb
@@ -16,6 +16,7 @@ tags:
   - add-user
   - msfvenom
   - smbpasswd
+  - medium
 ---
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/fuse/Fuse.png)

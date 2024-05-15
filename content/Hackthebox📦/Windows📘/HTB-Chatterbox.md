@@ -1,5 +1,5 @@
 ---
-title: "[MEDIUM] HTB-Chatterbox"
+title: HTB-Chatterbox
 draft: false
 tags:
   - htb
@@ -7,6 +7,7 @@ tags:
   - achat
   - bufferoverflow
   - icacls
+  - medium
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/chatterbox/Chatterbox.png)
 

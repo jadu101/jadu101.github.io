@@ -1,5 +1,5 @@
 ---
-title: "[EASY] HTB-Mailing"
+title: HTB-Mailing
 draft: false
 tags:
   - htb
@@ -9,6 +9,7 @@ tags:
   - hmailserver
   - responder
   - sam
+  - easy
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/mailing/Mailing.png)
 
