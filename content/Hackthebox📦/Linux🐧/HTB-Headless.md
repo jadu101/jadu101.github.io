@@ -179,9 +179,10 @@ echo "chmod u+s /bin/bash" > initdb.sh
 chmod +x initdb.sh
 ```
 
-We can obtain root privilege through `/bin/bash -p` command after running syscheck:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/headless/image-17.png)
+
+We can obtain root privilege through `/bin/bash -p` command after running syscheck:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/headless/image-18.png)
 
