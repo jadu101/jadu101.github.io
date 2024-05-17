@@ -105,6 +105,16 @@ If port 80 is open, check if there are any different sites running internally:
 
 ### File Enumeration
 
+```bash
+# Files owned by the user
+find / -uid 1001 -type f -ls 2>/dev/null | grep -v "/proc*"
+# Files with the name of the user in it
+find / -name "*susan*" -type f -ls 2>/dev/null
+# Files with the word password in the home directory
+grep -i password -R .
+```
+
+
 You can hunt for passwords as such:  
 
 ```bash
