@@ -186,3 +186,6 @@ We can not sudo into root with the cracked password:
 
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/perfection/image-19.png)
+
+## References
+- https://gtfobins.github.io/gtfobins/ruby/
