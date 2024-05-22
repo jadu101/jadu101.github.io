@@ -21,7 +21,8 @@ Download the appimage from [here](https://github.com/mortbopet/Ripes/releases)
 
 ## Code
 
-![[../../Pasted image 20240522142243.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/ComputerOrg/Screenshot%20from%202024-05-22%2014-22-36.png)
+
 
 ```c
 .data
@@ -69,11 +70,15 @@ Address of `str` loads to `a0` and the value changes into `0x100000000`.
 
 `a1` value changes to `0x10000000` as well because upper 20 bits of the immediate value `0x10000` is saved to register `a1`.
 
-![[../../Pasted image 20240522141057.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/ComputerOrg/Screenshot%20from%202024-05-22%2014-10-49.png)
+
+
 
 This instruction adds the immediate value `0x100` to the current value in register `a1` and stores the result back in `a1`:
 
-![[../../Pasted image 20240522141106.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/ComputerOrg/Screenshot%20from%202024-05-22%2014-11-02.png)
+
+
 
 
 ### Loop for copying string
@@ -96,16 +101,20 @@ bgtz t0, loop
 
 instruction loads a byte from the address in `a0` into register `t0`:
 
-![[../../Pasted image 20240522141730.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/ComputerOrg/Screenshot%20from%202024-05-22%2014-17-24.png)
+
+
 
 
 Instruction increments the address in `a0` by 1:
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/ComputerOrg/Screenshot%20from%202024-05-22%2014-17-39.png)
 
-![[../../Pasted image 20240522141744.png]]
+
+
 
 Instruction increments the address in `a1` by 1:
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/ComputerOrg/Screenshot%20from%202024-05-22%2014-17-50.png)
 
-![[../../Pasted image 20240522141755.png]]
 
 ### Analysis Summary
 
