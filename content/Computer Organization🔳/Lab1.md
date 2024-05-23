@@ -107,12 +107,14 @@ instruction loads a byte from the address in `a0` into register `t0`:
 
 
 Instruction increments the address in `a0` by 1:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/ComputerOrg/Screenshot%20from%202024-05-22%2014-17-39.png)
 
 
 
 
 Instruction increments the address in `a1` by 1:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/ComputerOrg/Screenshot%20from%202024-05-22%2014-17-50.png)
 
 
