@@ -210,11 +210,15 @@ Let's first create **id_rsa** file inside `/var/www/html` and link it to root's 
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-27.png)
 
-
+Now let's run `/usr/bin/usage_management` with **sudo**:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-28.png)
 
+As the `/usr/bin/usage_management` stops running, it throws back root's **id_rsa** key:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/usage/image-29.png)
+
+Using root's id_rsa, we can now sign-in to the system as the root:
 
 `ssh -i id_rsa root@usage.htb`
 
