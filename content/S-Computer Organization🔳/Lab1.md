@@ -24,7 +24,7 @@ Download the appimage from [here](https://github.com/mortbopet/Ripes/releases)
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/ComputerOrg/Screenshot%20from%202024-05-22%2014-22-36.png)
 
 
-```c
+```
 .data
 str: .string "hello World!"
 
@@ -45,7 +45,7 @@ bgtz t0, loop
 
 ### Data Segment
 
-```c
+```
 .data
 str: .string "hello World!"
 ```
@@ -54,7 +54,7 @@ str: .string "hello World!"
 - **`str: .string "hello World!"`**: This defines a null-terminated string "hello World!" in memory at the label `str`.
 ### Text Segment
 
-```c
+```
 .text
 la a0, str
 lui a1, 0x10000
@@ -83,7 +83,7 @@ This instruction adds the immediate value `0x100` to the current value in regist
 
 ### Loop for copying string
 
-```c
+```
 loop:
 lb t0, 0(a0)
 sb t0, 0(a1)
