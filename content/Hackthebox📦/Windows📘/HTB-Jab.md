@@ -26,7 +26,6 @@ Rustscan discovers many ports open. Based on the ports open, target seems to be 
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/jab/image-43.png)
 
-### Nmap
 
 ## Enumeration
 ### SMB - TCP 445
