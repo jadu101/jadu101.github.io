@@ -8,7 +8,7 @@ import * as Plugin from "./quartz/plugins"
  */
 const config: QuartzConfig = {
   configuration: {
-    pageTitle: "🪴My Notes",
+    pageTitle: "👨‍💻My Notes👨‍💻",
     enableSPA: true,
     enablePopovers: true,
     analytics: {
@@ -27,7 +27,7 @@ const config: QuartzConfig = {
         code: "IBM Plex Mono",
       },
       colors: {
-      lightMode: {
+      darkMode: {
           light: "#161618",
           lightgray: "#393639",
           gray: "#646464",
@@ -37,7 +37,7 @@ const config: QuartzConfig = {
           tertiary: "#84a59d",
           highlight: "rgba(143, 159, 169, 0.15)",
         },
-        darkMode: {
+        lightMode: {
           light: "#161618",
           lightgray: "#393639",
           gray: "#646464",
