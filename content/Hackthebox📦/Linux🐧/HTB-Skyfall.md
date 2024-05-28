@@ -76,8 +76,8 @@ https://github.com/acheiii/CVE-2023-28432/
 ![alt text](image-13.png)
 
 ```
-user token
-
+MINIO_ROOT_USER:5GrE1B2YGGyZzNHZaIww
+MINIO_ROOT_PASSWORD:GkpjkmiVmpFuL2d3oRx0
 ```
 
 ### MinIO Client
@@ -118,8 +118,8 @@ https://min.io/docs/minio/linux/reference/minio-mc.html#id2
 ![alt text](image-20.png)
 
 ```
-exppot
-export
+export VAULT_API_ADDR="http://prd23-vault-internal.skyfall.htb"
+export VAULT_TOKEN="hvs.CAESIJlU9JMYEhOPYv4igdhm9PnZDrabYTobQ4Ymnlq1qY-LGh4KHGh2cy43OVRNMnZhakZDRlZGdGVzN09xYkxTQVE"
 ```
 
 prd23-vault-internal.skyfall.htb
@@ -131,8 +131,9 @@ https://developer.hashicorp.com/vault/docs/secrets/ssh/one-time-ssh-passwords
 
 `wget https://releases.hashicorp.com/vault/1.15.5/vault_1.15.5_linux_amd64.zip`
 
-`
-export`
+`export VAULT_ADDR="http://prd23-vault-internal.skyfall.htb"`
+
+`export VAULT_TOKEN="hvs.CAESIJlU9JMYEhOPYv4igdhm9PnZDrabYTobQ4Ymnlq1qY-LGh4KHGh2cy43OVRNMnZhakZDRlZGdGVzN09xYkxTQVE"`
 
 
 `./vault login`
@@ -180,8 +181,8 @@ sudo /root/vault/vault-unseal -c /etc/vault-unseal.yaml -vd
 ### SSH as root
 
 ```
-exploirt
-export
+export VAULT_ADDR="http://prd23-vault-internal.skyfall.htb"
+export VAULT_TOKEN="hvs.I0ewVsmaKU1SwVZAKR3T0mmG"
 ```
 
 ![alt text](image-31.png)
