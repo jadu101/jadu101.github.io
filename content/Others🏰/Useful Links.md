@@ -27,6 +27,12 @@ tags:
 - Reporter Creator
 - Port Scanner
 - Malware Analysis Lab
+- Nuclei Template Creation for HTB CVEs
+- POC write for HTB CVEs
+- Bug Bounty
+- CVE Author for Specific Platform
+
+
 
 
 
