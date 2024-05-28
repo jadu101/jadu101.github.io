@@ -118,8 +118,8 @@ https://min.io/docs/minio/linux/reference/minio-mc.html#id2
 ![alt text](image-20.png)
 
 ```
-export VAULT_API_ADDR="http://prd23-vault-internal.skyfall.htb"
-export VAULT_TOKEN="blahblah"
+exppot
+export
 ```
 
 prd23-vault-internal.skyfall.htb
@@ -181,8 +181,8 @@ sudo /root/vault/vault-unseal -c /etc/vault-unseal.yaml -vd
 ### SSH as root
 
 ```
-export VAULT_ADDR="http://prd23-vault-internal.skyfall.htb"
-export VAULT_TOKEN="blahblah"
+exploirt
+export
 ```
 
 ![alt text](image-31.png)
