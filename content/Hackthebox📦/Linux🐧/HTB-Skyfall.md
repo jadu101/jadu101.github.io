@@ -119,7 +119,7 @@ https://min.io/docs/minio/linux/reference/minio-mc.html#id2
 
 ```
 export VAULT_API_ADDR="http://prd23-vault-internal.skyfall.htb"
-export VAULT_TOKEN="hvs.CAESIJlU9JMYEhOPYv4igdhm9PnZDrabYTobQ4Ymnlq1qY-LGh4KHGh2cy43OVRNMnZhakZDRlZGdGVzN09xYkxTQVE"
+export VAULT_TOKEN="hvs.blahblah"
 ```
 
 prd23-vault-internal.skyfall.htb
@@ -133,7 +133,7 @@ https://developer.hashicorp.com/vault/docs/secrets/ssh/one-time-ssh-passwords
 
 `export VAULT_ADDR="http://prd23-vault-internal.skyfall.htb"`
 
-`export VAULT_TOKEN="hvs.CAESIJlU9JMYEhOPYv4igdhm9PnZDrabYTobQ4Ymnlq1qY-LGh4KHGh2cy43OVRNMnZhakZDRlZGdGVzN09xYkxTQVE"`
+`export VAULT_TOKEN="hvs.blahblah"`
 
 
 `./vault login`
@@ -182,7 +182,7 @@ sudo /root/vault/vault-unseal -c /etc/vault-unseal.yaml -vd
 
 ```
 export VAULT_ADDR="http://prd23-vault-internal.skyfall.htb"
-export VAULT_TOKEN="hvs.I0ewVsmaKU1SwVZAKR3T0mmG"
+export VAULT_TOKEN="blah blah"
 ```
 
 ![alt text](image-31.png)
