@@ -15,7 +15,6 @@ go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 ```
 
 
-
 `docker pull projectdiscovery/nuclei:latest`
 
 
@@ -36,4 +35,3 @@ go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
 
 ## References
 - https://github.com/projectdiscovery/nuclei
-- 
