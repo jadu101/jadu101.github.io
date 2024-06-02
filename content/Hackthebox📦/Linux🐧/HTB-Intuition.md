@@ -5,6 +5,12 @@ tags:
   - htb
   - linux
   - hard
+  - xss
+  - xss-cookie-stealing
+  - ssrf
+  - cve-2023-24329
+  - ansible
+  - suricata
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/intuition/Intuition.png)
 
