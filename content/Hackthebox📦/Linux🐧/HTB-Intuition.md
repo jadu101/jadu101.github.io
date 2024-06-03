@@ -545,7 +545,7 @@ int main(int argc, char *argv[]) {
 
 Let's move on to guessing the last four digits of the key.
 
-Here’s the missing value key: `UHI75GHI****`. The hash associated with it is `0feda17076d793c2ef2870d7427ad4ed`.
+Here’s the missing value key: `UHI75GHI****`. The hash associated with it is `0feda17076d793c2ef2870d7427ad4ed`.
 
 We can use the Python code below to try all possible combinations:
 
