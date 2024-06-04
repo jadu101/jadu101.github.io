@@ -5,6 +5,22 @@ tags:
   - htb
   - windows
   - hard
+  - joomla
+  - cve-2023-23752
+  - kerbrute
+  - password-spray
+  - wireshark
+  - kerberos-crack
+  - joomla-rce
+  - certutil
+  - runascs
+  - chisel
+  - cve-2023-2255
+  - jaws
+  - stored-credentials
+  - mimikatz
+  - dpapi
+  - gpo
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/office/Office.png)
 
