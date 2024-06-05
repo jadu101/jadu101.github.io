@@ -89,6 +89,8 @@ findstr /si password *.ini
 dir /s *pass* == *cred* == *vnc* == *.config*
 
 # Find all passwords in all files.
+for /r C:\Users %f in (*.config *.txt *.xml *.ini) do @findstr /sim /c:password "%f" 2>nul && (type "%f" & echo.)
+
 findstr /spin "password" *.*
 findstr /spin "password" *.*
 ```

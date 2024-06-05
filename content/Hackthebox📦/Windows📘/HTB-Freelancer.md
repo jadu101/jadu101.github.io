@@ -5,12 +5,29 @@ tags:
   - htb
   - windows
   - hard
+  - cyberchef
+  - qr
+  - sql
+  - sql-terminal
+  - xp_cmdshell
+  - sql_rce
+  - sa_impersonation
+  - password-hunting
+  - password-spray
+  - runascs
+  - bloodhound
+  - mimikatz
+  - dmp
+  - rbcd
+  - addcomputer
+  - getst
+  - secretsdump
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/freelancer/Freelancer.png)
 ## Information Gathering
 ### Rustscan
 
-Rustscan find several ports open. Based on the open ports, this machine seems to be a domain controller:
+Rustscan find several ports open. Based on the open ports, this machine seems to be a **domain controller**:
 
 `rustscan --addresses 10.10.11.5 --range 1-65535`
 
@@ -19,9 +36,9 @@ Rustscan find several ports open. Based on the open ports, this machine seems to
 ## Enumeration
 ### LDAP - TCP 389
 
-We will first enumerate LDAP. 
+We will first enumerate **LDAP**. 
 
-Let's query base namingcontexts:
+Let's query base **namingcontexts**:
 
 `ldapsearch -H ldap://10.10.11.5 -x -s base namingcontexts`
 
@@ -124,8 +141,7 @@ QR Code allows the user to login without needing any credentials:
 
 Let's abuse this QR code login feature. 
 
-We will download the QR code and pass it to [CyberChef](https://cyberchef.org/
-).
+We will download the QR code and pass it to [CyberChef](https://cyberchef.org).
 
 CyberChef decrypts the qr code to text:
 
@@ -137,7 +153,7 @@ We will use base64 to decode it:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/freelancer/image-21.png)
 
-`MTAwMTA=` decodes into a number `10010` and it semes to be the number for the prifile page:
+`MTAwMTA=` decodes into a number `10010` and it semes to be the number for the created user's page:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/freelancer/image-38.png)
 
@@ -152,7 +168,7 @@ Let's modify the QR code link with the value `Mgo=` as such:
 `http://freelancer.htb/accounts/login/otp/Mgo=/c6a9833419dc130a2c911af5d6fd6abf/`
 
 
-Using the modifed link, we can now login as the **admin**:
+Using the modified link, we can now login as the **admin**:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/freelancer/image-18.png)
 
@@ -209,7 +225,7 @@ SELECT IS_SRVROLEMEMBER('sysadmin');
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/freelancer/image-25.png)
 
-The command above send ICMP packets to our Kali machine and we can verify this through tcpdump:
+The command above send **ICMP** packets to our Kali machine and we can verify this through **tcpdump**:
 
 `sudo tcpdump -i tun0 icmp`
 
@@ -256,11 +272,11 @@ Let's hunt for keyword **password** in `C:\Users`:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/freelancer/image-30.png)
 
-It seems like password(**IL0v3ErenY3ager**) is exposed in plain text.
+It seems like the password(**IL0v3ErenY3ager**) is exposed in plain text.
 
 ### Password Spray
 
-Since we don't know for whih user this password is being used for, let's spray it to the users on the system:
+Since we don't know for which user this password is being used for, let's spray it to the users on the system:
 
 `crackmapexec smb 10.10.11.5 -u users.txt -p IL0v3ErenY3ager`
 
