@@ -5,7 +5,15 @@ tags:
   - htb
   - windows
   - medium
-  - API
+  - lfi
+  - viewstate
+  - ysoserial
+  - pscredentials
+  - runascs
+  - sedebug
+  - psgetsys
+  - msfvenom
+  - meterpreter
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/Pov.png)
 
@@ -147,7 +155,7 @@ PSCredentials is successfully decrypted: **f8gQ8fynP44ek1m3**
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-17.png)
 
-### RunasCS
+### RunasCs
 
 Now that we have the credentials for user **alaading**, we should be able to run commands as him using **RunasCs.exe**.
 
