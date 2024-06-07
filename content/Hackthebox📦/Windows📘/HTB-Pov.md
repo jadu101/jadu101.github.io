@@ -260,7 +260,6 @@ After we get a connection on meterpreter, let's migrate to **winlogon** and spaw
 We now have the shell as the system.
 
 ## References
-- https://jadu101.github.io/Hackthebox%F0%9F%93%A6/Windows%F0%9F%93%98/HTB-Mailing#lfi-payloads
 - https://book.hacktricks.xyz/pentesting-web/deserialization/exploiting-__viewstate-parameter#test-case-4-.net-greater-than-4.-5-and-enableviewstatemac-true-false-and-viewstateencryptionmode-true
 - https://swapneildash.medium.com/deep-dive-into-net-viewstate-deserialization-and-its-exploitation-54bf5b788817
 - https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation/privilege-escalation-abusing-tokens
