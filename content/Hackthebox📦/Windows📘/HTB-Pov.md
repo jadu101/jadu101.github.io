@@ -68,7 +68,7 @@ Let's intercept the traffic for downloading CV and take a look into it.
 
 There are lot of parameters available such as **__VIEWSTATE** and **__VIEWSTATEGENERATOR**:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-9.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/p-9.png)
 
 We will first test if the parameter **file=** is vulnerable to Local File Inclusion(**LFI**) by trying to read `C:\Windows\win.ini`:
 
