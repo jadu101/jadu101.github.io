@@ -15,11 +15,11 @@ Rustscan finds only **HTTP** running on the target machine:
 
 `rustscan --addresses 10.10.11.251 --range 1-65535`
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-2.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/p-2.png)
 
 Nmap default version scan discovers the http-title(**pov.htb**), which we add to `/etc/hosts`:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-3.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/p-3.png)
 
 ## Enumeration
 ### HTTP - TCP 80
@@ -30,13 +30,13 @@ Nmap default version scan discovers the http-title(**pov.htb**), which we add to
 
 At the bottom of the page, we see the potential username **sfitz**:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-1.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/p-1.png)
 
 Website is a pretty simple with close to zero functionality. Let's see if there are other subdomains available:
 
 `gobuster vhost --append-domain -u http://pov.htb -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt`
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-7.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/p-7.png)
 
 **dev.pov.htb** is found. We will add it to `/etc/hosts`.
 
@@ -44,7 +44,7 @@ Website is a pretty simple with close to zero functionality. Let's see if there 
 
 The website is all about the Web Develop and UI/UX Designer, Stephen Fitz:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-4.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/p-4.png)
 
 This person must be the same person as `sfitz@pov.htb`.
 
@@ -52,15 +52,15 @@ Let's look around the website.
 
 `/portfolio/contact.aspx` is a form where you can send messages but the form seems to be dead:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-6.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/p-6.png)
 
 There's a function where we can download CV about Stephen Fitz:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-5.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/p-5.png)
 
 There is nothing interesting about the download CV itself:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/image-8.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/pov/p-8.png)
 
 Let's intercept the traffic for downloading CV and take a look into it. 
 
