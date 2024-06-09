@@ -5,6 +5,9 @@ tags:
   - htb
   - linux
   - medium
+  - clearml
+  - sudoers
+  - evaluate_model
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/blurry/Blurry.png)
 
@@ -216,9 +219,6 @@ When we run `/usr/bin/evaluate_model` towards `/models/demo_model.pth`, we will 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/blurry/image-18.png)
 
 Let's see what just happened.
-
-
-
 
 `sudo /usr/bin/evaluate_model /models/demo_model.pth`
 
