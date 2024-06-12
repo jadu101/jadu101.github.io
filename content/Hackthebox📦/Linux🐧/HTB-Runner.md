@@ -5,6 +5,11 @@ tags:
   - htb
   - linux
   - medium
+  - knockpy
+  - cve-2023-42793
+  - teamcity
+  - chisel
+  - portrainer
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/runner/Runner.png)
 
@@ -64,8 +69,6 @@ Let's enumerate subdomains using **knockpy**:
 
 We will add **teamcity.runner.htb** to `/etc/hosts` as well. 
 
-
-
 ### Nagios - TCP 8000
 
 We tried accessing port 8000 through browser but nothing was found:
@@ -82,14 +85,14 @@ Below is the screenshot of /version:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/runner/image-2.png)
 
-Below si teh screenshot of /health:
+Below is the screenshot of /health:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/runner/image-3.png)
 
 Since we found nothing intriguing, let's move on. 
 
 
-## CVE-2023-4793
+## CVE-2023-42793
 
 Opening **teamcity.runner.htb**, we see a login page for TeamCity Version 2023.05.3:
 
@@ -130,7 +133,7 @@ Backups are always interesting, let's take a look into it:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/runner/image-12.png)
 
-In backup section, we will a backup file and download it:
+In backup section, we will create a backup file and download it:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/runner/image-13.png)
 
@@ -161,7 +164,6 @@ Let's try cracking discovered hashes with hashcat:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/runner/runner-h.png)
 
-piper123
 
 We managed to crack password for matthew (piper123), but failed to crack for other user's hashes.
 
@@ -237,7 +239,7 @@ Currently, we see two images available:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/runner/image-24.png)
 
-We will current image ID of one of them.
+We will copy image ID of one of them.
 
 With the Image ID copied on our clipboard, let's move on to creating new volume.
 
