@@ -5,11 +5,19 @@ tags:
   - htb
   - linux
   - medium
+  - blind-xss
+  - xss-cookie-stealing
+  - ssti
+  - ssti-to-shell
+  - mysql
+  - sudoers
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/iclean/IClean.png)
 
 ## Information Gathering
 ### Rustscan
+
+Rustscan finds SSH and HTTP open on target:
 
 `rustscan --addresses 10.10.11.12 --range 1-65535`
 
@@ -17,12 +25,14 @@ tags:
 
 ### Nmap
 
+Nmap finds nothing much:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/iclean/image-2.png)
 
 ## Enumeration
 ### HTTP - TCP 80
 
-After adding **capiclean.htb** to `/etc/hosts`, we can acess the website:
+After adding **capiclean.htb** to `/etc/hosts`, we can access the website:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/iclean/image-1.png)
 
@@ -92,8 +102,6 @@ Let's send the following payload through Burp Suite Intruder:
 After waiting for few seconds, Python Web Server captures cookie from other users on the system:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/iclean/image-11.png)
-
-`10.10.11.12 - - [11/Jun/2024 23:01:00] "GET /?cookie=session=eyJyb2xlIjoiMjEyMzJmMjk3YTU3YTVhNzQzODk0YTBlNGE4MDFmYzMifQ.ZmkK_w.PvBhMs9F8EtFoWQXDH62Th-70iM HTTP/1.1" 200 -`
 
 
 Let's use Firefox's [Cookie-Editor](https://addons.mozilla.org/en-US/firefox/addon/cookie-editor/) to modify our cookie value. 
@@ -245,11 +253,21 @@ Using the password, we can SSH in:
 ## Privesc: consuela to root
 ### Sudoers
 
+Checking on commands that could be ran with sudo privilege, `/usr/bin/qpdf` is found:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/iclean/image-36.png)
+
+Let's use the following command to create PDF copy of the root's id_rsa file:
+
+`sudo /usr/bin/qpdf --qpdf --add-attachment /root/.ssh/id_rsa -- --empty ./id_rsa`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/iclean/image-37.png)
 
+Reading the created pdf, we can SSH private key in plain-text:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/iclean/image-38.png)
+
+Save it to the local machine and SSH in as the root:
 
 `ssh -i id_rsa root@capiclean.htb`
 
