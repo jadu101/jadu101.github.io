@@ -6,6 +6,15 @@ tags:
   - windows
   - medium
   - active-directory
+  - ldap
+  - password-spray
+  - bloodhound
+  - tightvnc
+  - aes
+  - dnspy
+  - ilspy
+  - cyberchef
+  - ad-recycle-bin
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/cascade/Cascade.png)
 
@@ -279,6 +288,9 @@ nc.exe smbserver transfer method save it to jadu cheatsheet
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/cascade/image-43.png)
 
 YmFDVDNyMWFOMDBkbGVz
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/cascade/a.png)
 
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/cascade/a-1.png)
 ## References
 - https://github.com/frizb/PasswordDecrypts
