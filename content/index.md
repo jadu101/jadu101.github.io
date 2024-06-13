@@ -11,7 +11,7 @@ My focus lies in executing penetration tests and implementing ethical hacking pr
 - Practical Network Penetration Tester 【**PNPT**】
 - Junior Penetration Tester 【**eJPT**】
 - Ranked **1st** on Hackthebox South Korea
-- Hackthebox 【Pro Hacker】
+- Hackthebox 【**Pro Hacker**】
 - Active Member on CTF Team (**[DOMBUSTERS](https://app.hackthebox.com/teams/overview/6248)**)
 - Blog: https://jadu101.github.io
 - Projects: https://github.com/jadu101
