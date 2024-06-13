@@ -190,18 +190,12 @@ echo -n 6bcf2a4b6e5aca0f | xxd -r -p | openssl enc -des-cbc --nopad --nosalt -K 
 
 Password is decrpyted to be **sT333ve2**. 
 
-
 Spraying the cracked password on list of users, we get a match for s.smith:
 
 `crackmapexec smb cascade.local -u users.txt -p sT333ve2`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/cascade/image-26.png)
 
-
-
-`crackmapexec smb cascade.local -u s.smith -p sT333ve2 --shares`
-
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/cascade/image-27.png)
 
 s.smith is in the remote management group as well, which provides us a winrm shell:
 
@@ -254,7 +248,7 @@ Inside the MainModule, some sort of key (c4scadek3y654321) is revealed:
 
 Let's open up **CascCrypto.dll** as well.
 
-It aes IV key is found: 1tdyjCbY1Ix49842
+aes IV key is found: 1tdyjCbY1Ix49842
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/cascade/image-40.png)
 
@@ -270,26 +264,34 @@ Now set up the Key and IV and we will get the decrypted password: w3lc0meFr31nd
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/cascade/image-39.png)
 
-nc.exe smbserver transfer method save it to jadu cheatsheet
+Using the decrypted password, we can winrm in as ArkSvc:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/cascade/image-28.png)
 
 ## Privesc: ArkSvc to Administrator
+
+ArkSvc is in several interesting groups, inclusing AD Recyle bin:
 
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/cascade/image-41.png)
 
 ### AD Recycle Bin
 
+The following command will dump all the data inside the recycle bin:
+
 `Get-ADObject -filter 'isDeleted -eq $true' -includeDeletedObjects -Properties *`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/cascade/image-42.png)
 
+Scrolling down, we found one interesting data which seems to be a password for TempAdmin:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/cascade/image-43.png)
 
-YmFDVDNyMWFOMDBkbGVz
+Let's decode it with base64:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/cascade/a.png)
 
+Remembering from earlier that TempAdmin has a same password as the administrator, we can sign in as the administrator using the decoded password::
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/cascade/a-1.png)
 ## References
