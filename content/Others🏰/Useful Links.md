@@ -38,3 +38,10 @@ tags:
 
 
 
+take
+
+https://gist.github.com/Tamarisk-1/f5ec2f8a857f43f6dd97943cf9b6d95d
+
+https://www.mediafire.com/file/rkkworidqbtlntn/study_notes.rar/file
+
+https://anonymfile.com/adVd5/study-notes.rar
