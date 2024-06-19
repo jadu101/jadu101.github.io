@@ -5,6 +5,10 @@ tags:
   - htb
   - linux
   - easy
+  - ssrf
+  - git
+  - sudoers
+  - cve-2022-24439
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/editorial/Editorial.png)
 
