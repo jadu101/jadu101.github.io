@@ -56,14 +56,14 @@ Exploring around newly discovered file paths, `nibbleblog/content/private/config
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/nibbles/image-8.png)
 
-Trying the the password nibbles for the admin, we managed to successfully login:
+Trying the the password `nibbles` for the `admin`, we managed to successfully login:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/nibbles/image-9.png)
 
 ## Shell as nibbler
 ### Web Shell upload
 
-Going to Plugins, we can see installed plugins, inclusing **My image**:
+Going to Plugins, we can see installed plugins, including **My image**:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/nibbles/image-10.png)
 
@@ -101,7 +101,7 @@ Let's unzip personal.zip to access monitor.sh:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/nibbles/image-16.png)
 
-monitor.sh seems tobe a server health monitoring script from tecmint.com:
+monitor.sh seems to be a server health monitoring script from tecmint.com:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/nibbles/image-17.png)
 
