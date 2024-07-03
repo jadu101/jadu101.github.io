@@ -363,6 +363,58 @@ Now on my local listener, the data receieved by Netcat is redirected to a file n
 
 ![](https://i.imgur.com/FtwfYyu.png)
 
+## TTY
+
+Once we connect to a shell through Netcat, we will notice that we can only type commands or backspace, but we cannot move the text cursor left or right to edit our commands, nor can we go up and down to access the command history. To be able to do that, we will need to upgrade our TTY. This can be achieved by mapping our terminal TTY with the remote TTY.
+
+There are multiple methods to do this. For our purposes, we will use the `python/stty` method. In our `netcat` shell, we will use the following command to use python to upgrade the type of our shell to a full TTY:
+
+```shell-session
+[!bash!]$ python -c 'import pty; pty.spawn("/bin/bash")'
+```
+
+After we run this command, we will hit `ctrl+z` to background our shell and get back on our local terminal, and input the following `stty` command:
+
+```shell-session
+www-data@remotehost$ ^Z
+
+[1] Stopped                 nc -lvnp 1234
+[!bash!]$ stty raw -echo
+[!bash!]$ fg
+
+[Enter]
+[Enter]
+www-data@remotehost$
+```
+
+Once we hit `fg`, it will bring back our `netcat` shell to the foreground. At this point, the terminal will show a blank line. We can hit `enter` again to get back to our shell or input `reset` and hit enter to bring it back. At this point, we would have a fully working TTY shell with command history and everything else.
+
+We may notice that our shell does not cover the entire terminal. To fix this, we need to figure out a few variables. We can open another terminal window on our system, maximize the windows or use any size we want, and then input the following commands to get our variables:
+
+```shell-session
+[!bash!]$ echo $TERM
+
+xterm-256color
+```
+
+```shell-session
+[!bash!]$ stty size
+
+67 318
+```
+
+The first command showed us the `TERM` variable, and the second shows us the values for `rows` and `columns`, respectively. Now that we have our variables, we can go back to our `netcat` shell and use the following command to correct them:
+
+```shell-session
+www-data@remotehost$ export TERM=xterm-256color
+
+www-data@remotehost$ stty rows 67 columns 318
+```
+
+Once we do that, we should have a `netcat` shell that uses the terminal's full features, just like an SSH connection.
+
+
+
 
 ## Developing your shell
   
