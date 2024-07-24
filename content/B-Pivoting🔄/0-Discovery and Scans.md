@@ -109,27 +109,20 @@ for port in {1..65535}; do echo > /dev/tcp/172.19.0.1/$port && echo "$port open"
 ![](https://i.imgur.com/fiQtWb0.png)
 
 
-## Tunneling/Pivoting
-### Chisel
-There are many ways for tunneling but my favorite way is **chisel**.
+## Things to Document and Track
 
-[Here](https://0xdf.gitlab.io/2020/08/10/tunneling-with-chisel-and-ssf-update.html)is a good chisel cheatsheet created by 0xdf. 
+- DNS records, network device backups, and DHCP configurations
+- Full and current application inventory
+- A list of all enterprise hosts and their location
+- Users who have elevated permissions
+- A list of any dual-homed hosts (More than one network interface)
+- Keeping a visual network diagram of your environment
 
-Let's say you are on the compromised system and you found 192.168.122.4 host live and connected to your compromised system. It has port 80 open so I would have to tunnel to access that port 80 running on 192.168.122.4.
+## Diagram
 
-1. You first upload **chisel** to the compromised system using wget or curl.
+- [Netbrain](https://www.netbraintech.com/)
+- [diagrams.net](https://app.diagrams.net/)
 
-![](https://i.imgur.com/bw7gY2r.png)
-
-2. Now on your local machine, start Chisel server listening on whatever port you prefer (In this case 9000).
-
-![](https://i.imgur.com/8uPSoY6.png)
-
-3. Now on the compromised system, tunnel target machine's port to local machine's listener.
-
-![](https://i.imgur.com/cOCJDW7.png)
-
-4. Now on your local machine, you can access port 80 of 192.168.122.4 as if you are accessing service running locally. 
 
 ## References
 - https://0xdf.gitlab.io/2019/01/28/pwk-notes-tunneling-update1.html

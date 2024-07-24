@@ -73,7 +73,7 @@ Auxiliary action:
    Proxy  Run a SOCKS proxy server
 ```
 
-Above configuration starts a listener on port 9050 and route all the traffic recievd via our meterpreter session.
+Above configuration starts a listener on port 9050 and routes all the traffic received via our meterpreter session.
 
 We can confirm the proxy server running as such:
 

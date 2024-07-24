@@ -193,3 +193,8 @@ htb-student@10.129.86.90's password:
 passwd    
 ```
 
+For copying entire directory:
+
+```shell-session
+jadu101@htb[/htb]$ scp -r ptunnel-ng ubuntu@10.129.202.64:~/
+```
