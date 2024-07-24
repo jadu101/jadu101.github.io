@@ -1,14 +1,36 @@
 ---
-title: Tunneling and Pivoting
+title: Discovery and Scan
 draft: false
 tags:
   - pivoting
   - tunneling
   - chisel
 ---
+
+**Lateral Movement**:
+
+Technique for further access to additional hosts, applications, and services within a network environment. 
+
+**Pivoting**:
+
+Accessing hosts to cross network boundaries you would not usually have access to. 
+
+**Tunneling**:
+
+Shuttling traffic in/out of a network where there is a chance of our traffic being detected. 
+
+
+**Port Forwarding**: 
+
+Technique that allows attacker to redirect a communication request from one port to another. 
+
+
+
+
 ## Plot
 
 Let's say you finally compromised the machine. You have shell connection but it seems like you need to pivot to another machine in different network. In this note, I will cover following topics:
+
 - Enumeration for Pivoting
 - Host discovery
 - Port Scan
@@ -38,9 +60,23 @@ In this case, I performed host discovery for all the hosts within **192.168.122.
 
 `time for i in $(seq 1 254); do (ping -c 1 192.168.122.${i} | grep "bytes from" &); done`
 
+or 
+
+`for i in {1..254} ;do (ping -c 1 172.16.5.$i | grep "bytes from" &) ;done`
+
+
 ![](https://i.imgur.com/rYmyDm5.png)
 
 You can see that **192.168.122.4** and **192.168.122.5** is live above.
+
+
+If on Windows CMD:
+
+`for /L %i in (1 1 254) do ping 172.16.5.%i -n 1 -w 100 | find "Reply"`
+
+If on Windows Powershell:
+
+`1..254 | % {"172.16.5.$($_): $(Test-Connection -count 1 -comp 172.15.5.$($_) -quiet)"}`
 
 ## Port Scan
 For port scanning, you can upload binary version of nmap to the system to run nmap on the compromised system but I somehow found just running **nc** scan more comfortable.

