@@ -3,6 +3,7 @@ title: Password Spraying - Windows
 draft: false
 tags:
   - password-spray
+  - domainpasswordspray
 ---
 If we have a foothold on domain-joined Windows host, we can use[DomainPasswordSpray](https://github.com/dafthack/DomainPasswordSpray) tool.
 

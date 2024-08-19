@@ -2,6 +2,10 @@
 title: Create Target User List
 draft: false
 tags:
+  - crackmapexec
+  - rpcclient
+  - enum4linux
+  - kerbrute
 ---
 From 4-Password Policy, we obtained password policy.
 

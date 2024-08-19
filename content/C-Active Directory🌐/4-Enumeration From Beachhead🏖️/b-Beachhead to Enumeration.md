@@ -3,6 +3,9 @@ title: Enumeration from beachhead - Linux
 draft: false
 tags:
   - beachhead
+  - psexec
+  - wmiexec
+  - windapsearch
 ---
 Now that we acquired foothold in the domain with valid credentials, it's time to dig deeper using our beachhead system. 
 

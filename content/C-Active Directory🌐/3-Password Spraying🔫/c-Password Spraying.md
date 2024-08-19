@@ -3,6 +3,8 @@ title: Password Spraying - Linux
 draft: false
 tags:
   - password-spray
+  - kerbrute
+  - crackmapexec
 ---
 Now that we have list of valid usernames and password policy in hand, it's time for password spraying.
 

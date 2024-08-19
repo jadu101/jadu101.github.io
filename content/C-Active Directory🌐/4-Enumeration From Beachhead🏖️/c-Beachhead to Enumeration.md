@@ -2,6 +2,7 @@
 title: Enumeration from beachhead - Windows
 draft: false
 tags:
+  - powerview-ps1
 ---
 We have valid credentials that gave us foothold to beachhead on the domain. Now we have to enumerate the domain to further gain access.
 
