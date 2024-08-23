@@ -15,7 +15,7 @@ My focus lies in executing penetration tests and implementing ethical hacking pr
 - Hackthebox 【Pro Hacker】
 - CVEs Disclosed
 【CVE-2024-6066】【CVE-2024-6067】【CVE-2024-6213】【CVE-2024-6214】
-【CVE-2024-6215】【CVE-2024-6216】【CVE-2024-6217】
+【CVE-2024-6215】【CVE-2024-6216】【CVE-2024-6217】【CVE-2024-7942】【CVE-2024-7948】
 - Blog: https://jadu101.github.io
 - Projects: https://github.com/jadu101
 
