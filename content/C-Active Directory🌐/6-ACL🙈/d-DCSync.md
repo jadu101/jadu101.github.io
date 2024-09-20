@@ -1,5 +1,5 @@
 ---
-title: DCSync Attack
+title: d-DCSync Attack
 draft: false
 tags:
   - acl

@@ -1,5 +1,5 @@
 ---
-title: Password Policy Enumeration
+title: a-Password Policy Enumeration
 draft: false
 tags:
   - password-spray

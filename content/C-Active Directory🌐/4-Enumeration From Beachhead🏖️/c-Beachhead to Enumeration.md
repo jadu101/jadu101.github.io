@@ -1,5 +1,5 @@
 ---
-title: Enumeration from beachhead - Windows
+title: c-Enumeration from beachhead - Windows
 draft: false
 tags:
   - powerview-ps1

@@ -1,5 +1,5 @@
 ---
-title: Discovery and Scan
+title: a-Discovery and Scan
 draft: false
 tags:
   - pivoting

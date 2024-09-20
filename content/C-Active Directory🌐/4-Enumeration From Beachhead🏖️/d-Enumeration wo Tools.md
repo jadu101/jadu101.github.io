@@ -1,5 +1,5 @@
 ---
-title: Enumeration Without Tools
+title: d-Enumeration Without Tools
 draft: false
 tags:
   - active-directory

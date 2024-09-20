@@ -1,5 +1,5 @@
 ---
-title: Enumeration from beachhead - Linux
+title: b-Enumeration from beachhead - Linux
 draft: false
 tags:
   - beachhead

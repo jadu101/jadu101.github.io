@@ -1,5 +1,5 @@
 ---
-title: LLMNR/NBT-NS Poisoning - Inveigh
+title: b-LLMNR/NBT-NS Poisoning - Inveigh
 draft: false
 tags:
   - llmnr

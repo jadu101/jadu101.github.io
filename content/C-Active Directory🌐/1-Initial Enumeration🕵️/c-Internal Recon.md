@@ -1,5 +1,5 @@
 ---
-title: Internal Recone
+title: c-Internal Recon
 draft: false
 tags:
   - active-directory

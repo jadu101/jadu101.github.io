@@ -1,5 +1,5 @@
 ---
-title: Password Spraying - Linux
+title: c-Password Spraying - Linux
 draft: false
 tags:
   - password-spray
