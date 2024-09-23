@@ -19,3 +19,4 @@ When vendors don't respond or are unwilling to fix these issues, Yoon takes the 
 | CVE-2024-6216 | CVE-2024-6217 | CVE-2024-6418 | CVE-2024-6419 | CVE-2024-7942 |
 | CVE-2024-7948 | CVE-2024-8140 | CVE-2024-8141 | CVE-2024-8142 | CVE-2024-8151 |
 | CVE-2024-8152 | CVE-2024-8153 | CVE-2024-8154 | CVE-2024-8170 | CVE-2024-8172 |
+| CVE-2024-9092 | CVE-2024-9093 |               |               |               |

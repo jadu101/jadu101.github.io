@@ -14,7 +14,7 @@ Yoon's focus lies in executing penetration tests and implementing ethical hackin
 - Hackthebox 【Pro Hacker】
 - Blog: https://jadu101.github.io
 - Projects: https://github.com/jadu101
-- 21 CVEs Disclosed
+- 23 CVEs Disclosed
 - 【CVE POC】: https://jadu101.github.io/A-My-CVEs%F0%9F%94%90/A-README
 
 🔍 Ready for New Opportunities:
