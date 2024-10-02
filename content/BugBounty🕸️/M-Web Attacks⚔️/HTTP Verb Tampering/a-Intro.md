@@ -42,3 +42,21 @@ An attacker may still use a different HTTP method (like `HEAD`) to bypass this 
 
 ## Insecure Coding
 
+Insecure coding sometimes causes the other type of HTTP verb tampering vulnerability.
+
+ For example, if a web page was found to be vulnerable to a SQL Injection vulnerability, and the back-end developer mitigated the SQL Injection vulnerability by the following applying input sanitization filters:
+
+
+```php
+$pattern = "/^[A-Za-z\s]+$/";
+
+if(preg_match($pattern, $_GET["code"])) {
+    $query = "Select * from ports where port_code like '%" . $_REQUEST["code"] . "%'";
+    ...SNIP...
+}
+```
+
+Above, sanitization filter is only being tested on the `GET` parameter.
+
+In this case, an attacker may use a `POST` request to perform SQL injection, in which case the `GET` parameters would be empty (will not include any bad characters). The request would pass the security filter, which would make the function still vulnerable to SQL Injection.
+
