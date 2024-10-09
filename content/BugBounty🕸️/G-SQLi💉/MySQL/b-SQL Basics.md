@@ -275,7 +275,7 @@ mysql> SELECT * FROM logins WHERE username like '___';
 ### AND
 
 ```shell-session
-mysql> SELECT 1 = 1 AND 'test' = 'test';
+myesql> SELECT 1 = 1 AND 'test' = 'test';
 
 +---------------------------+
 | 1 = 1 AND 'test' = 'test' |

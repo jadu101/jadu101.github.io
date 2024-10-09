@@ -16,4 +16,3 @@ But if the XSS vulnerability is non-persistent, how would we target victims with
 > We can send the target user containing our payload and hope they click on it.
 
 
-<script>alert(window.origin)</script>
