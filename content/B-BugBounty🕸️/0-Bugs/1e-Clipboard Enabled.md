@@ -1,9 +1,9 @@
 ---
-title: a-Easy Bugs
+title: Clipboard Enabled
 draft: false
 tags:
 ---
-## Clipboard Enabled
+
 
 > P5 in Bugcrowd but some programs still accept it.
 
