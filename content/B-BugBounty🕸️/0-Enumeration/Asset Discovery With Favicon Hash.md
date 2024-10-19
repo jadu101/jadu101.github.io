@@ -58,15 +58,15 @@ To copy results from shodan as a text:
 
 1. Click on more on the right corner down:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/enumeration/favicon-hash/Pasted image 20241019182725.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/enumeration/favicon-hash/s1.png)
 
 2. Choose IP:
 
-![[../../../Images/bbh/enumeration/favicon-hash/Pasted image 20241019182827.png]]
+![[../../../Images/bbh/enumeration/favicon-hash/s2.png.png]]
 
 3. Copy
 
-![[../../../Images/bbh/enumeration/favicon-hash/Pasted image 20241019182838.png]]
+![[../../../Images/bbh/enumeration/favicon-hash/s3.png.png]]
 
 
 ## Automation
