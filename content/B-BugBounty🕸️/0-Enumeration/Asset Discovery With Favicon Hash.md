@@ -62,11 +62,11 @@ To copy results from shodan as a text:
 
 2. Choose IP:
 
-![[../../../Images/bbh/enumeration/favicon-hash/s2.png.png]]
+![[../../../Images/bbh/enumeration/favicon-hash/s2.png]]
 
 3. Copy
 
-![[../../../Images/bbh/enumeration/favicon-hash/s3.png.png]]
+![[../../../Images/bbh/enumeration/favicon-hash/s3.png]]
 
 
 ## Automation
