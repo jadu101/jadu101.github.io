@@ -33,7 +33,7 @@ First, use `go` to install [waybackurls](https://github.com/tomnomnom/waybackurl
 
 go: downloading github.com/tomnomnom/waybackurls v0.1.0
 ```
-
+g 
 > If go install is not working, try changing the proxy: `export GOPROXY=https://goproxy.io`
 
 Next, download `anew`:

@@ -10,7 +10,7 @@ Yoon's focus lies in executing penetration tests and implementing ethical hackin
 💡 Key Achievements:  
 -》 【PNPT】- Practical Network Penetration Tester  
 -》 【eJPT】 - Junior Penetration Tester  
--》 【35 CVEs Disclosed】 - POC: https://jadu101.github.io/A-My-CVEs%F0%9F%94%90/A-README  
+-》 【41 CVEs Disclosed】 - POC: https://jadu101.github.io/A-My-CVEs%F0%9F%94%90/A-README  
 -》 【Hackthebox】 - Ranked as ProHacker, 1st on South Korea  
 -》 【Blog】- https://jadu101.github.io  
 -》 【Projects】- https://github.com/jadu101  
