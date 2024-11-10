@@ -7,7 +7,7 @@ tags:
 ---
 Yoon is actively conducting security research on open-source projects, focusing on identifying and reporting vulnerabilities to relevant vendors to ensure timely patches. 
 
-So far, Yoon has discovered a total of **41 CVEs**, mainly in PHP open-source projects from SourceCodester. These vulnerabilities include **Cross-Site Scripting (XSS)**, **SQL Injection**, **Session Fixation**, and **Unrestricted File Upload** flaws.
+So far, Yoon has discovered a total of **43 CVEs**, mainly in PHP open-source projects from SourceCodester. These vulnerabilities include **Cross-Site Scripting (XSS)**, **SQL Injection**, **Session Fixation**, and **Unrestricted File Upload** flaws.
 
 When vendors don't respond or are unwilling to fix these issues, Yoon takes the responsible step of publicly disclosing the vulnerabilities. This helps alert users to the potential risks associated with the affected products. By providing detailed proof-of-concept (POC) exploits, Yoon aims to help others understand and reproduce the vulnerabilities, ultimately raising security awareness and contributing to the overall improvement of the open-source community.
 
@@ -21,4 +21,4 @@ When vendors don't respond or are unwilling to fix these issues, Yoon takes the 
 | CVE-2024-10156 | CVE-2024-10157 | CVE-2024-10158 | CVE-2024-10159 | CVE-2024-10160 |
 | CVE-2024-10161 | CVE-2024-10162 | CVE-2024-8380  | CVE-2024-10191 | CVE-204-10192  |
 | CVE-2024-10414 | CVE-2024-10423 | CVE-2024-10424 | CVE-2024-10425 | CVE-2024-10432 |
-| CVE-2024-10433 |                |                |                |                |
+| CVE-2024-10433 | CVE-2024-10446 | CVE-2024-10447 |                |                |
