@@ -4,7 +4,6 @@ draft: false
 tags:
 ---
 
-
 > P5 in Bugcrowd but some programs still accept it.
 
 Go to website and create an account.
