@@ -3,7 +3,7 @@ title: Welcome to my blog!
 draft: false
 tags:
 ---
-Security Researcher & Penetration Tester
+【Security Researcher & Penetration Tester】
   
 Yoon's focus lies in executing penetration tests and implementing ethical hacking practices. With hands-on experience in conducting vulnerability assessments and deploying robust security measures, Yoon is committed to fortifying cybersecurity frameworks. As a constant learner, Yoon continuously challenges themselves through participation in CTFs, certifications, and CVE hunting. Open to new opportunities, Yoon eagerly anticipates connecting with like-minded professionals and embarking on innovative cybersecurity endeavors together.  
   
@@ -21,6 +21,3 @@ Contact:
 Feel free to reach out for networking, collaborations, or job opportunities: sec.sh.yoon@gmail.com
   
 
-  
-Contact:  
-Feel free to reach out for networking, collaborations, or exciting job opportunities: sec.sh.yoon@gmail.com

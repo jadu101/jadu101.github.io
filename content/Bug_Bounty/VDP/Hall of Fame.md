@@ -24,7 +24,7 @@ I participate in Vulnerability Disclosure Programs and so far have helped secure
 
 ----
 
-## WHO
+## World Health Organization
 
 - **Reported**: Oct 28, 2024
 - **Accpeted**: December 5, 2024
