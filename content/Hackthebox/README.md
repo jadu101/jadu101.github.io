@@ -11,7 +11,8 @@ Along the way, I documented my pentesting process and techniques by creating det
 
 I am ranked as **Pro-hacker** on Hackthebox and was once ranked as **1st** in South Korea (*August 2024*).
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/others/htb-pro.png)
+
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/others/htb-pro.png" alt="alt text" width="500" />
 
 
 

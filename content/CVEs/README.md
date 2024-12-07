@@ -12,6 +12,8 @@ So far, I discovered **43 CVEs**.
 
 These vulnerabilities includes but are not limited to **Cross-Site Scripting**, **SQL Injection**, **Session Fixation**, and **Unrestricted File Upload** flaws. 
 
+For more details: https://jadu101.github.io/CVEs/Disclosed
+
 | CVEs           |                |                |                |                |
 | -------------- | -------------- | -------------- | -------------- | -------------- |
 | CVE-2024-6066  | CVE-2024-6067  | CVE-2024-6213  | CVE-2024-6214  | CVE-2024-6215  |
