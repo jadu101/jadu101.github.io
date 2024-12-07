@@ -25,6 +25,7 @@ tags:
 	https://www.who.int/about/cybersecurity/vulnerability-hall-of-fame/ethical-hacker-list
 
 <img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/vdp/hof/who-email.png" alt="alt text" width="700" />
+
 ## Bayer
 
 - **Reported**: Nov 29, 2024
