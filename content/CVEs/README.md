@@ -1,15 +1,16 @@
 ---
-title: A-README
+title: README
 draft: false
 tags:
   - readme
   - cve
 ---
-Yoon is actively conducting security research on open-source projects, focusing on identifying and reporting vulnerabilities to relevant vendors to ensure timely patches. 
 
-So far, Yoon has discovered a total of **43 CVEs**, mainly in PHP open-source projects from SourceCodester. These vulnerabilities include **Cross-Site Scripting (XSS)**, **SQL Injection**, **Session Fixation**, and **Unrestricted File Upload** flaws.
+I actively conduct security research mainly on open-source project and focus on identifying and reporting vulnerabilities to relevant vendors to ensure timely patches. 
 
-When vendors don't respond or are unwilling to fix these issues, Yoon takes the responsible step of publicly disclosing the vulnerabilities. This helps alert users to the potential risks associated with the affected products. By providing detailed proof-of-concept (POC) exploits, Yoon aims to help others understand and reproduce the vulnerabilities, ultimately raising security awareness and contributing to the overall improvement of the open-source community.
+So far, I discovered **43 CVEs**.
+
+These vulnerabilities includes but are not limited to **Cross-Site Scripting**, **SQL Injection**, **Session Fixation**, and **Unrestricted File Upload** flaws. 
 
 | CVEs           |                |                |                |                |
 | -------------- | -------------- | -------------- | -------------- | -------------- |
