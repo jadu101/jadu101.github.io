@@ -12,7 +12,14 @@ tags:
 
 	https://www.unesco.org/en/vulnerability-disclosure
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/vdp/hof/unesco-hof.png)
+	![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/vdp/hof/unesco-hof.png)
+
+## WHO
+
+## Bayer
+
+	https://www.bayer.com/en/cybersecurity-hall-of-fame
+
 ## Achmea
 
 **Reported**: Nov 26, 2024
