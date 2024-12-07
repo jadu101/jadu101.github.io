@@ -18,11 +18,11 @@ After that, I check for installation pages such as Apache, IIS and run fuzzing o
 cat subs_final.txt | httprobe > httprobe_result.txt
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot from 2024-10-30 16-31-58.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot%20from%202024-10-30%2016-31-58.png)
 
 `httprobe` identified 1960 assets being live.
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot from 2024-10-30 16-43-42.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot%20from%202024-10-30%2016-43-42.png)
 ## httpx - Sort for By Status Code
 
 ```
@@ -32,11 +32,11 @@ while read -r url; do
 done < httprobe_result.txt > status_codes.txt
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241030172036.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241030172036.png)
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241031110434.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241031110434.png)
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241031110520.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241031110520.png)
 ## aquatone
 
 We can use aquatone to take screenshots of the host. 

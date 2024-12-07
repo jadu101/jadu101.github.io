@@ -28,11 +28,11 @@ subfinder -d example.com -all -recursive > subfinder.txt
 
 - `-all`: Uses all available sources for subdomain discovery. Subfinder integrates with multiple data sources such as ThreatCrowd, VirusTotal, Censys, etc., and using `-all` ensures you're casting a wide net.
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029233003.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241029233003.png)
 
 `subfinder` with recursive mode found 383 subdomains from `seeds.txt`:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029233559.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241029233559.png)
 
 ### Assetfinder
 
@@ -45,11 +45,11 @@ while read -r line; do assetfinder --subs-only "$line" >> assetfinder.txt; done 
 assetfinder --subs-only example.com >> assetfinder.txt
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029233626.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241029233626.png)
 
 `assetfinder` only found 18 subdomains from `seeds.txt`:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot from 2024-10-29 23-41-44.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot%20from%202024-10-29%2023-41-44.png)
 
 ### Amass
 
@@ -60,11 +60,11 @@ sudo amass enum -df seeds.txt -o amass_default.txt
 ```
 
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029235303.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241029235303.png)
 
 Default `amass` scan found 2509 subdomains from `seeds.txt`:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241030012752.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241030012752.png)
 
 We will run active scan as well:
 
@@ -72,11 +72,11 @@ We will run active scan as well:
 sudo amass enum -active -df seeds.txt -o amass_active.txt
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241030104929.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241030104929.png)
 
 We can see that active scan found much more:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241030131045.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241030131045.png)
 
 To get a list of FQDNs, use [amass_beautifier.sh](https://github.com/Asbawy/amassbeautifier/blob/main/amassbeautifier.sh) and then:
 
@@ -102,7 +102,7 @@ go install -v github.com/owasp-amass/oam-tools/cmd/oam_subs@master
 
 Now we have four files containing subdomains from `amass`, `assetfinder`, and `subfinder`
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241030132355.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241030132355.png)
 
 I will use the command below to sort for unique assets only:
 

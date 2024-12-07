@@ -16,24 +16,24 @@ I use the following extensions
 
 First, check on `service running` and `Allow access without API Keys`:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241106151850.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241106151850.png)
 ### Tasks
 
 Let's create a new resource pool as below:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241106152009.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241106152009.png)
 
 ## Setting Scope
 
 Filter setting - show only in-scope items
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241106152408.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241106152408.png)
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241106153850.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241106153850.png)
 
 Use advanced scope control to use regex
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241106154015.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241106154015.png)
 
 
 
@@ -55,11 +55,11 @@ Create a profile as below:
 - Payload Position: Append
 - Insertion point type: All
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot from 2024-11-04 14-09-23.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot%20from%202024-11-04%2014-09-23.png)
 
 Name issue so we can later see it from the dashboard:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot from 2024-11-04 14-09-41.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot%20from%202024-11-04%2014-09-41.png)
 
 ### Payloads
 https://github.com/jadu101/blind_xss_payload_generator/blob/main/collaborator_blind_xss_payloads.txt
@@ -72,15 +72,15 @@ Above two payloads were used to create [blind xss payload generator](https://git
 
 Run the bash script and input your Burp Collaborator URL:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot from 2024-11-04 14-29-17.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot%20from%202024-11-04%2014-29-17.png)
 
 201 blind XSS payloads have been created:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241104142957.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241104142957.png)
 
 Now load it to the payload section of the profile:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241104143023.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241104143023.png)
 
 Now, as we freely go through the website, blind XSS payload is going to be tested. 
 
@@ -88,9 +88,9 @@ Now, as we freely go through the website, blind XSS payload is going to be teste
 
 We can run scan as well to make sure we go through all endpoints. 
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241104145158.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241104145158.png)
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot from 2024-11-04 14-52-22.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot%20from%202024-11-04%2014-52-22.png)
 
 
 # AutoRepeater
@@ -105,13 +105,13 @@ https?:\/\/\S+
 
 
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241110155046.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241110155046.png)
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241110155104.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241110155104.png)
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241110155116.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241110155116.png)
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241110155135.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241110155135.png)
 
 
 
@@ -137,13 +137,13 @@ After there is a hit, try escalating to LFI.
 
 Browse the Web App with **User A** and Add the cookie of **User B** in the autorize so that it can browse with the User B account automatically.
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241105135816.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241105135816.png)
 
 
 
 Turn ON the Autorize and surf the WebApp with User A and requests with start flowing through autorize
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241105135835.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241105135835.png)
 
 > Just browse through the WebApp and try each and every Functionality which has Admin privileges and can't be accessed by Normal User, if you get 200 Ok on that request it's an IDOR Vulnerability. So Auditing the Request is upto you.
 

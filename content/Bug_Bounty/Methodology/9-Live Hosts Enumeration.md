@@ -68,7 +68,7 @@ cat infi_live.txt | ~/go/bin/httpx -path /login -p 80,443,8080,8443 -mc 401,403 
 cat status_codes.txt| grep " - 403" | awk '{print $1}' > 403-subdomains.txt
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241101201823.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241101201823.png)
 
 Always fuzz for interesting endpoints on 403. 
 
@@ -79,7 +79,7 @@ Always fuzz for interesting endpoints on 403.
 while IFS= read -r subdomain; do { echo "Processing: $subdomain" >> process.log; ./bypass-403.sh "$subdomain" >> process.log 2>&1; echo "Done: $subdomain" >> process.log; }; done < /home/carabiner1/Documents/bbh/who/subs/403-subdomains.txt
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241101203216.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241101203216.png)
 
 Also change request methods 
 ## Subdomain Takeover
@@ -145,7 +145,7 @@ gau "http://target.com" | while read url;do target=$(curl -s -I -H "Origin: http
 crsn -f live.txt -t 100 --filter
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241111185617.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241111185617.png)
 
 ---
 ## Prototpye Pollution

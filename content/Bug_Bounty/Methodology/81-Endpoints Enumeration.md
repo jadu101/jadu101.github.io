@@ -14,7 +14,7 @@ tags:
 cat all_urls.txt| grep "eyJ" 
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241101195406.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241101195406.png)
 
 ### UUID
 
@@ -24,7 +24,7 @@ A UUID (Universally Unique Identifier) is a 128-bit unique identifier used for r
 grep -Eo '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}' all_urls.txt | sort -u 
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241101200228.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241101200228.png)
 
 
 ### Any suspicious keyword/path/number

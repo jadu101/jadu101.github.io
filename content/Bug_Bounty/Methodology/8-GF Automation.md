@@ -54,9 +54,9 @@ Let's feed potentially XSS vulnerable URLs to `dalfox`:
 cat gf_xss_uniq.txt | ~/go/bin/gf xss | sed 's/#,*/#/' | ~/go/bin/dalfox pipe -o output.txt    
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot from 2024-10-31 21-51-04.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot%20from%202024-10-31 21-51-04.png)
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241031215603.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241031215603.png)
 
 
 If we want to get dalfox run faster, we can use `multicast`. Decide wisely on whether to use this flag or not based on your internet connection.
@@ -120,11 +120,11 @@ Append burp collaborator payload to the URLs:
 cat gf_ssrf_uniq.txt | /home/carabiner1/go/bin/qsreplace tb825nl8s8wamuib81jppheomfs6gw4l.oastify.com >> ssrf_collaborator_payload.txt
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241101190749.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241101190749.png)
 
 URLs are gonna look something like below:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241101190804.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241101190804.png)
 
 Now run through URLs with burp collaborator through `ffuf`:
 
@@ -132,7 +132,7 @@ Now run through URLs with burp collaborator through `ffuf`:
 ffuf -c -w ssrf_collaborator_payload.txt -u FUZZ
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241101191008.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241101191008.png)
 
 ### xargs with Collaborator
 
@@ -164,8 +164,8 @@ Feed it to `lfimap`:
 sudo python3 lfimap/lfimap.py --no-stop -F ~/Documents/bbh/nokia/urls/mass_lfi/gf_lfi_uniq.txt -a |& sudo tee -a ~/Documents/bbh/nokia/urls/mass_lfi/lfi_results3.txt 
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241101152104.png)
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241101155257.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241101152104.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241101155257.png)
 
 ### httpx
 
