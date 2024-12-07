@@ -62,6 +62,7 @@ Name issue so we can later see it from the dashboard:
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot%20from%202024-11-04%2014-09-41.png)
 
 ### Payloads
+
 https://github.com/jadu101/blind_xss_payload_generator/blob/main/collaborator_blind_xss_payloads.txt
 
 
