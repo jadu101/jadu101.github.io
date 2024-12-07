@@ -16,7 +16,7 @@ We will use `gf` to automate testing for:
 
 There are many types in `gf` that we can use:
 
-![[Pasted image 20241031212548.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241031212548.png)
 
 
 ## SQLi
@@ -37,7 +37,7 @@ cat gf_sqli.txt | ~/go/bin/gf sqli | sed 's/=.*/=/' | sed 's/URL: //' | sort | u
 
 After filtering for unique ones, we nearly got it down to 1/3. 
 
-![[Pasted image 20241101112655.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241101112655.png)
 
 
 ## XSS
@@ -53,11 +53,11 @@ cat all_urls.txt| ~/go/bin/gf xss | sudo tee mass_xss/gf_xss.txt
 
 There are 24006 potential endpoints:
 
-![[Pasted image 20241031212410.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241031212410.png)
 
 However, right now there are lot of overlaps in parameters:
 
-![[Pasted image 20241031214118.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241031214118.png)
 
 Let's filter out only unique ones.
 
@@ -65,9 +65,9 @@ Let's filter out only unique ones.
 cat gf_xss.txt | ~/go/bin/gf xss | sed 's/=.*/=/' | sed 's/URL: //' | sort | uniq | sudo tee gf_xss_uniq.txt
 ```
 
-![[Pasted image 20241031214617.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241031214617.png)
 
-![[Pasted image 20241031214634.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241031214634.png)
 
 ## SSRF
 
@@ -86,7 +86,7 @@ Filter for unique ones:
 cat mass_ssrf/gf_ssrf.txt | ~/go/bin/gf ssrf | sed 's/=.*/=/' | sed 's/URL: //' | sort | uniq | sudo tee mass_ssrf/gf_ssrf_uniq.txt
 ```
 
-![[Pasted image 20241101152553.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241101152553.png)
 
 ## LFI
 > cat all_urls.txt | ~/go/bin/gf lfi | sudo tee mass_lfi/gf_lfi.txt | ~/go/bin/gf lfi | sed 's/=.*/=/' | sed 's/URL: //' | sort | uniq | sudo tee mass_lfi/gf_lfi_uniq.txt
@@ -105,7 +105,7 @@ cat gf_lfi.txt | ~/go/bin/gf lfi | sed 's/=.*/=/' | sed 's/URL: //' | sort | uni
 ```
 
 
-![[Pasted image 20241101113520.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241101113520.png)
 
 ## Redirect
 > cat all_urls.txt | ~/go/bin/gf redirect | sudo tee mass_redirect/gf_redirect.txt | ~/go/bin/gf redirect | sed 's/=.*/=/' | sed 's/URL: //' | sort | uniq | sudo tee mass_redirect/gf_redirect_uniq.txt 
@@ -120,7 +120,7 @@ cat 2katana_httprobe.txt | ~/go/bin/gf redirect | sudo tee mass_redirect/gf_redi
 cat mass_redirect/gf_redirect.txt | ~/go/bin/gf redirect | sed 's/=.*/=/' | sed 's/URL: //' | sort | uniq | sudo tee mass_redirect/gf_redirect_uniq.txt
 ```
 
-![[Screenshot from 2024-11-10 11-54-43.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot from 2024-11-10 11-54-43.png)
 
 ## SSTI
 

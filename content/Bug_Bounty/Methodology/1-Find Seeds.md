@@ -20,9 +20,10 @@ We can achieve this through:
 ## WhoisXML
 
 `https://tools.whoisxmlapi.com/reverse-whois-search` -> Not very accurate.
+
 <img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241112115018.png" alt="alt text" width="500" />
 
-![[Pasted image 20241112115018.png]]
+
 
 
 
@@ -30,28 +31,32 @@ We can achieve this through:
 
 Let's search up `World Health Organization` on Crunchbase:
 
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029203901.png" alt="alt text" width="500" />
 
-![[Pasted image 20241029203901.png]]
 
 Probably because this is non-profit organization, I don't see any acquisitions:
 
-![[Pasted image 20241029204118.png]]
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029204118.png" alt="alt text" width="500" />
+
 
 For other companies such as Tesla, there is acquisition.
 
 Below, we can see 10 of them:
 
-![[Pasted image 20241029204058.png]]
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029204058.png" alt="alt text" width="500" />
+
 
 Click on it to list them:
 
-![[Pasted image 20241029204534.png]]
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029204534.png" alt="alt text" width="500" />
+
 
 Click on each of the acquisition one by one manually and add them to the scope.
 
 For the example acquisition below, I will be adding `www.wifierion.com` to the scope:
 
-![[Pasted image 20241029204605.png]]
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029204605.png" alt="alt text" width="500" />
+
 
 
 After finishing this step, we should have list of acquisitions ready.
@@ -67,11 +72,13 @@ We will use [https://bgp.he.net/](https://bgp.he.net/) for enumeration.
 
 Our search result shows lot of results and we have to guess which ones should be the correct ones:
 
-![[Pasted image 20241029205208.png]]
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029205208.png" alt="alt text" width="500" />
+
 
 Since `AS28810` shows the country as Switzerland, this seems to the correct one. I am not sure about the other ones. 
 
-![[Pasted image 20241029205409.png]]
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029205409.png" alt="alt text" width="500" />
+
 
 Take a note of the ASN number and the IP address range:
 
@@ -85,21 +92,25 @@ Take a note of the ASN number and the IP address range:
 
 Let's go to builtwith.com and check on companies related to `who.int`.
 
-![[Pasted image 20241029205648.png]]
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029205648.png" alt="alt text" width="500" />
+
 
 Going to `Relationship` tab, we can see bunch of Google Tags that is being used in `who.int`:
 
-![[Pasted image 20241029205728.png]]
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029205728.png" alt="alt text" width="500" />
+
 
 I see some subdomains such as `data.euro.who.int` on the list. 
 
 Take a note on this and add it to the scope since subdomain enumeration might not detect it:
 
-![[Screenshot from 2024-10-29 20-59-54.png]]
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot from 2024-10-29 20-59-54.png" alt="alt text" width="500" />
+
 
 I had a quick check on `data.euro.who.int` and it got me redirected to `cisid.euro.who.int` and page seemed juicy at first glance.
 
-![[Pasted image 20241029210301.png]]
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029210301.png" alt="alt text" width="500" />
+
 
 Take note of interesting assets:
 
@@ -173,15 +184,18 @@ To copy results from shodan as a text:
 
 1. Click on more on the right corner down:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/enumeration/favicon-hash/s1.png)
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/enumeration/favicon-hash/s1.png)
 
 2. Choose IP:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/enumeration/favicon-hash/s2.png)
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/enumeration/favicon-hash/s2.png)
 
 3. Copy
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/enumeration/favicon-hash/s3.png)
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/enumeration/favicon-hash/s3.png)
 
 
 ### Automation
@@ -201,17 +215,22 @@ Tools that will help with finding favicon and find assets:
 
 Lastly, do Copyright dorking on Google as such:
 
-![[Pasted image 20241029210540.png]]
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029210540.png" alt="alt text" width="500" />
+
+
 
 It didn't find nothing new, but it did found some juicy webpages as below:
 
 `https://apps.who.int/healthinfo/systems/surveydata/index.php/auth/forgot_password`
 
-![[Pasted image 20241029210555.png]]
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029210555.png" alt="alt text" width="600" />
+
 
 ## Result
 
 On `seeds.txt`, I saved all the seeds discovered from `who.int`:
 
-![[Pasted image 20241029232547.png]]
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241029232547.png" alt="alt text" width="300" />
+
+
 

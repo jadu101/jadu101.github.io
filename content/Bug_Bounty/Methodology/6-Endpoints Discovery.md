@@ -19,11 +19,11 @@ We will feed the find URLs to automated tools such as `gf` to test for XSS and s
 cat subs.txt | /home/carabiner1/go/bin/waybackurls| sudo /home/carabiner1/go/bin/anew waybackurls.txt
 ```
 
-![[Pasted image 20241031165033.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241031165033.png)
 
 `waybackurls` found 13543 URLs:
 
-![[Screenshot from 2024-10-31 16-47-49.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Screenshot from 2024-10-31 16-47-49.png)
 
 ### gau
 
@@ -33,7 +33,7 @@ Now let's use `gau` to collect more URLs:
 cat subs.txt | /home/carabiner1/go/bin/gau| /home/carabiner1/go/bin/anew gau.txt 
 ```
 
-![[Pasted image 20241031170041.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241031170041.png)
 
 `gau` somehow just froze. Some people say only using `katana` is also fine.
 
@@ -51,11 +51,11 @@ while read subdomain; do /home/carabiner1/go/bin/katana -proxy http://127.0.0.1:
 
 > I am also having katana go through the burp proxy so that I can log more information on Burp Suite Targets. This also eases on testing SSRF and XSS automatically. 
 
-![[Pasted image 20241031170511.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241031170511.png)
 
 I stopped it running in the middle of the scan and yet it still discovered 50003 URLs:
 
-![[Pasted image 20241031210342.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241031210342.png)
 
 ## Sort It
 
@@ -67,5 +67,5 @@ cat *.txt | sort -u | sudo tee all_urls.txt
 
 Now we have 63528 unique URLs to be tested:
 
-![[Pasted image 20241031210522.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted image 20241031210522.png)
 

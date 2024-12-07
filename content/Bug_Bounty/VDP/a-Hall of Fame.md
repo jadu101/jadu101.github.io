@@ -12,7 +12,7 @@ tags:
 
 	https://www.unesco.org/en/vulnerability-disclosure
 
-<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/vdp/hof/unesco-hof.png" alt="alt text" width="500" />
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/vdp/hof/unesco-hof.png" alt="alt text" width="600" />
 
 
 
