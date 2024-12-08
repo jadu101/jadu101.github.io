@@ -11,7 +11,7 @@ I do penetration testing and vulnerability assessments.
 -》 【PNPT】- Practical Network Penetration Tester  
 -》 【eJPT】 - Junior Penetration Tester  
 -》 【43 CVEs Disclosed】 - POC: https://jadu101.github.io/CVEs/Disclosed  
--》 【VDPs】 - https://jadu101.github.io/Bug_Bounty/VDP/a-Hall-of-Fame  
+-》 【VDPs】 - https://jadu101.github.io/Bug_Bounty/VDP/Hall-of-Fame  
 -》 【Hackthebox】 - Ranked as ProHacker, 1st on South Korea  
 -》 【Blog】- https://jadu101.github.io  
 -》 【Projects】- https://github.com/jadu101  
