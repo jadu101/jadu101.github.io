@@ -11,7 +11,7 @@ I participate in Vulnerability Disclosure Programs and so far have helped secure
 - Bayer
 - Achmea
 
-
+-----
 ## UNESCO
 
 - **Reported**: Dec 1, 2024
