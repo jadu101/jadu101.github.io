@@ -22,7 +22,7 @@ I participate in Vulnerability Disclosure Programs and so far have helped secure
 
 	https://www.unesco.org/en/vulnerability-disclosure
 
-<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/vdp/hof/unesco-hof1.png" alt="alt text" width="700" />
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/vdp/hof/unesco-hof1.png" alt="alt text" width="600" />
 
 ----
 
