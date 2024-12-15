@@ -48,11 +48,13 @@ https://www.bayer.com/en/cybersecurity-hall-of-fame
 
 - **Reported**: Nov 29, 2024
 - **Accpeted**: December 7, 2024
-- **HoF**: Dec , 2024
+- **HoF**: Dec 14, 2024
 
 
 
 <img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/vdp/hof/bayer-email.png" alt="alt text" width="700" />
+
+<img src="https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/vdp/hof/bayer-hof.png" alt="alt text" width="500" />
 
 ----
 
