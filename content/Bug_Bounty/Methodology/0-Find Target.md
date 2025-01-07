@@ -39,8 +39,18 @@ Below are some of my potential targets:
 - University of Twente-HoF-e
 - Looka-HoF-e-na
 - FirstCry-HoF-E
+- **Microstrategy**
+- **Empire Flippers**
+- **BBC**
+- **Agicap**
+- **TomTom**
+- **Geotab**
+- **Swisscom**
+- **Content King**
+- **Bentley Systems**
 
-Below are people I follow on LinkedIn:
+Below are people I follow on LinkedIn for choosing the right program:
+
 - https://www.linkedin.com/in/vishalvishw10/recent-activity/all/
 - https://www.linkedin.com/in/kartik-garg-6370b6232/
 
