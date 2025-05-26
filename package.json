@@ -100,22 +100,19 @@
     "ws": "^8.18.2",
     "yargs": "^17.7.2"
   },
-  "devDependencies": {
-    "@types/d3": "^7.4.3",
-    "@types/hast": "^3.0.4",
-    "@types/js-yaml": "^4.0.9",
-    "@types/node": "^22.5.4",
-    "@types/pretty-time": "^1.1.5",
-    "@types/source-map-support": "^0.5.10",
-    "@types/ws": "^8.5.10",
-    "@types/yargs": "^17.0.32",
-    "esbuild": "^0.20.2",
-    "prettier": "^3.2.4",
-    "tsx": "^4.7.1",
-    "typescript": "^5.4.2"
-    "esbuild": "^0.19.9",
-    "prettier": "^3.3.3",
-    "tsx": "^4.19.3",
-    "typescript": "^5.5.4"
-  }
+ "devDependencies": {
+  "@types/d3": "^7.4.3",
+  "@types/hast": "^3.0.4",
+  "@types/js-yaml": "^4.0.9",
+  "@types/node": "^22.5.4",
+  "@types/pretty-time": "^1.1.5",
+  "@types/source-map-support": "^0.5.10",
+  "@types/ws": "^8.5.10",
+  "@types/yargs": "^17.0.32",
+  "esbuild": "^0.20.2",
+  "prettier": "^3.3.3",
+  "tsx": "^4.19.3",
+  "typescript": "^5.5.4"
+}
+
 }
