@@ -80,7 +80,7 @@ We can verify that port 8888 is open and listening on the C2 Server.
  will not be shown, you would have to be root to see it all.)
 tcp6       0      0 :::8888                 :::*                    LISTEN      -                    off (0.00/0/0)
 ```
-## Implant Delivery
+### Implant Delivery
 
 We will deliver the implant using **Apache2 Web Server**.
 
@@ -94,10 +94,37 @@ When downloading, we will see such warning but ignore and just proceed.
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/Sliver/BuildSliverLab/01-warning.png)
 
-## Session Created
+### Session Created
 
 Once we download and execute the implant, session should get established:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/Sliver/BuildSliverLab/session.png)
 
+Using the command `sessions`, we can see list of sessions:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/Sliver/BuildSliverLab/01-sess.png)
+
+### Use Session
+
+We can choose a session to use through the command `use`:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/Sliver/BuildSliverLab/01-use.png)
+
+`info` command will show us more information on the implant:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/Sliver/BuildSliverLab/01-info.png)
+
+We can now even take screenshots:
+
+```
+sliver (COLD_INCIDENT) > screenshot
+
+[*] Screenshot written to /tmp/screenshot_DESKTOP-IPQVF9T_20220701224728_3343901839.png (893.2 KiB)
+```
+
+Once we are done using the session, we can background it using the command `background`.
+
+When we are totally done with the session, we use `sessions -k <ID>` to remove the session:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/Sliver/BuildSliverLab/01-sess-k.png)
 
