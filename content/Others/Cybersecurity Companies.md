@@ -29,7 +29,6 @@ Below are some of the cyber security companies that I would consider applying:
 - TrustedSec
 - NetSPI
 - BishopFox
-- Rapid 7
 - Fortra
 - Toss
 - Raon Secure

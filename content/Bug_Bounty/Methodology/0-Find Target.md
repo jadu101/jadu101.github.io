@@ -63,6 +63,70 @@ For choosing correct VDP program, I use:
 - https://chaos.projectdiscovery.io/
 - https://greedybucks.medium.com/bug-bounty-programs-beginners-should-try-fe51cebe52a5
 
+## Dorks to Find Unique Programs
+
+For VDPs:
+
+```
+vulnerability disclosure program -site:hackerone.com -site:bugcrowd.com -site:yeswehack.com -site:intigriti.com
+```
+
+VDP with reward:
+
+```
+vulnerability disclosure program "reward" -site:hackerone.com -site:bugcrowd.com -site:yeswehack.com -site:intigriti.com
+vulnerability disclosure program "bounty" -site:hackerone.com -site:bugcrowd.com -site:yeswehack.com -site:intigriti.com
+```
+
+### Reward Currency
+
+_Rupees_
+
+```bash
+vulnerability disclosure program "reward" "₹" -site:hackerone.com -site:bugcrowd.com -site:yeswehack.com -site:intigriti.com
+```
+
+_Dollars_
+
+```bash
+vulnerability disclosure program "reward" "$" -site:hackerone.com -site:bugcrowd.com -site:yeswehack.com -site:intigriti.com
+```
+
+_Euros_
+
+```bash
+vulnerability disclosure program "reward" "€" -site:hackerone.com -site:bugcrowd.com -site:yeswehack.com -site:intigriti.com
+```
+
+_Bitcoin_
+
+```bash
+vulnerability disclosure program "reward" "bitcoin" -site:hackerone.com -site:bugcrowd.com -site:yeswehack.com -site:intigriti.com
+```
+
+### Payment Method
+
+_Paypal_
+
+```bash
+vulnerability disclosure program "reward" "paypal" -site:hackerone.com -site:bugcrowd.com -site:yeswehack.com -site:intigriti.com
+```
+
+_Wire Transfer_
+
+```bash
+vulnerability disclosure program "reward" "wire transfer" -site:hackerone.com -site:bugcrowd.com -site:yeswehack.com -site:intigriti.com
+```
+
+- Similarly replace "vulnerability disclosure program" to "bug bounty program" and same dorks like in VDP.
+
+- Similarly replace "responsible disclosure program" to "bug bounty program" and same dorks like in VDP.
+
+### Swags or Goodies
+
+```
+"swag" "t-shirt" "tshirt" "goodies" "certificate" "letter of"
+```
 ## 40 Google Dorks for Bug Bounty Programs
 
 ```

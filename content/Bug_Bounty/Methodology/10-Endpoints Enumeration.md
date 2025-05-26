@@ -1,5 +1,5 @@
 ---
-title: 8-Endpoints Enumeration
+title: 10-Endpoints Enumeration
 draft: false
 tags:
 ---
