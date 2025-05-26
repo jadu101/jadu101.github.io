@@ -5,6 +5,8 @@ tags:
   - sliver
   - c2
   - redteam
+  - beacon
+  - session
 ---
 ## Install Sliver
 
