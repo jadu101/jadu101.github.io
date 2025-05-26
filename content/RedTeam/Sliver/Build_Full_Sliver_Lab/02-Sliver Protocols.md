@@ -81,7 +81,7 @@ In real world, we will actually be purchasing a domain so that we can use it as 
 
 ### DNS Server Prep
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/Sliver/BuildSliverLab/01-vms.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/Sliver/BuildSliverLab/02-vms.png)
 
 There are many ways to set up a DNS server but here we will use the [named/BIND](https://en.wikipedia.org/wiki/BIND). 
 
