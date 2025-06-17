@@ -90,15 +90,15 @@ Everything looks good — the binary runs and shows its help page.
 
 Next, we upload this unmodified binary to [VirusTotal](https://www.virustotal.com/gui/home/upload) and see how many security vendors find original chisel file to be flagged:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/Pasted image 20250615220952.png)
-
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/1.png)
 
 
 16/65 found it flagged.
 
 Let's check it on [filescan.io](https://filescan.io)as well:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/Pasted image 20250616203504.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/2.png)
+
 
 
 Again, the binary is detected as malicious.
@@ -245,11 +245,11 @@ Now that we have fixed the issue, re-build it and upload the created binary to V
 
 After removing server functionality, it's slightly better: `12/65 security vendors flagged this file as malicious`.
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/Pasted image 20250615231841.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/3.png)
 
 On `filescan.io`, it is marked as `malicious`:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/Pasted image 20250616203741.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/4.png)
 
 
 Ok, this wasn't very helpful, but it still did help a bit.
@@ -349,7 +349,7 @@ After manually deleting/removing hardcoded texts, build it again:
 yoon@yoon-XH695R:~/Documents/workplace2/chisel-masterwoserver$ sudo go build -ldflags="-s -w" -o chisel_noserver_hardcode
 ```
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/Pasted image 20250616191842.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/5.png)
 
 
 Unfortunately, that didn't do much. 
@@ -366,11 +366,11 @@ Go through the file system and remove all the help messages in text.
 
 After building and uploading to VT, we get 10/65 flagged:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/Pasted image 20250616194437.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/6.png)
 
 on `filescan.io`, it is marked as `Suspicious`:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/Pasted image 20250616203233.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/7.png)
 
 Ok, so results got better.
 
@@ -408,7 +408,7 @@ Check on `Code 1` at the Appendix at the end of this blog post to see how we add
 
 Let's build and upload to VT to test on it again:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/Pasted image 20250616221253.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/8.png)
 
 Sadly that didn't do much. We are still stuck `10/65`
 
@@ -572,11 +572,11 @@ yoon@yoon-XH695R:~/Documents/workplace2/chisel-masterwoserver$ garble --tiny bui
 
 Uploading to VT, we have `2/65 flagged`:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/Pasted image 20250616223336.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/9.png)
 
 On `filescan.io`, it is marked as `No Threat`:
 
-![[Pasted image 20250616225202.png]]
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/10.png)
 
 Just to be sure, let's test if this build works fine.
 
@@ -626,7 +626,7 @@ yoon@yoon-XH695R:~/Documents/workplace2/chisel-masterwoserver$ garble --seed=ran
 
 Upon building and uploading to VT, we managed to get it down to `1/65` flagged:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/Pasted image 20250617220458.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/11.png)
 
 ## Summary
 
