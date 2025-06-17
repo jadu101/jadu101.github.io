@@ -1,8 +1,17 @@
 ---
-title: "# AV Evasion w Chisel: From 16/65 to 2/65 flagged on VT"
+title: AV Evasion w Chisel
 draft: false
 tags:
+  - chisel
+  - av-evasion
+  - garble
+  - obfuscation
+  - virustotal
+  - edr
+  - go
+  - redteam
 ---
+# AV Evasion w Chisel: From 16/65 to 2/65 flagged on VT
 ## Introduction
 
 
