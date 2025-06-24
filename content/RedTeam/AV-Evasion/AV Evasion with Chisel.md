@@ -125,7 +125,7 @@ I'm pretty sure that there are lot more advanced techniques out there for AV Eva
 - **Refactor code structure** — to change recognizable patterns and improve obfuscation effectiveness.  
 - **Compile with obfuscation techniques** — using tools like `garble` to further conceal the binary’s purpose and behavior.
 
-### 1-Remove Server Functionality
+## 1-Remove Server Functionality
 
 When we transfer Chisel binary to the target system, we don't really need Server functionality since we got the Chisel server running on our listener machine. 
 
