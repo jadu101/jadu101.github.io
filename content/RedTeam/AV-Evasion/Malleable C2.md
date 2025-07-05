@@ -459,6 +459,11 @@ Hooray! Our traffic is now changed to something we set using `profile-switch.py`
 
 ## Summary
 
+This post covered how to adapt Malleable C2 profiles for Sliver by automating their conversion and rotation with `profile-switch.py`. By using real-world HTTP profiles and switching them regularly, you can make beacon traffic less predictable and better simulate advanced adversaries. While this won’t guarantee evasion, it helps keep operations dynamic and more closely aligned with real attack behaviors.
+
+This was fun to play with. Next time, Imma go for something more dynamic. 
+
+I will be back.
 
 ## References
 - https://github.com/BC-SECURITY/Malleable-C2-Profiles
