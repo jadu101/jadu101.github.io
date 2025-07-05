@@ -449,11 +449,11 @@ desktop-bn3rlj1\yoon
 
 Now go back to the `.pcap` file we've been logging and open it up on Wireshark:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/malleablec2/1.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/refs/heads/v4/Images/RedTeam/malleablec2/1.png)
 
 Click on some of the suspicious looking traffic and follow on TCP stream:
 
-![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/RedTeam/AV/malleablec2/2.png)
+![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/refs/heads/v4/Images/RedTeam/malleablec2/2.png)
 
 Hooray! Our traffic is now changed to something we set using `profile-switch.py`. 
 
