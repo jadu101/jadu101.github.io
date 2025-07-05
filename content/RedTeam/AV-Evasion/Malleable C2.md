@@ -36,7 +36,7 @@ sudo git checkout tags/v1.5.43
 
 Ok. Now we have the latest version of Sliver on our testing machine. 
 
-# 1-IOC Obfuscation
+## 1-IOC Obfuscation
 
 When modifying the Sliver C2 framework to avoid detection by EDRs and other security products, a key technique is **obfuscating Indicators of Compromise (IOCs)** — such as function names, message identifiers, and other strings that could reveal the tool’s presence. If left unchanged, these strings act as reliable fingerprints, making it easy for defenders to detect or correlate Sliver deployments.
 
