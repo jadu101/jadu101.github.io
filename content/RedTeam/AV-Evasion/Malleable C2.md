@@ -146,7 +146,7 @@ I used the excellent open-source collection **[Malleable-C2-Profiles](https://gi
 
 Malleable profiles look like this:
 
-```scss
+```json
 set useragent "Mozilla/5.0";
 header "Host" "api.amazon.com";
 header "Accept" "application/json";
@@ -154,7 +154,7 @@ header "Accept" "application/json";
 
 But Sliver’s JSON config wants this:
 
-```scss
+```json
 "implant_config": {
   "headers": [
     {"name": "Host", "value": "api.amazon.com"},
@@ -192,7 +192,7 @@ def ensure_repo():
 
 Below function will allow the operator to see which categories of profiles are available for selection:
 
-```scss
+```python
 def list_categories():
     print("[*] Available categories:")
     for item in sorted(BASE_DIR.iterdir()):
@@ -204,7 +204,7 @@ def list_categories():
 
 Below function will parse each profile line by line, extract headers, and built them into the JSON format Sliver understands:
 
-```scss
+```python
 def parse_profile(profile_path):
     headers = []
     with profile_path.open() as f:
@@ -224,7 +224,7 @@ def parse_profile(profile_path):
 
 This function will replace the existing Sliver HTTP headers with the new profile's headers:
 
-```scss
+```python
 SLIVER_CONFIG = Path.home() / ".sliver" / "configs" / "http-c2.json"
 
 def update_sliver_config(headers):
@@ -240,7 +240,7 @@ def update_sliver_config(headers):
 
 Below loop allows Sliver to dynamically rotate profiles at configurable intervals, helping simulate a more advanced adversary and avoiding detection by static rules:
 
-```scss
+```python
 def auto_switch_loop(profiles, switch_time, unique_header_names):
     print(f"[*] Starting auto-switch mode: rotating every {switch_time} minute(s)")
     try:
