@@ -1,5 +1,5 @@
 ---
-title: adb basics
+title: a-adb basics
 draft: false
 tags:
   - android
