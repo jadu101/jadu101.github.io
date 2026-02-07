@@ -90,7 +90,48 @@ total 8
 Similarly, we pull files from the device to the host by executing the following command: `adb pull /sdcard/Download/myapp.apk .`.
 
 
+## Interactions
 
+To list all the applications installed:
+
+```cmd
+emu64xa:/ # pm list packages
+package:com.android.companiondevicemanager.auto_generated_characteristics_rro
+package:com.android.systemui.auto_generated_rro_vendor__
+package:com.google.android.providers.media.module
+```
+
+or
+
+```cmd
+emu64xa:/ # ls -l /data/data
+total 2056
+drwx------  4 system         system         4096 2026-01-29 12:48 android
+drwx------  4 u0_a95         u0_a95         4096 2026-01-29 12:48 android.auto_generated_characteristics_rro
+drwx------  4 u0_a96         u0_a96         4096 2026-01-29 12:48 android.auto_generated_rro_product__
+```
+
+To look for specific application:
+
+```cmd
+emu64xa:/ # pm list packages | grep hack
+package:com.hackthebox.myapp
+```
+
+To find out where the app is installed at:
+
+```cmd
+emu64xa:/ # pm path com.hackthebox.myapp
+package:/data/app/~~T4SGxhALvs-sdPMp5uX1nw==/com.hackthebox.myapp-D6UwOMlfwXrxsjvC_nCuOQ==/base.apk
+```
+
+We can pull the app from virtual device and analyze it on our host machine:
+
+```cmd
+C:\Users\secsh\Downloads>mkdir APKFolder
+C:\Users\secsh\Downloads>adb pull /data/app/~~T4SGxhALvs-sdPMp5uX1nw==/com.hackthebox.myapp-D6UwOMlfwXrxsjvC_nCuOQ==/base.apk testapp_pulled.apk
+/data/app/~~T4SGxhALvs-sdPMp5uX1nw==/com.hackthebox.myapp-D6UwOMlfwXrxsjvC_n...OQ==/base.apk: 1 file pulled, 0 skipped. 50.1 MB/s (4969680 bytes in 0.095s)
+```
 
 
 
