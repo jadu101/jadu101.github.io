@@ -133,6 +133,10 @@ C:\Users\secsh\Downloads>adb pull /data/app/~~T4SGxhALvs-sdPMp5uX1nw==/com.hackt
 /data/app/~~T4SGxhALvs-sdPMp5uX1nw==/com.hackthebox.myapp-D6UwOMlfwXrxsjvC_n...OQ==/base.apk: 1 file pulled, 0 skipped. 50.1 MB/s (4969680 bytes in 0.095s)
 ```
 
+Loading the pulled app through `jadx`, we are ready for static analysis:
+
+<img width="690" alt="image" src="https://github.com/user-attachments/assets/c7fe2045-e371-4e0f-8935-3c8d0744836f" />
+
 
 
 
