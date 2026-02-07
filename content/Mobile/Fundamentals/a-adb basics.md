@@ -46,7 +46,7 @@ Mode                 LastWriteTime         Length Name
 
 To add adb to PATH environment variable, check out the following from [this article](https://theflutterist.medium.com/setting-up-adb-path-on-windows-android-tips-5b5cdaa9084b):
 
-<img width="441" height="800" alt="image" src="https://github.com/user-attachments/assets/7477e55e-e1d4-4f3f-91e9-0101544e2f4e" />
+<img width="441" alt="image" src="https://github.com/user-attachments/assets/7477e55e-e1d4-4f3f-91e9-0101544e2f4e" />
 
 
 # Using adb
