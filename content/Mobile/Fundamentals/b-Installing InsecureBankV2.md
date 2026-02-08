@@ -12,7 +12,7 @@ tags:
 
 All of the steps could be found at [here](https://github.com/dineshshetty/Android-InsecureBankv2).
 
-Assuming you already have AVD installed, firt download all the requirements using Python2.7:
+Assuming you already got AVD installed, firt download all the requirements using Python2.7:
 
 `C:\Python27\python.exe -m pip install -r requirements.txt`
 
@@ -36,4 +36,3 @@ Installing via the command `adb install InsecureBankv2.apk`, we can now view the
 Signin using the following credentials: `jack/Jack@123$`
 
 <img width="300" alt="image" src="https://github.com/user-attachments/assets/901b3b72-2198-4fc5-bca2-512126281e81" />
-
