@@ -1,5 +1,5 @@
 ---
-title: a-adb basics
+title: c-static analysis
 draft: false
 tags:
   - android
@@ -38,4 +38,27 @@ C:\Users\secsh\Downloads\Android-InsecureBankv2\InsecureBankv2_apktooled>dir
                2 File(s)          4,419 bytes
                5 Dir(s)  108,264,226,816 bytes free
 ```
+
+실습 기준, 바로 터지는 것들:
+
+AndroidManifest.xml
+
+exported Activity / Service
+
+res/values/strings.xml
+
+hardcoded secrets
+
+smali/.../LoginActivity.smali
+
+인증 로직
+
+smali/.../RequestDispatcher.smali
+
+API 호출
+
+assets/
+
+hidden data
+
 
