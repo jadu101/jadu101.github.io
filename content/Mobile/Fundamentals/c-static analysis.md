@@ -63,7 +63,7 @@ hidden data
 
 # Find Hardcoded Strings
 
-could be found in resources/strings.xml
+could be found in resources/strings.xml and xmls.xml
 
 also in activity source code
 
@@ -75,4 +75,17 @@ threat vector:
 
 <img width="228" alt="image" src="https://github.com/user-attachments/assets/4319f0f1-99c8-46d6-b9db-030e755bb7ab" />
 
+seach keywords:
+- api
+- password
+- username
+- firebase.io
+- SQL
+- key
+- ClientID
+- ClientSecret
+- http://
+- https://
+
+<img width="567" alt="image" src="https://github.com/user-attachments/assets/df1332bf-4ea6-48ad-bedc-dca018074d19" />
 
