@@ -61,4 +61,18 @@ assets/
 
 hidden data
 
+# Find Hardcoded Strings
+
+could be found in resources/strings.xml
+
+also in activity source code
+
+threat vector:
+- login bypass
+- url exposed
+- API keys exposed
+- Firebase URLs (firebase.io)
+
+<img width="228" alt="image" src="https://github.com/user-attachments/assets/4319f0f1-99c8-46d6-b9db-030e755bb7ab" />
+
 
