@@ -13,7 +13,7 @@ tags:
 
 All of the steps could be found at [here](https://github.com/dineshshetty/Android-InsecureBankv2).
 
-Assuming you already got AVD installed, firt download all the requirements using Python2.7:
+Assuming you already got AVD installed, first download all the requirements using Python2.7:
 
 `C:\Python27\python.exe -m pip install -r requirements.txt`
 
