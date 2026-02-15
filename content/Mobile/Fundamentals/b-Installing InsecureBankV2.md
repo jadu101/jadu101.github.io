@@ -6,6 +6,7 @@ tags:
   - mobile
   - jadx
   - androidinsecure
+  - burp
 ---
 
 # InsecureBankV2 Installation
@@ -36,3 +37,8 @@ Installing via the command `adb install InsecureBankv2.apk`, we can now view the
 Signin using the following credentials: `jack/Jack@123$`
 
 <img width="300" alt="image" src="https://github.com/user-attachments/assets/901b3b72-2198-4fc5-bca2-512126281e81" />
+
+
+
+
+
