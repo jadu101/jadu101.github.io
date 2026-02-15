@@ -6,8 +6,12 @@ tags:
   - mobile
   - apktool
   - dex2jar
+  - jadxgui
 ---
 
+## apktool
+
+`apktool` will provide raw smali code.
 
 ```cmd
 C:\Users\secsh\Downloads\Android-InsecureBankv2>apktool d InsecureBankv2.apk -o InsecureBankv2_apktooled
@@ -92,7 +96,7 @@ seach keywords:
 
 ## dex2jar -> jadx gui
 
-```
+``` 
 C:\Users\secsh\Downloads\Android_Pentests\dex-tools-v2.4\dex-tools-v2.4>d2j-dex2jar.bat -f InsecureBankv2.apk
 dex2jar InsecureBankv2.apk -> .\InsecureBankv2-dex2jar.jar
 
