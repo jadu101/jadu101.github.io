@@ -38,4 +38,34 @@ This allows Drozer (on your PC) to talk to the agent (on the emulator) without n
 
 <img width="548" height="149" alt="image" src="https://github.com/user-attachments/assets/912f3575-a431-4c89-8b0c-337df7ba291c" />
 
- 
+5 activities exported → These are screens (Activities) in the app that other apps could potentially start without restriction. Exported activities are often attack vectors.
+
+1 broadcast receiver exported → A receiver that can listen to system or custom intents from other apps. Could be abused if not protected.
+
+1 content provider exported → A data-sharing component that other apps can query or modify. Needs proper permissions.
+
+0 services exported → No background services are exported, so less risk there.
+
+is debuggable → The app is marked as debuggable, which makes it easier to attack (you can attach debuggers, access private data, etc.).
+
+run app.activity.info -a com.android.insecurebankv2
+
+<img width="509" height="250" alt="image" src="https://github.com/user-attachments/assets/43e93f19-c216-4e1e-bcdc-ef0b742aaa7f" />
+
+
+Each line shows an activity name and its required permission.
+
+Permission: null → No permission is required, so any other app could potentially start these activities.
+
+Activities like DoTransfer or ViewStatement are especially sensitive because they could allow money transfers or data viewing without authentication if exploited.
+
+
+<img width="340" height="488" alt="image" src="https://github.com/user-attachments/assets/a0cb9ce1-a369-49dc-bfc4-91cff0d3ef82" />
+
+```
+dz> run app.activity.start --component com.android.insecurebankv2 com.android.insecurebankv2.PostLogin
+Attempting to run shell module
+```
+
+<img width="343" height="461" alt="image" src="https://github.com/user-attachments/assets/374ab243-d4aa-45e8-9278-1852c9db74df" />
+
