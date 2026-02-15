@@ -26,6 +26,14 @@ I: Copying original files...
 I: Copying unknown files...
 ```
 
+Below are some that should be manually looked into:  
+  - AndroidManifest.xml
+  - exported Activity / Service
+  - res/values/strings.xml
+  - hardcoded secrets
+  - smali/.../LoginActivity.smali
+  - smali/.../RequestDispatcher.smali
+
 ```cmd
 C:\Users\secsh\Downloads\Android-InsecureBankv2\InsecureBankv2_apktooled>dir
  Volume in drive C has no label.
@@ -44,35 +52,16 @@ C:\Users\secsh\Downloads\Android-InsecureBankv2\InsecureBankv2_apktooled>dir
                5 Dir(s)  108,264,226,816 bytes free
 ```
 
-실습 기준, 바로 터지는 것들:
 
-AndroidManifest.xml
 
-exported Activity / Service
+## Find Hardcoded Strings
 
-res/values/strings.xml
+Hardcoded strings can be found in places like `resources/strings.xml` and `xmls.xml`.
 
-hardcoded secrets
-
-smali/.../LoginActivity.smali
-
-인증 로직
-
-smali/.../RequestDispatcher.smali
-
-API 호출
-
-assets/
-
-hidden data
-
-# Find Hardcoded Strings
-
-could be found in resources/strings.xml and xmls.xml
-
-also in activity source code
+Also in activity source code
 
 threat vector:
+
 - login bypass
 - url exposed
 - API keys exposed
@@ -80,7 +69,7 @@ threat vector:
 
 <img width="228" alt="image" src="https://github.com/user-attachments/assets/4319f0f1-99c8-46d6-b9db-030e755bb7ab" />
 
-seach keywords:
+Seach keywords:
 - api
 - password
 - username
