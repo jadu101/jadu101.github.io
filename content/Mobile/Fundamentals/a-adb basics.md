@@ -137,6 +137,16 @@ Loading the pulled app through `jadx`, we are ready for static analysis:
 
 <img width="690" alt="image" src="https://github.com/user-attachments/assets/c7fe2045-e371-4e0f-8935-3c8d0744836f" />
 
+## Using AndroidStudio for Interaction
+
+Using Android Studio for uploading files might be easier to some people:
+
+<img width="394" alt="image" src="https://github.com/user-attachments/assets/0db8bae2-ca14-44aa-8493-e0456fab8339" />
+
+
+<img width="284" alt="image" src="https://github.com/user-attachments/assets/ca8a75db-98bb-44b4-80e2-8426c4040cf8" />
+
+
 
 
 
