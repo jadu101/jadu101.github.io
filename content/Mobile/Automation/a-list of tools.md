@@ -55,5 +55,8 @@ Medusa
     Skills Assessment
 
 
+<img width="1755" height="851" alt="image" src="https://github.com/user-attachments/assets/75ca362b-13e7-4f79-8664-159b2c058dfd" />
+
+Automation Tool -> Static on Insecurebank -> Dynamic on InsecureBank -> Hackerone VDP?
 
 
