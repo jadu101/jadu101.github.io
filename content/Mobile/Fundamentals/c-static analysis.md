@@ -5,6 +5,7 @@ tags:
   - android
   - mobile
   - apktool
+  - dex2jar
 ---
 
 
@@ -89,3 +90,19 @@ seach keywords:
 
 <img width="567" alt="image" src="https://github.com/user-attachments/assets/df1332bf-4ea6-48ad-bedc-dca018074d19" />
 
+## dex2jar -> jadx gui
+
+```
+C:\Users\secsh\Downloads\Android_Pentests\dex-tools-v2.4\dex-tools-v2.4>d2j-dex2jar.bat -f InsecureBankv2.apk
+dex2jar InsecureBankv2.apk -> .\InsecureBankv2-dex2jar.jar
+
+C:\Users\secsh\Downloads\Android_Pentests\dex-tools-v2.4\dex-tools-v2.4>dir *jar
+ Volume in drive C has no label.
+ Volume Serial Number is 2ACD-1208
+
+ Directory of C:\Users\secsh\Downloads\Android_Pentests\dex-tools-v2.4\dex-tools-v2.4
+
+02/15/2026  03:39 PM         6,944,741 InsecureBankv2-dex2jar.jar
+               1 File(s)      6,944,741 bytes
+               0 Dir(s)  122,810,023,936 bytes free
+```
