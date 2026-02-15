@@ -146,3 +146,7 @@ sqlite> select * from android_metadata
 en_US
 ```
 
+
+# LogCat Info Leaks
+
+search password, login etc on logcat
