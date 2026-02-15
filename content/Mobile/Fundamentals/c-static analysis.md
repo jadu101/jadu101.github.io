@@ -110,3 +110,39 @@ C:\Users\secsh\Downloads\Android_Pentests\dex-tools-v2.4\dex-tools-v2.4>dir *jar
                1 File(s)      6,944,741 bytes
                0 Dir(s)  122,810,023,936 bytes free
 ```
+
+
+## Explore File System
+
+`shared_prefs`, `databases`
+
+```
+generic_x86:/data/data/com.android.insecurebankv2 # ls -l
+total 28
+drwxrwx--x 2 u0_a77 u0_a77       4096 2026-02-15 16:36 app_textures
+drwx------ 3 u0_a77 u0_a77       4096 2026-02-15 16:36 app_webview
+drwxrws--x 3 u0_a77 u0_a77_cache 4096 2026-02-15 16:36 cache
+drwxrws--x 2 u0_a77 u0_a77_cache 4096 2026-02-15 14:27 code_cache
+drwxrwx--x 2 u0_a77 u0_a77       4096 2026-02-15 14:27 databases
+drwxrwx--x 2 u0_a77 u0_a77       4096 2026-02-15 16:36 files
+drwxrwx--x 2 u0_a77 u0_a77       4096 2026-02-15 16:36 shared_prefs
+```
+
+```
+generic_x86:/data/data/com.android.insecurebankv2/databases # ls -l
+total 20
+-rw-rw---- 1 u0_a77 u0_a77 20480 2026-02-15 14:27 mydb
+-rw-rw---- 1 u0_a77 u0_a77     0 2026-02-15 14:27 mydb-journal
+```
+
+```
+generic_x86:/data/data/com.android.insecurebankv2/databases # sqlite3 mydb
+SQLite version 3.18.2 2017-07-21 07:56:09
+Enter ".help" for usage hints.
+sqlite> .tables
+android_metadata  names
+sqlite> select * from android_metadata
+   ...> ;
+en_US
+```
+
