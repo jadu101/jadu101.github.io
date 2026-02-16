@@ -64,13 +64,82 @@ Automation Tool -> Static on Insecurebank -> Dynamic on InsecureBank -> Hackeron
 Prepare APK
 -  Always verify the APK signature with apksigner to make sure you're testing the legitimate production version and not a modified one.
 
-apktool
-apk2url
-- extract all URLs and endpoints hidden in the decompiled code.
+### Static Analysis
+
+#### apktool
+analyze AndroidManifest.xml
+what to look for
+```
+<!-- Dangerous permissions -->
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<uses-permission android:name="android.permission.INTERNET"/>
+
+<!-- Exported components (can be accessed by other apps) -->
+<activity 
+    android:name=".AdminActivity"
+    android:exported="true">  ← VULNERABLE!
+</activity>
+
+<!-- Backup allowed (app data can be backed up) -->
+<application
+    android:allowBackup="true"  ← POTENTIAL ISSUE
+    android:debuggable="true">  ← HUGE VULNERABILITY IF IN PRODUCTION
+```
+search for secrets
+
+```
+# Search for API keys
+grep -r "api_key" .
+grep -r "API_KEY" .
+grep -r "apiKey" .
+
+# Search for AWS credentials
+grep -r "AKIA" .  # AWS Access Key pattern
+grep -r "aws_secret" .
+
+# Search for Firebase
+grep -r "firebaseio.com" .
+
+# Search for passwords
+grep -r "password" .
+grep -r "pwd" .
+
+# Search for tokens
+grep -r "token" .
+grep -r "bearer" .
+```
+
+#### jadx gui
 
 jadxgui
-- Search globally for keywords like "api_key", "secret", "password", "token" and "firebase".
+Navigate to interesting classes:
 
-MobSF 
+    com.app.util.ApiClient (API calls)
+    com.app.auth.LoginActivity (authentication)
+    com.app.storage.DatabaseHelper (data storage)
+
+Look for
+
+```
+// Bad: Hardcoded credentials
+String apiKey = "sk_live_abc123xyz789";
+
+// Bad: Weak encryption
+String password = Base64.encode(userPassword);  // Base64 is NOT encryption!
+
+// Bad: Insecure storage
+SharedPreferences prefs = context.getSharedPreferences("user_data", MODE_WORLD_READABLE);
+prefs.edit().putString("password", userPassword).commit();
+```
+
+#### apk2url
+- extract all URLs and endpoints hidden in the decompiled code.
+
+#### MobSF 
+
+### Dynamic Analysis
+Burp Suite
+Frida
+Objection
 drozer
 
