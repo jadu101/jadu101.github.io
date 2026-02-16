@@ -59,16 +59,28 @@ Medusa
 
 Automation Tool -> Static on Insecurebank -> Dynamic on InsecureBank -> Hackerone VDP?
 
-## Methodology
+# Methodology
 
 Prepare APK
 -  Always verify the APK signature with apksigner to make sure you're testing the legitimate production version and not a modified one.
 
-### Static Analysis
+## Static Analysis
 
-#### apktool
-analyze AndroidManifest.xml
-what to look for
+### apktool
+
+`apktool` will give `smali` codes: `apktool d InsecureBankv2.apk -o InsecureBankv2_apktool`
+
+Below are some that should be manually looked into:
+
+    - AndroidManifest.xml
+    - exported Activity / Service
+    - res/values/strings.xml
+    - hardcoded secrets
+    - smali/…/LoginActivity.smali
+    - smali/…/RequestDispatcher.smali
+
+On `AndroidManifest`, check for the followings:
+
 ```
 <!-- Dangerous permissions -->
 <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -85,7 +97,8 @@ what to look for
     android:allowBackup="true"  ← POTENTIAL ISSUE
     android:debuggable="true">  ← HUGE VULNERABILITY IF IN PRODUCTION
 ```
-search for secrets
+
+Search for interesting strings as well:
 
 ```
 # Search for API keys
@@ -107,9 +120,13 @@ grep -r "pwd" .
 # Search for tokens
 grep -r "token" .
 grep -r "bearer" .
+
+## Search for internet related
+grep -r "http" .
+grep -r "https" .
 ```
 
-#### jadx gui
+### jadx gui
 
 jadxgui
 Navigate to interesting classes:
@@ -132,12 +149,12 @@ SharedPreferences prefs = context.getSharedPreferences("user_data", MODE_WORLD_R
 prefs.edit().putString("password", userPassword).commit();
 ```
 
-#### apk2url
+### apk2url
 - extract all URLs and endpoints hidden in the decompiled code.
 
-#### MobSF 
+### MobSF 
 
-### Dynamic Analysis
+## Dynamic Analysis
 Burp Suite
 Frida
 Objection
