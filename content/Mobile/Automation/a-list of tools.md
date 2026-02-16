@@ -79,7 +79,7 @@ Below are some that should be manually looked into:
     - smali/…/LoginActivity.smali
     - smali/…/RequestDispatcher.smali
 
-On `AndroidManifest`, check for the followings:
+On `AndroidManifest.xml`, check for the followings:
 
 ```
 <!-- Dangerous permissions -->
