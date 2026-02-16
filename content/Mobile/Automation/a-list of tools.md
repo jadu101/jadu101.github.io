@@ -143,3 +143,4 @@ Frida
 Objection
 drozer
 
+resource 
