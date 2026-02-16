@@ -59,4 +59,18 @@ Medusa
 
 Automation Tool -> Static on Insecurebank -> Dynamic on InsecureBank -> Hackerone VDP?
 
+## Methodology
+
+Prepare APK
+-  Always verify the APK signature with apksigner to make sure you're testing the legitimate production version and not a modified one.
+
+apktool
+apk2url
+- extract all URLs and endpoints hidden in the decompiled code.
+
+jadxgui
+- Search globally for keywords like "api_key", "secret", "password", "token" and "firebase".
+
+MobSF 
+drozer
 
