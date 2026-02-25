@@ -60,13 +60,12 @@ Medusa
 Automation Tool -> Static on Insecurebank -> Dynamic on InsecureBank -> Hackerone VDP?
 
 # Methodology
-
 Prepare APK
 -  Always verify the APK signature with apksigner to make sure you're testing the legitimate production version and not a modified one.
 
-## Static Analysis
+# Static Analysis
 
-### apktool
+## apktool
 
 `apktool` will give `smali` codes: `apktool d InsecureBankv2.apk -o InsecureBankv2_apktool`
 
@@ -126,7 +125,7 @@ grep -r "http" .
 grep -r "https" .
 ```
 
-### jadx gui
+## jadx gui
 
 jadxgui
 Navigate to interesting classes:
@@ -149,12 +148,42 @@ SharedPreferences prefs = context.getSharedPreferences("user_data", MODE_WORLD_R
 prefs.edit().putString("password", userPassword).commit();
 ```
 
-### apk2url
+## apk2url
 - extract all URLs and endpoints hidden in the decompiled code.
 
-### MobSF 
+This works only on Linux
 
-## Dynamic Analysis
+## Nuclei
+
+Download templates: `https://github.com/optiv/mobile-nuclei-templates`
+
+`C:\Users\secsh\Downloads\Android_Pentests\nuclei_3.7.0_windows_amd64\nuclei.exe -target C:\Users\secsh\Downloads\Android-InsecureBankv2\InsecureBankv2_apktooled -t C:\Users\secsh\Downloads\Android_Pentests\mobile-nuclei-templates-main -file`
+
+```cmd
+C:\Users\secsh\Downloads\Android-InsecureBankv2>C:\Users\secsh\Downloads\Android_Pentests\nuclei_3.7.0_windows_amd64\nuclei.exe -target C:\Users\secsh\Downloads\Android-InsecureBankv2\InsecureBankv2_apktooled -t C:\Users\secsh\Downloads\Android_Pentests\mobile-nuclei-templates-main -file
+
+                     __     _
+   ____  __  _______/ /__  (_)
+  / __ \/ / / / ___/ / _ \/ /
+ / / / / /_/ / /__/ /  __/ /
+/_/ /_/\__,_/\___/_/\___/_/   v3.7.0
+
+                projectdiscovery.io
+
+[ERR] Could not read nuclei-ignore file: open C:\Users\secsh\AppData\Roaming\nuclei\.nuclei-ignore: The system cannot find the file specified.
+[INF] Current nuclei version: v3.7.0 (outdated)
+[INF] Current nuclei-templates version:  (latest)
+[INF] New templates added in latest release: 0
+[INF] Templates loaded for current scan: 42
+[WRN] Loading 42 unsigned templates for scan. Use with caution.
+[INF] Targets loaded for current scan: 1
+[android-debug-enabled] [file] [low] C:\Users\secsh\Downloads\Android-InsecureBankv2\InsecureBankv2_apktooled\AndroidManifest.xml
+[adb-backup-enabled] [file] [low] C:\Users\secsh\Downloads\Android-InsecureBankv2\InsecureBankv2_apktooled\AndroidManifest.xml
+```
+
+## MobSF 
+
+# Dynamic Analysis
 Burp Suite
 Frida
 Objection
