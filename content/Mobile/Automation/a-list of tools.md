@@ -127,14 +127,14 @@ grep -r "https" .
 
 ## jadx gui
 
-jadxgui
+
 Navigate to interesting classes:
 
-    com.app.util.ApiClient (API calls)
-    com.app.auth.LoginActivity (authentication)
-    com.app.storage.DatabaseHelper (data storage)
+  - com.app.util.ApiClient (API calls)
+  - com.app.auth.LoginActivity (authentication)
+  - com.app.storage.DatabaseHelper (data storage)
 
-Look for
+Search for:
 
 ```
 // Bad: Hardcoded credentials
@@ -149,6 +149,7 @@ prefs.edit().putString("password", userPassword).commit();
 ```
 
 ## apk2url
+
 - extract all URLs and endpoints hidden in the decompiled code.
 
 This works only on Linux
