@@ -183,9 +183,23 @@ C:\Users\secsh\Downloads\Android-InsecureBankv2>C:\Users\secsh\Downloads\Android
 
 ## MobSF 
 
+127.0.0.1:8000
+
+<img width="1137" height="904" alt="image" src="https://github.com/user-attachments/assets/5b1e8d22-b9e8-4417-9905-8f3b77c1d5aa" />
+
+
 # Dynamic Analysis
 Burp Suite
-Frida
+## Frida
+
+```
+# pipx 설치
+sudo apt install pipx -y
+pipx ensurepath
+# 터미널 재실행 후
+pipx install frida-tools
+```
+
 Objection
 drozer
 
