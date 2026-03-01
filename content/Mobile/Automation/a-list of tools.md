@@ -206,6 +206,14 @@ yoon@yoon-XH695R:~/Downloads/android_pentest/recreation_apk$ ls
 base.apk  base-decompiled  endpoints  split_config.en.apk  split_config.x86_64.apk  split_config.xxhdpi.apk
 ```
 
+Sort for interesting endpoints along with ChatGPT. Feed GPT with program scope and ask it to identify interesting endpoints such as:
+
+```
+https://mobile.recreation.gov
+https://www.recreation.gov/api/...
+https://www.recreation.gov/api/...
+```
+
 ## Nuclei
 
 Download templates: `https://github.com/optiv/mobile-nuclei-templates`
