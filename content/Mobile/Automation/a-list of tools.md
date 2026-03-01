@@ -214,9 +214,11 @@ C:\Users\secsh\Downloads\Android-InsecureBankv2>C:\Users\secsh\Downloads\Android
 
 ## MobSF 
 
-127.0.0.1:8000
+```bash
+docker run -it --rm -p 8000:8000 opensecurity/mobile-security-framework-mobsf:latest
+```
 
-<img width="1137" height="904" alt="image" src="https://github.com/user-attachments/assets/5b1e8d22-b9e8-4417-9905-8f3b77c1d5aa" />
+<img width="537" alt="image" src="https://github.com/user-attachments/assets/5b1e8d22-b9e8-4417-9905-8f3b77c1d5aa" />
 
 
 # Dynamic Analysis
