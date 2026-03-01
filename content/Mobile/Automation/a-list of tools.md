@@ -182,7 +182,29 @@ prefs.edit().putString("password", userPassword).commit();
 
 - extract all URLs and endpoints hidden in the decompiled code.
 
-This works only on Linux
+```bash
+yoon@yoon-XH695R:~/Downloads/android_pentest/recreation_apk$ sudo chown -R yoon:yoon ~/Downloads/android_pentest/recreation_apk
+yoon@yoon-XH695R:~/Downloads/android_pentest/recreation_apk$ apk2url base.apk 
+       
+ █████╗ ██████╗ ██╗  ██╗██████╗ ██╗   ██╗██████╗ ██╗     
+██╔══██╗██╔══██╗██║ ██╔╝╚════██╗██║   ██║██╔══██╗██║v1.2
+███████║██████╔╝█████╔╝  █████╔╝██║   ██║██████╔╝██║By    
+██╔══██║██╔═══╝ ██╔═██╗ ██╔═══╝ ██║   ██║██╔══██╗██║n0mi1k     
+██║  ██║██║     ██║  ██╗███████╗╚██████╔╝██║  ██║███████╗
+╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+[++++] Decompiling base.apk 
+[~] SHA256: f7c23085f3a4889bd4da65a1450eab650a81dbbc63f0ba2b66ed9d228afc8b59
+[+] Disassembling with Apktool...
+[+] Decompiling with Jadx...
+[+] Beginning Endpoint Extraction...
+[~] Extracting URLs...
+[~] Extracting IPs...
+[~] Performing Uniq Filter...
+[~] Wrote Uniq Domains to: /home/yoon/Downloads/android_pentest/recreation_apk/endpoints//base_uniqurls.txt
+[*] Endpoints Extracted to: /home/yoon/Downloads/android_pentest/recreation_apk/endpoints//base_endpoints.txt
+yoon@yoon-XH695R:~/Downloads/android_pentest/recreation_apk$ ls
+base.apk  base-decompiled  endpoints  split_config.en.apk  split_config.x86_64.apk  split_config.xxhdpi.apk
+```
 
 ## Nuclei
 
