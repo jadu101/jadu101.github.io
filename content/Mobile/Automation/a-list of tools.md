@@ -13,6 +13,9 @@ Quark Engine
 Frida (Objection)
 Medusa
 
+
+
+
 ## Static Analysis
 
 
@@ -60,8 +63,35 @@ Medusa
 Automation Tool -> Static on Insecurebank -> Dynamic on InsecureBank -> Hackerone VDP?
 
 # Methodology
+
 Prepare APK
 -  Always verify the APK signature with apksigner to make sure you're testing the legitimate production version and not a modified one.
+
+Check for downloaded apk file on APK Puller emulator:
+
+```bash
+emu64xa:/ $ pm list packages | grep bah                                       
+package:com.bah.r1smobile
+```
+
+This is a modern Play Store split APK delivery:
+
+```bash
+emu64xa:/ $ pm path com.bah.r1smobile
+package:/data/app/~~7xoQMoJNQahisKXPigo8vw==/com.bah.r1smobile-IqRphLg7uYD22_L4SwC13A==/base.apk
+package:/data/app/~~7xoQMoJNQahisKXPigo8vw==/com.bah.r1smobile-IqRphLg7uYD22_L4SwC13A==/split_config.en.apk
+package:/data/app/~~7xoQMoJNQahisKXPigo8vw==/com.bah.r1smobile-IqRphLg7uYD22_L4SwC13A==/split_config.x86_64.apk
+package:/data/app/~~7xoQMoJNQahisKXPigo8vw==/com.bah.r1smobile-IqRphLg7uYD22_L4SwC13A==/split_config.xxhdpi.apk
+```
+
+Move it locally via:
+
+```bash
+adb pull /data/app/~~7xoQMoJNQahisKXPigo8vw==/com.bah.r1smobile-IqRphLg7uYD22_L4SwC13A==/base.apk
+adb pull /data/app/~~7xoQMoJNQahisKXPigo8vw==/com.bah.r1smobile-IqRphLg7uYD22_L4SwC13A==/split_config.en.apk
+adb pull /data/app/~~7xoQMoJNQahisKXPigo8vw==/com.bah.r1smobile-IqRphLg7uYD22_L4SwC13A==/split_config.x86_64.apk
+adb pull /data/app/~~7xoQMoJNQahisKXPigo8vw==/com.bah.r1smobile-IqRphLg7uYD22_L4SwC13A==/split_config.xxhdpi.apk
+```
 
 # Static Analysis
 
