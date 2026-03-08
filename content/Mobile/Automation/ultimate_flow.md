@@ -14,10 +14,7 @@ tags:
 - https://book.hacktricks.wiki/en/mobile-pentesting/android-checklist.html
 - https://github.com/Hrishikesh7665/Android-Pentesting-Checklist
 
-## Tips
-- https://github.com/six2dez/pentest-book/blob/master/mobile/android.md
-
-# Resources
+## Resources
 - https://github.com/Raunaksplanet/Learn-android-bug-bounty
 - https://github.com/B3nac/Android-Reports-and-Resources
 
@@ -164,6 +161,15 @@ grep -r "http" .
 grep -r "https" .
 ```
 
+`six2dez` uses the following command:
+
+```cmd
+grep -EHirn "accesskey|admin|aes|api_key|apikey|checkClientTrusted|crypt|http:|https:|password|pinning|secret|SHA256|SharedPreferences|superuser|token|X509TrustManager|insert into"
+grep -Phro "(https?://)[\w\.-/]+[\"'\`]" | sed 's#"##g' | anew | grep -v "w3\|android\|github\|http://schemas.android\|google\|http://goo.gl"
+```
+
+> Tip: for firebase related try this trick: https://*.firebase.io/.json
+
 There are tools that help you assist this procedure. I will go through those in later steps. 
 
 ## static-b. Jadx
@@ -218,26 +224,17 @@ https://www.recreation.gov/api/...
 
 > Tip: Make sure target endpoints is under the scope.
 
-## Nuclei
+## static-d. Nuclei
+
+> Tip: Honestly, mobile nuclei templates are quite outdated and I doubt anyone can find anything juicy from modern APKs using nuclei.
 
 Download templates: `https://github.com/optiv/mobile-nuclei-templates`
 
-`C:\Users\secsh\Downloads\Android_Pentests\nuclei_3.7.0_windows_amd64\nuclei.exe -target C:\Users\secsh\Downloads\Android-InsecureBankv2\InsecureBankv2_apktooled -t C:\Users\secsh\Downloads\Android_Pentests\mobile-nuclei-templates-main -file`
+Run nuclei on target APK:
 
 ```cmd
 C:\Users\secsh\Downloads\Android-InsecureBankv2>C:\Users\secsh\Downloads\Android_Pentests\nuclei_3.7.0_windows_amd64\nuclei.exe -target C:\Users\secsh\Downloads\Android-InsecureBankv2\InsecureBankv2_apktooled -t C:\Users\secsh\Downloads\Android_Pentests\mobile-nuclei-templates-main -file
-
-                     __     _
-   ____  __  _______/ /__  (_)
-  / __ \/ / / / ___/ / _ \/ /
- / / / / /_/ / /__/ /  __/ /
-/_/ /_/\__,_/\___/_/\___/_/   v3.7.0
-
-                projectdiscovery.io
-
-[ERR] Could not read nuclei-ignore file: open C:\Users\secsh\AppData\Roaming\nuclei\.nuclei-ignore: The system cannot find the file specified.
-[INF] Current nuclei version: v3.7.0 (outdated)
-[INF] Current nuclei-templates version:  (latest)
+<SNIP>
 [INF] New templates added in latest release: 0
 [INF] Templates loaded for current scan: 42
 [WRN] Loading 42 unsigned templates for scan. Use with caution.
@@ -245,6 +242,10 @@ C:\Users\secsh\Downloads\Android-InsecureBankv2>C:\Users\secsh\Downloads\Android
 [android-debug-enabled] [file] [low] C:\Users\secsh\Downloads\Android-InsecureBankv2\InsecureBankv2_apktooled\AndroidManifest.xml
 [adb-backup-enabled] [file] [low] C:\Users\secsh\Downloads\Android-InsecureBankv2\InsecureBankv2_apktooled\AndroidManifest.xml
 ```
+
+## static-e. Automated Tools (slicer, apkhunt, mobsf)
+
+
 
 ## MobSF 
 
