@@ -157,7 +157,7 @@ grep -r "token" .
 grep -r "bearer" .
 
 ## Search for internet related
-grep -r "http" .
+grep -RIEo "http://[^\"' ]+" .
 grep -r "https" .
 ```
 
