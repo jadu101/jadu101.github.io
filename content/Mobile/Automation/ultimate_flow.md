@@ -170,9 +170,7 @@ grep -Phro "(https?://)[\w\.-/]+[\"'\`]" | sed 's#"##g' | anew | grep -v "w3\|an
 
 > Tip: for firebase related try this trick: https://*.firebase.io/.json
 
-There are tools that help you assist this procedure. I will go through those in later steps. 
-
-## static-b. Jadx
+### static-b. Jadx
 
 Open up the APK file using Jadx.
 
@@ -198,7 +196,7 @@ prefs.edit().putString("password", userPassword).commit();
 
 Bascially, we are doing the same thing of what we can do with `apktool`. 
 
-## static-c. apk2url
+### static-c. apk2url
 
 Using `apk2url`, we can extract all URLs and endpoints hidden in the decompiled code. 
 
@@ -224,7 +222,7 @@ https://www.recreation.gov/api/...
 
 > Tip: Make sure target endpoints is under the scope.
 
-## static-d. Nuclei
+### static-d. Nuclei
 
 > Tip: Honestly, mobile nuclei templates are quite outdated and I doubt anyone can find anything juicy from modern APKs using nuclei.
 
@@ -243,11 +241,11 @@ C:\Users\secsh\Downloads\Android-InsecureBankv2>C:\Users\secsh\Downloads\Android
 [adb-backup-enabled] [file] [low] C:\Users\secsh\Downloads\Android-InsecureBankv2\InsecureBankv2_apktooled\AndroidManifest.xml
 ```
 
-## static-e. Automated Tools (slicer, apkhunt, mobsf)
 
 
 
-## MobSF 
+
+#### static-e. MobSF 
 
 ```bash
 docker run -it --rm -p 8000:8000 opensecurity/mobile-security-framework-mobsf:latest
