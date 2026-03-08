@@ -6,12 +6,18 @@ tags:
   - mobile
 ---
 
-drozer
 
-MobSF
-Quark Engine
-Frida (Objection)
-Medusa
+## Resources & Checklists
+
+### Checklists
+
+- https://www.pentest-book.com/mobile/general
+- https://book.hacktricks.wiki/en/mobile-pentesting/android-checklist.html
+- https://github.com/Hrishikesh7665/Android-Pentesting-Checklist
+
+### Resources
+- https://github.com/Raunaksplanet/Learn-android-bug-bounty
+- https://github.com/B3nac/Android-Reports-and-Resources
 
 
 
