@@ -241,11 +241,9 @@ C:\Users\secsh\Downloads\Android-InsecureBankv2>C:\Users\secsh\Downloads\Android
 [adb-backup-enabled] [file] [low] C:\Users\secsh\Downloads\Android-InsecureBankv2\InsecureBankv2_apktooled\AndroidManifest.xml
 ```
 
-
-
-
-
 #### static-e. MobSF 
+
+Run ->
 
 ```bash
 docker run -it --rm -p 8000:8000 opensecurity/mobile-security-framework-mobsf:latest
@@ -253,6 +251,12 @@ docker run -it --rm -p 8000:8000 opensecurity/mobile-security-framework-mobsf:la
 
 <img width="537" alt="image" src="https://github.com/user-attachments/assets/5b1e8d22-b9e8-4417-9905-8f3b77c1d5aa" />
 
+Resource: https://www.hackingarticles.in/android-pentest-automated-analysis-using-mobsf/
+
+- Signer Certficiate: Take a quick look at developer, country, state, type of algo, bit size etc.
+- Application Permissions: Some quick wins
+- Browsable Activities: Check for deeplinks.
+- Manifest Analysis
 
 # Dynamic Analysis
 Burp Suite
