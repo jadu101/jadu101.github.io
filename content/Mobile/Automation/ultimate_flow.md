@@ -72,8 +72,8 @@ Automation Tool -> Static on Insecurebank -> Dynamic on InsecureBank -> Hackeron
 
 # Methodology
 
-Prepare APK
--  Always verify the APK signature with apksigner to make sure you're testing the legitimate production version and not a modified one.
+## 1. Prepare APK
+> Tip: Always verify the APK signature with apksigner to make sure you're testing the legitimate production version and not a modified one.
 
 Check for downloaded apk file on APK Puller emulator:
 
@@ -92,7 +92,7 @@ package:/data/app/~~7xoQMoJNQahisKXPigo8vw==/com.bah.r1smobile-IqRphLg7uYD22_L4S
 package:/data/app/~~7xoQMoJNQahisKXPigo8vw==/com.bah.r1smobile-IqRphLg7uYD22_L4SwC13A==/split_config.xxhdpi.apk
 ```
 
-Move it locally via:
+Move it to host machine via the command:
 
 ```bash
 adb pull /data/app/~~7xoQMoJNQahisKXPigo8vw==/com.bah.r1smobile-IqRphLg7uYD22_L4SwC13A==/base.apk
@@ -101,9 +101,10 @@ adb pull /data/app/~~7xoQMoJNQahisKXPigo8vw==/com.bah.r1smobile-IqRphLg7uYD22_L4
 adb pull /data/app/~~7xoQMoJNQahisKXPigo8vw==/com.bah.r1smobile-IqRphLg7uYD22_L4SwC13A==/split_config.xxhdpi.apk
 ```
 
-# Static Analysis
+Now our APK is ready for static analysis.
 
-## apktool
+## 2. Static Analysis
+### static-a. apktool
 
 `apktool` will give `smali` codes: `apktool d InsecureBankv2.apk -o InsecureBankv2_apktool`
 
@@ -135,7 +136,7 @@ On `AndroidManifest.xml`, check for the followings:
     android:debuggable="true">  ← HUGE VULNERABILITY IF IN PRODUCTION
 ```
 
-Search for interesting strings as well:
+Search for sensitive info:
 
 ```
 # Search for API keys
@@ -163,8 +164,11 @@ grep -r "http" .
 grep -r "https" .
 ```
 
-## jadx gui
+There are tools that help you assist this procedure. I will go through those in later steps. 
 
+## static-b. Jadx
+
+Open up the APK file using Jadx.
 
 Navigate to interesting classes:
 
@@ -186,27 +190,17 @@ SharedPreferences prefs = context.getSharedPreferences("user_data", MODE_WORLD_R
 prefs.edit().putString("password", userPassword).commit();
 ```
 
-## apk2url
+Bascially, we are doing the same thing of what we can do with `apktool`. 
 
-- extract all URLs and endpoints hidden in the decompiled code.
+## static-c. apk2url
+
+Using `apk2url`, we can extract all URLs and endpoints hidden in the decompiled code. 
 
 ```bash
 yoon@yoon-XH695R:~/Downloads/android_pentest/recreation_apk$ sudo chown -R yoon:yoon ~/Downloads/android_pentest/recreation_apk
 yoon@yoon-XH695R:~/Downloads/android_pentest/recreation_apk$ apk2url base.apk 
        
- █████╗ ██████╗ ██╗  ██╗██████╗ ██╗   ██╗██████╗ ██╗     
-██╔══██╗██╔══██╗██║ ██╔╝╚════██╗██║   ██║██╔══██╗██║v1.2
-███████║██████╔╝█████╔╝  █████╔╝██║   ██║██████╔╝██║By    
-██╔══██║██╔═══╝ ██╔═██╗ ██╔═══╝ ██║   ██║██╔══██╗██║n0mi1k     
-██║  ██║██║     ██║  ██╗███████╗╚██████╔╝██║  ██║███████╗
-╚═╝  ╚═╝╚═╝     ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
-[++++] Decompiling base.apk 
-[~] SHA256: f7c23085f3a4889bd4da65a1450eab650a81dbbc63f0ba2b66ed9d228afc8b59
-[+] Disassembling with Apktool...
-[+] Decompiling with Jadx...
-[+] Beginning Endpoint Extraction...
-[~] Extracting URLs...
-[~] Extracting IPs...
+<SNIP>
 [~] Performing Uniq Filter...
 [~] Wrote Uniq Domains to: /home/yoon/Downloads/android_pentest/recreation_apk/endpoints//base_uniqurls.txt
 [*] Endpoints Extracted to: /home/yoon/Downloads/android_pentest/recreation_apk/endpoints//base_endpoints.txt
@@ -214,13 +208,15 @@ yoon@yoon-XH695R:~/Downloads/android_pentest/recreation_apk$ ls
 base.apk  base-decompiled  endpoints  split_config.en.apk  split_config.x86_64.apk  split_config.xxhdpi.apk
 ```
 
-Sort for interesting endpoints along with ChatGPT. Feed GPT with program scope and ask it to identify interesting endpoints such as:
+I like to sort for interesting endpoints using ChatGPT. Feed ChatGPT with program scope and ask it to identify interesting endpoints such as:
 
 ```
 https://mobile.recreation.gov
 https://www.recreation.gov/api/...
 https://www.recreation.gov/api/...
 ```
+
+> Tip: Make sure target endpoints is under the scope.
 
 ## Nuclei
 
