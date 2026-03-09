@@ -241,7 +241,7 @@ C:\Users\secsh\Downloads\Android-InsecureBankv2>C:\Users\secsh\Downloads\Android
 [adb-backup-enabled] [file] [low] C:\Users\secsh\Downloads\Android-InsecureBankv2\InsecureBankv2_apktooled\AndroidManifest.xml
 ```
 
-#### static-e. MobSF 
+### static-e. MobSF 
 
 Run ->
 
@@ -258,7 +258,9 @@ Resource: https://www.hackingarticles.in/android-pentest-automated-analysis-usin
 - Browsable Activities: Check for deeplinks.
 - Manifest Analysis
 
-# Dynamic Analysis
+## Dynamic Analysis
+### Dynamic-a. Drozer
+
 Burp Suite
 ## Frida
 
