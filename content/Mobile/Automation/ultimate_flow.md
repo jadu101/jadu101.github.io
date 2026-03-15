@@ -17,6 +17,7 @@ tags:
 ## Resources
 - https://github.com/Raunaksplanet/Learn-android-bug-bounty
 - https://github.com/B3nac/Android-Reports-and-Resources
+- https://csbygb.gitbook.io/pentips/mobile-app-pentest/android#general-tips-for-dynamic-analysis
 
 
 
@@ -261,16 +262,34 @@ Resource: https://www.hackingarticles.in/android-pentest-automated-analysis-usin
 ## 3. Dynamic Analysis
 ### Burp Suite
 
+adb emu kill
+
+```bash
+yoon@yoon-XH695R:~/Downloads/android_pentest$ ~/Android/Sdk/emulator/emulator -list-avds
+APK_Puller
+Pixel_5_Tester
+yoon@yoon-XH695R:~/Downloads/android_pentest$ ~/Android/Sdk/emulator/emulator -avd Pixel_5_Tester -writable-system
+```
 
 
 ```
-yoon@yoon-XH695R:~/Downloads/android_pentest$ file cert
-cert: Certificate, Version=3
+yoon@yoon-XH695R:~/Downloads/android_pentest$ file cacert
+cacert: Certificate, Version=3
 ```
+
+```cmd
+yoon@yoon-XH695R:~/Downloads/android_pentest$ openssl x509 -inform DER -in cacert -out cacert.pem
+yoon@yoon-XH695R:~/Downloads/android_pentest$ openssl x509 -inform PEM -subject_hash_old -in cacert.pem |head -1
+9a5ba575
+yoon@yoon-XH695R:~/Downloads/android_pentest$ mv cacert.pem 9a5ba575.0
+```
+
+Move it to /sdcard/Download
 
 ### Dynamic-a. Drozer
 
 Burp Suite
+
 ## Frida
 
 ```
