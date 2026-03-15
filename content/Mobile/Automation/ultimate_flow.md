@@ -260,54 +260,38 @@ Resource: https://www.hackingarticles.in/android-pentest-automated-analysis-usin
 - Manifest Analysis
 
 ## 3. Dynamic Analysis
-### Burp Suite
+### Dynamic-a. Burp Suite
+#### Installation
 
-adb emu kill
-
-```bash
-yoon@yoon-XH695R:~/Downloads/android_pentest$ ~/Android/Sdk/emulator/emulator -list-avds
-APK_Puller
-Pixel_5_Tester
-yoon@yoon-XH695R:~/Downloads/android_pentest$ ~/Android/Sdk/emulator/emulator -avd Pixel_5_Tester -writable-system
-```
-
-
-```
-yoon@yoon-XH695R:~/Downloads/android_pentest$ file cacert
-cacert: Certificate, Version=3
-```
+1. Download the Burp Suite cert and move it to the emulator:
 
 ```cmd
 yoon@yoon-XH695R:~/Downloads/android_pentest$ openssl x509 -inform DER -in cacert -out cacert.pem
 yoon@yoon-XH695R:~/Downloads/android_pentest$ openssl x509 -inform PEM -subject_hash_old -in cacert.pem |head -1
 9a5ba575
 yoon@yoon-XH695R:~/Downloads/android_pentest$ mv cacert.pem 9a5ba575.0
+yoon@yoon-XH695R:~/Downloads/android_pentest$ mv 9a5ba575.0 burp.cer
+yoon@yoon-XH695R:~/Downloads/android_pentest$ adb push burp.cer /sdcard/Download/
+burp.cer: 1 file pushed, 0 skipped. 4.9 MB/s (1326 bytes in 0.000s)
 ```
 
-Move it to /sdcard/Download
+Once moved to the emulator, install it manually from Setting. 
 
-~/Android/Sdk/emulator/emulator -avd Pixel_5_Tester
+2. Make sure there's no proxy set to emulator:
 
-yoon@yoon-XH695R:~/Downloads/android_pentest$ yoon@yoon-XH695R:~/Downloads/android_pentest$ adb shell settings get global http_proxy
-10.180.165.54:8080
-^C
+```cmd
 yoon@yoon-XH695R:~/Downloads/android_pentest$ adb shell settings put global http_proxy :0
 yoon@yoon-XH695R:~/Downloads/android_pentest$ adb shell settings delete global http_proxy
 Deleted 1 rows
 yoon@yoon-XH695R:~/Downloads/android_pentest$ adb shell settings get global http_proxy
 null
+```
 
-yoon@yoon-XH695R:~/Downloads/android_pentest$ yoon@yoon-XH695R:~/Downloads/android_pentest$ openssl x509 -inform DER -in cacert -out cacert.pem
-yoon@yoon-XH695R:~/Downloads/android_pentest$ openssl x509 -inform PEM -subject_hash_old -in cacert.pem |head -1
-9a5ba575
-yoon@yoon-XH695R:~/Downloads/android_pentest$ mv cacert.pem 9a5ba575.0^C
-yoon@yoon-XH695R:~/Downloads/android_pentest$ mv 9a5ba575.0 burp.cer
-yoon@yoon-XH695R:~/Downloads/android_pentest$ adb push burp.cer /sdcard/Download/
-burp.cer: 1 file pushed, 0 skipped. 4.9 MB/s (1326 bytes in 0.000s)
+3. Run the following command to have a seperate pop up: `~/Android/Sdk/emulator/emulator -avd Pixel_5_Tester`
 
+And set the proxy as `127.0.0.1:8080` from the pop up setting. 
 
-
-
+Now Burp Suite should be able to intercept traffic unless there's SSL pinning.
 
 ### Dynamic-a. Drozer
 
