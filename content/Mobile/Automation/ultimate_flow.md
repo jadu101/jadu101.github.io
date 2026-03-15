@@ -258,7 +258,16 @@ Resource: https://www.hackingarticles.in/android-pentest-automated-analysis-usin
 - Browsable Activities: Check for deeplinks.
 - Manifest Analysis
 
-## Dynamic Analysis
+## 3. Dynamic Analysis
+### Burp Suite
+
+
+
+```
+yoon@yoon-XH695R:~/Downloads/android_pentest$ file cert
+cert: Certificate, Version=3
+```
+
 ### Dynamic-a. Drozer
 
 Burp Suite
