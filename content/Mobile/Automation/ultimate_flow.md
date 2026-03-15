@@ -286,6 +286,29 @@ yoon@yoon-XH695R:~/Downloads/android_pentest$ mv cacert.pem 9a5ba575.0
 
 Move it to /sdcard/Download
 
+~/Android/Sdk/emulator/emulator -avd Pixel_5_Tester
+
+yoon@yoon-XH695R:~/Downloads/android_pentest$ yoon@yoon-XH695R:~/Downloads/android_pentest$ adb shell settings get global http_proxy
+10.180.165.54:8080
+^C
+yoon@yoon-XH695R:~/Downloads/android_pentest$ adb shell settings put global http_proxy :0
+yoon@yoon-XH695R:~/Downloads/android_pentest$ adb shell settings delete global http_proxy
+Deleted 1 rows
+yoon@yoon-XH695R:~/Downloads/android_pentest$ adb shell settings get global http_proxy
+null
+
+yoon@yoon-XH695R:~/Downloads/android_pentest$ yoon@yoon-XH695R:~/Downloads/android_pentest$ openssl x509 -inform DER -in cacert -out cacert.pem
+yoon@yoon-XH695R:~/Downloads/android_pentest$ openssl x509 -inform PEM -subject_hash_old -in cacert.pem |head -1
+9a5ba575
+yoon@yoon-XH695R:~/Downloads/android_pentest$ mv cacert.pem 9a5ba575.0^C
+yoon@yoon-XH695R:~/Downloads/android_pentest$ mv 9a5ba575.0 burp.cer
+yoon@yoon-XH695R:~/Downloads/android_pentest$ adb push burp.cer /sdcard/Download/
+burp.cer: 1 file pushed, 0 skipped. 4.9 MB/s (1326 bytes in 0.000s)
+
+
+
+
+
 ### Dynamic-a. Drozer
 
 Burp Suite
