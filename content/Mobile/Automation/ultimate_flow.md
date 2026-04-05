@@ -293,19 +293,66 @@ And set the proxy as `127.0.0.1:8080` from the pop up setting.
 
 Now Burp Suite should be able to intercept traffic unless there's SSL pinning.
 
+### Dynamic-b. Frida
+#### Installation
+
+Install relevant tools:
+
+```
+sudo apt install pipx -y
+pipx ensurepath
+pipx install frida-tools
+```
+
+Move downloaded fridaserver to android device and run it: https://github.com/frida/frida/releases
+
+```
+adb root
+adb push frida-server-17.8.2-android-x86_64 /data/local/tmp
+adb shell "chmod +x /data/local/tmp/frida-server-17.8.2-android-x86_64"
+adb shell "/data/local/tmp/frida-server-17.8.2-android-x86_64 &"
+```
+
+If we can list processes on the Android device, it's confirmed that it is working:
+
+```
+yoon@yoon-XH695R:~/Downloads/android_pentest$ frida-ps -U
+ PID  Name
+----  ------------------------------------------------------
+3061  Chrome
+<SNIP>
+```
+
+#### SSL Bypass
+
+Bypassing SSL Pinning is pretty simple:
+
+I got the code from [here](https://codeshare.frida.re/@masbog/frida-android-unpinning-ssl/)
+
+```bash
+yoon@yoon-XH695R:~/Downloads/android_pentest$ frida -U -f com.bah.r1smobile --codeshare masbog/frida-android-unpinning-ssl
+     ____
+    / _  |   Frida 17.7.3 - A world-class dynamic instrumentation toolkit
+   | (_| |
+    > _  |   Commands:
+   /_/ |_|       help      -> Displays the help system
+   . . . .       object?   -> Display information about 'object'
+   . . . .       exit/quit -> Exit
+   . . . .
+   . . . .   More info at https://frida.re/docs/home/
+   . . . .
+   . . . .   Connected to Android Emulator 5554 (id=emulator-5554)
+Spawned `com.bah.r1smobile`. Resuming main thread!                      
+[Android Emulator 5554::com.bah.r1smobile ]->
+[.] Android Cert Pinning Bypass
+[.] TrustManagerImpl Android 7+ detection...
+[-] TrustManagerImpl Not Found
+[.] TrustManager Android < 7 detection...
+```
+
 ### Dynamic-a. Drozer
 
 Burp Suite
-
-## Frida
-
-```
-# pipx 설치
-sudo apt install pipx -y
-pipx ensurepath
-# 터미널 재실행 후
-pipx install frida-tools
-```
 
 Objection
 drozer
