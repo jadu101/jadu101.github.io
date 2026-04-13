@@ -325,7 +325,11 @@ yoon@yoon-XH695R:~/Downloads/android_pentest$ frida-ps -U
 
 #### SSL Bypass
 
-Bypassing SSL Pinning is pretty simple:
+Bypassing SSL Pinning is pretty simple: 
+
+```bash
+frida -U -f com.bah.r1smobile --codeshare masbog/frida-android-unpinning
+```
 
 I got the code from [here](https://codeshare.frida.re/@masbog/frida-android-unpinning-ssl/)
 
