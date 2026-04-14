@@ -329,6 +329,7 @@ Bypassing SSL Pinning is pretty simple:
 
 ```bash
 frida -U -f com.bah.r1smobile --codeshare masbog/frida-android-unpinning
+frida -U -f com.bah.r1smobile -l ssl_bypass.js
 ```
 
 I got the code from [here](https://codeshare.frida.re/@masbog/frida-android-unpinning-ssl/)
