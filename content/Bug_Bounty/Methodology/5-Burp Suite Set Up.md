@@ -19,6 +19,10 @@ I use the following extensions
 ```
 <img width="1127" height="551" alt="image" src="https://github.com/user-attachments/assets/e0db6d7a-916a-49a6-934c-43950017c328" />
 
+Check `is in the scope`:
+
+<img width="764" height="339" alt="image" src="https://github.com/user-attachments/assets/42dc71f6-a20a-48fe-ac26-e3960e55e4f4" />
+
 
 ### REST API
 
