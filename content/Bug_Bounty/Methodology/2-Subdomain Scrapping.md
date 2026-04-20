@@ -69,7 +69,7 @@ Default `amass` scan found 2509 subdomains from `seeds.txt`:
 We will run active scan as well:
 
 ```
-sudo amass enum -active -df seeds.txt -o amass_active.txt
+sudo /home/yoon/go/bin/amass enum -active -df 1-hosts.txt -oA amass_active_result.txt
 ```
 
 ![alt text](https://raw.githubusercontent.com/jadu101/jadu101.github.io/v4/Images/bbh/methodology/Pasted%20image%2020241030104929.png)
