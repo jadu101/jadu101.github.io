@@ -12,6 +12,14 @@ I use the following extensions
 - Param Miner
 
 ## Settings
+### Out of Scope
+
+```
+^(firefox\.com|google\.com|mozilla\.com|mozilla\.org)$
+```
+<img width="1127" height="551" alt="image" src="https://github.com/user-attachments/assets/e0db6d7a-916a-49a6-934c-43950017c328" />
+
+
 ### REST API
 
 First, check on `service running` and `Allow access without API Keys`:
