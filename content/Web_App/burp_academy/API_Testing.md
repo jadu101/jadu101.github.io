@@ -40,6 +40,12 @@ After identifying API endpoint ->
 
 ## 4-Find Hidden Parameters
 
+Sometimes there are API parameters that are not documented. 
+
+How to find those parameters?: `Intruder`, `Param miner BApp`, and `Content Discovery Tool`.
+
+## 5-Mass Assignment Vulnerability
+
 
 
 
