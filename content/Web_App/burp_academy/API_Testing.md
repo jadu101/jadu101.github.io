@@ -46,6 +46,43 @@ How to find those parameters?: `Intruder`, `Param miner BApp`, and `Content Disc
 
 ## 5-Mass Assignment Vulnerability
 
+This can inadvertently create hidden parameters.
+
+Mass assignment creates parameters from object fields and you can often identify these hidden parameters by manually examining objects returned by the API.
+
+For example, below JSON return might indicate that hidden `id` and `isAdmin` parameters are bound to internal user object:
+
+```
+{
+    "id": 123,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "isAdmin": "false"
+}
+```
+
+To test whether the parameter works, try adding it to the request as such:
+
+```
+{
+    "username": "wiener",
+    "email": "wiener@example.com",
+    "isAdmin": false,
+}
+```
+
+You can also try giving it a invalid parameter value as such:
+
+```
+{
+    "username": "wiener",
+    "email": "wiener@example.com",
+    "isAdmin": "foo",
+}
+```
+
+
+
 
 
 
