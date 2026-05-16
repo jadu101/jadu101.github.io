@@ -1,5 +1,3 @@
-# API Testing
-
 ---
 title: API Testing
 draft: false
@@ -7,6 +5,7 @@ tags:
   - api
   - web
 ---
+# API Testing
 
 ## 1-API Recon
 
@@ -29,7 +28,15 @@ API Documentation could be both human readable and machine readable.
 
 **Make sure you investigate the basepath manually**: `/api`, `/api/swagger`, `/api/swagger/v1`
 
-## 3-Identify API Endpoints
+## 3-Identify & Interact API Endpoints
+
+Couple ways to identify API Endpoints: `Burp Crawl`, `manual investigation`, and `JavaScript Files (JS Link Finder BApp)`.
+
+After identifying API endpoint -> **Identify Supported HTTP Methods** -> Use Intruder HTTP Verbs List.
+
+
+
+
 
 
 
