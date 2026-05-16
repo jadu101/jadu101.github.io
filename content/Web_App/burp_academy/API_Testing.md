@@ -81,6 +81,29 @@ You can also try giving it a invalid parameter value as such:
 }
 ```
 
+----
+
+## 6-Server-side parameter pollution
+
+There are intenal APIs that shouldn't be accessible. SSPP occurs when website embeds user input in a server-side request to an internal API without adequate encoding. 
+
+To test for SSPP: place query syntax characters like `#`, `&`, and `=` in your input and observe how the application responds. 
+
+For example: `GET /userSearch?name=peter%23foo&back=/home`
+
+For example, if the response returns the user peter, the server-side query may have been truncated. If an Invalid name error message is returned, the application may have treated foo as part of the username. This suggests that the server-side request may not have been truncated. 
+
+Another example: `GET /userSearch?name=peter%26foo=xyz&back=/home`
+
+You can also try adding second valid parameter: `GET /userSearch?name=peter%26email=foo&back=/home`
+
+You could try to override the original parameter. Do this by injecting a second parameter with the same name: `GET /userSearch?name=peter%26name=carlos&back=/home`
+
+    - PHP parses the last parameter only. This would result in a user search for carlos.
+    - ASP.NET combines both parameters. This would result in a user search for peter,carlos, which might result in an Invalid username error message.
+    - Node.js / express parses the first parameter only. This would result in a user search for peter, giving an unchanged result.
+
+If you're able to override the original parameter, you may be able to conduct an exploit. For example, you could add name=administrator to the request. This may enable you to log in as the administrator user. 
 
 
 
