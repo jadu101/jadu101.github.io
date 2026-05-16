@@ -7,6 +7,9 @@ tags:
 ---
 # API Testing
 
+Good Resource:
+- https://www.linkedin.com/pulse/api-bug-bounty-101-modern-techniques-find-your-first-2025-medeiros-frwac/
+
 ## 1-API Recon
 
 First we need to identify API endpoints. Such as: `/api/books`
