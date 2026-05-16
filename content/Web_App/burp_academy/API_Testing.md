@@ -105,6 +105,14 @@ You could try to override the original parameter. Do this by injecting a second 
 
 If you're able to override the original parameter, you may be able to conduct an exploit. For example, you could add name=administrator to the request. This may enable you to log in as the administrator user. 
 
+For SSPP on **REST PATH**:
+
+RESTful API places parameter names and values in the URL path like `/api/users/123`.
+
+If there's an request as such: `GET /edit_profile.php?name=peter`, try manipulating as `GET /edit_profile.php?name=peter%2f..%2fadmin`.
+
+
+
 
 
 
