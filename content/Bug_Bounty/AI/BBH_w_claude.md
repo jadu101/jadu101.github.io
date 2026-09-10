@@ -21,7 +21,13 @@ httpx -l subdomains/subdomains.txt -p 80,443,8000,8080,8443,9000,9443 -status-co
 
 # Another way
 
-chaos -d target.com -o chaos.txtsubfinder -d target.com -all -recursive -o passive.txtcurl -s "https://crt.sh/?q=%.target.com&output=json" | jq -r '.[].name_value' | sed 's/\*\.//g' >> passive.txt
+```bash
+chaos -d target.com -o chaos.txt
+
+subfinder -d target.com -all -recursive -o passive.txt
+
+curl -s "https://crt.sh/?q=%.target.com&output=json" | jq -r '.[].name_value' | sed 's/\*\.//g' >> passive.txt
+```
 
 cat chaos.txt passive.txt | sort -u | dnsx -a -cname -resp -silent -o resolved.txt
 
